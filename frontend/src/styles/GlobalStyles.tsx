@@ -1,19 +1,19 @@
 // src/styles/GlobalStyles.tsx
-import { createGlobalStyle } from 'styled-components'
-import tw, { theme, GlobalStyles as BaseStyles } from 'twin.macro'
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+import React from "react";
+import { Global } from "@emotion/react";
+import tw, { css, theme, GlobalStyles as BaseStyles } from "twin.macro";
 
-const CustomStyles = createGlobalStyle({
+const customStyles = css({
   body: {
     WebkitTapHighlightColor: theme`colors.purple.500`,
     ...tw`antialiased`,
   },
-})
-
+});
 const GlobalStyles = () => (
   <>
     <BaseStyles />
-    <CustomStyles />
+    <Global styles={customStyles} />
   </>
-)
-
-export default GlobalStyles
+);
+export default GlobalStyles;

@@ -6,9 +6,9 @@ import Login from "./pages/Login/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import NotFound from "./pages/Login/NotFound";
 import LoginRedirect from "./pages/Login/LoginRedirect";
-import Rolling from "./pages/rolling";
-import RollingCreate from "./pages/rollingCreate";
-import RollingDetail from "./pages/rollingDetail";
+import Rolling from "./pages/Rolling";
+import RollingCreate from "./pages/RollingCreate";
+import RollingDetail from "./pages/RollingDetail";
 
 const App: React.FC = () => {
   const state = useRecoilValue(stateAtom).id
