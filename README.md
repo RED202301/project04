@@ -4,7 +4,7 @@
 
 개인정보(번호, 카카오id 등 정보 공개) - 개인정보처리방침, 이용약관 넣기(참고. https://505bucket.s3.ap-northeast-2.amazonaws.com/static/personal.html)
 
-미리 작성
+미리 작성하기
 
 - 인풋 어떻게 뭘 받나(음성, 텍스트, 영상)
     - 웹 | 앱 | 카카오 채널
