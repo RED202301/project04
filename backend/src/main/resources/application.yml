@@ -41,7 +41,7 @@ spring:
           clientSecret: "${KAKAO_CLIENT_SECRET_KEY}"
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
-          redirectUri: "http://192.168.30.124:8080/login/oauth2/code/kakao"
+          redirectUri: "http://192.168.30.218:8080/login/oauth2/code/kakao"
           scope:
             - profile_nickname
             - profile_image
