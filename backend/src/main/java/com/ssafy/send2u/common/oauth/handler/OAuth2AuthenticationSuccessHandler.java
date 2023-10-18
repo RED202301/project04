@@ -80,6 +80,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         AuthToken accessToken = tokenProvider.createAuthToken(
                 userInfo.getId(),
                 roleType.getCode(),
+                userInfo.getName(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 

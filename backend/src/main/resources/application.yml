@@ -80,3 +80,6 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:5173/oauth/redirect
+
+kakao:
+  admin: ${KAKAO_API_ADMIN_KEY}
