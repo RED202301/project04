@@ -1,16 +1,15 @@
 package com.ssafy.send2u.message.controller;
 
-import com.ssafy.send2u.common.ApiResponse;
+import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.message.dto.MessageDto;
-import com.ssafy.send2u.message.entity.Message;
 import com.ssafy.send2u.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/v1/messages")
@@ -20,15 +19,29 @@ public class MessageController {
 
 
     @GetMapping()
-    public ApiResponse getAllMessages() {
+    public ResponseEntity<ApiResponse> getAllMessages() {
         List<MessageDto.Response> list = messageService.getAllMessages();
-        return ApiResponse.success("data",list);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("회원정보")
+                .status(OK.value())
+                .data(list)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 
     @PostMapping()
-    public ApiResponse create(@RequestParam Long senderId, @RequestBody MessageDto.CreateRequest request) {
+    public ResponseEntity<ApiResponse> create(@RequestParam Long senderId, @RequestBody MessageDto.CreateRequest request) {
         MessageDto.Response response = messageService.createMessage(senderId, request.getContent());
-        return ApiResponse.success("data", response);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("회원정보")
+                .status(OK.value())
+                .data(response)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 
 }
