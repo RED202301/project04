@@ -2,6 +2,7 @@ package com.ssafy.send2u.message.dto;
 
 import lombok.*;
 
+
 public class MessageDto {
 
     @Getter
