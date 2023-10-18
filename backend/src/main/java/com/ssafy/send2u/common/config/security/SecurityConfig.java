@@ -1,9 +1,7 @@
 package com.ssafy.send2u.common.config.security;
 
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import com.ssafy.send2u.common.config.properties.AppProperties;
 import com.ssafy.send2u.common.config.properties.CorsProperties;
-import com.ssafy.send2u.common.oauth.entity.RoleType;
 import com.ssafy.send2u.common.oauth.exception.RestAuthenticationEntryPoint;
 import com.ssafy.send2u.common.oauth.filter.TokenAuthenticationFilter;
 import com.ssafy.send2u.common.oauth.handler.OAuth2AuthenticationFailureHandler;
@@ -13,6 +11,7 @@ import com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedO
 import com.ssafy.send2u.common.oauth.service.CustomOAuth2UserService;
 import com.ssafy.send2u.common.oauth.service.CustomUserDetailsService;
 import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
+import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +21,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 
 @Configuration
@@ -68,8 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-//                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
-//                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
+                /* 아래 주석된 부분은 인증관련 나중에 설정 잘 하기*/
+//                .antMatchers("/api/v1/users/**").hasAnyAuthority(RoleType.USER.getCode())
 //                .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -84,7 +89,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userService(oAuth2UserService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
-                .failureHandler(oAuth2AuthenticationFailureHandler());
+                .failureHandler(oAuth2AuthenticationFailureHandler())
+                .and()
+                .logout()
+                .deleteCookies("JSESSIONID","refresh_token")
+                .logoutUrl("/logout") // 로그아웃 U
+                .logoutSuccessHandler(new LogoutSuccessHandler() {
+
+                    @Override
+                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                Authentication authentication) throws IOException, ServletException {
+                        System.out.println("success");
+                    }
+                });
+
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

@@ -1,16 +1,19 @@
 package com.ssafy.send2u.user.controller.auth;
 
-import com.ssafy.send2u.user.entity.user.UserRefreshToken;
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
-import com.ssafy.send2u.common.ApiResponse;
 import com.ssafy.send2u.common.config.properties.AppProperties;
+import com.ssafy.send2u.common.error.ErrorCode;
+import com.ssafy.send2u.common.error.exception.TokenValidFailedException;
 import com.ssafy.send2u.common.oauth.entity.RoleType;
 import com.ssafy.send2u.common.oauth.token.AuthToken;
 import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
+import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.common.utils.CookieUtil;
 import com.ssafy.send2u.common.utils.HeaderUtil;
+import com.ssafy.send2u.user.entity.user.UserRefreshToken;
+import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -36,21 +41,20 @@ public class AuthController {
 
 
     @GetMapping("/refresh")
-    public ApiResponse refreshToken (HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<ApiResponse> refreshToken (HttpServletRequest request, HttpServletResponse response) {
         // access token 확인
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
-        if (!authToken.validate()) {
-            return ApiResponse.invalidAccessToken();
-        }
+
 
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
-            return ApiResponse.notExpiredTokenYet();
+            throw new TokenValidFailedException(ErrorCode.NOT_EXPIRED_TOKEN_YET);
         }
 
         String userId = claims.getSubject();
+        String userName = (String)claims.get("userName");
         RoleType roleType = RoleType.of(claims.get("role", String.class));
 
         // refresh token
@@ -59,20 +63,18 @@ public class AuthController {
                 .orElse((null));
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
-        if (authRefreshToken.validate()) {
-            return ApiResponse.invalidRefreshToken();
-        }
 
         // userId refresh token 으로 DB 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
         if (userRefreshToken == null) {
-            return ApiResponse.invalidRefreshToken();
+            throw new TokenValidFailedException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         Date now = new Date();
         AuthToken newAccessToken = tokenProvider.createAuthToken(
                 userId,
                 roleType.getCode(),
+                userName,
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
@@ -95,7 +97,11 @@ public class AuthController {
             CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
             CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
         }
-
-        return ApiResponse.success("token", newAccessToken.getToken());
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("토큰이 재발행되었습니다.")
+                .status(OK.value())
+                .data(newAccessToken.getToken())
+                .build();
+        return ResponseEntity.ok(apiResponse);
     }
 }
