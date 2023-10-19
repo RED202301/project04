@@ -1,8 +1,9 @@
 package com.ssafy.send2u.user.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.send2u.common.oauth.entity.ProviderType;
 import com.ssafy.send2u.common.oauth.entity.RoleType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.send2u.message.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -69,6 +71,13 @@ public class User {
     @Column(name = "MODIFIED_AT")
     @NotNull
     private LocalDateTime modifiedAt;
+
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<Message> sendMessage;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private List<Message> receiveMessage;
 
     public User(
             @NotNull @Size(max = 64) String userId,
