@@ -1,45 +1,20 @@
-import React, { MouseEventHandler, TouchEventHandler } from "react";
-import { useRecoilState } from "recoil";
 import tw from "twin.macro";
-import { isEditState, stickyNoteInfosState } from "../atoms/States";
-import { StickyNoteProps } from "../atoms/Props";
+import { StickyNoteProps } from "../types/types"
+import Placing from "./Placing";
 
-const StickyNoteCSS = [tw`w-36 h-36 absolute select-none drop-shadow-md p-4 font-['Nanum Brush Script'] bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`]
-
-const StickyNote: React.FC<StickyNoteProps> = ({ children, css, onMouseDown, onTouchStart, zIndex, ...props }) => {
-  
-  const [isEdit] = useRecoilState(isEditState) 
-  const setStickyNoteInfos = useRecoilState(stickyNoteInfosState)[1];
-  const newOnMouseDown:MouseEventHandler = (e) => {
-    onMouseDown(e);
-    if (!isEdit) return;
-    setStickyNoteInfos((stickyNoteInfos) =>
-      stickyNoteInfos.map(stickyNoteInfo => {
-        const newStickyNoteInfo = { ...stickyNoteInfo };
-        if (newStickyNoteInfo.zIndex > zIndex) newStickyNoteInfo.zIndex -= 1;
-        else if (newStickyNoteInfo.zIndex === zIndex) newStickyNoteInfo.zIndex = stickyNoteInfos.length;
-        return newStickyNoteInfo
-      })
-    )
-  }
-  const newOnTouchStart:TouchEventHandler = (e) => {
-    onTouchStart(e);
-    if (!isEdit) return;
-    setStickyNoteInfos((stickyNoteInfos) =>
-      stickyNoteInfos.map(stickyNoteInfo => {
-        const newStickyNoteInfo = { ...stickyNoteInfo };
-        if (newStickyNoteInfo.zIndex > zIndex) newStickyNoteInfo.zIndex -= 1;
-        else if (newStickyNoteInfo.zIndex === zIndex) newStickyNoteInfo.zIndex = stickyNoteInfos.length;
-        return newStickyNoteInfo
-      })
-    )
-  }
-  
-  return (
-    <div {...{ ...props, css: [...StickyNoteCSS, ...(css ? css : [])], onMouseDown: newOnMouseDown, onTouchStart: newOnTouchStart }}>
-      {children}
-    </div>
-  );
+const StickyNote: React.FC<StickyNoteProps> = ({ ...props }) => {
+  const { content, id, top, left, rotate, zIndex, color } = props;
+  const twColors =[
+    tw`bg-white`,
+    tw`bg-yellow-300`,
+    tw`bg-red-300`,
+    tw`bg-blue-300`,
+  ]
+  const twColor = twColors[color]
+  const twStyles = [tw`w-36 h-36 absolute select-none drop-shadow-md p-4 font-['Nanum Brush Script'] bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`, ...(twColor?[twColor]:[])]
+  return <Placing {...{ id, top, left, rotate, zIndex, twStyles }}>
+      {content}
+  </Placing>
 }
 
-export default StickyNote;
+export default StickyNote

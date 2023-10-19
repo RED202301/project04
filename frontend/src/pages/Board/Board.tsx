@@ -1,96 +1,85 @@
-import React, { useState, MouseEventHandler, TouchEventHandler } from "react";
+import React, { PropsWithChildren, useEffect } from "react"
+import { useOnDragMove, useOnDragEnd } from "./hooks";
+import { placeableInfoMapState, placeableInfoListState, draggingState } from "./recoil/atoms";
 import { useRecoilState } from "recoil";
+import { PlaceableInfo, DummyPlaceableInfo } from "./types/types";
+import Placeable from "./components/Placeable";
 import tw from "twin.macro";
-import PolaroidInfo from "./components/PolaroidInfo";
-import FontStyles from "./styles/FontStyles";
-import { PropsWithChildrenAndCSS } from "./atoms/Props";
-import { isEditState, stickyNoteInfosState } from "./atoms/States";
-import Polaroid from "./components/Polaroid";
 
-interface SelectedInfo{
-  target?: HTMLElement;
-  offsetTop: number;
-  offsetLeft: number;
-  startX: number;
-  startY: number;
-}
+const datas: PlaceableInfo[] = [
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:0}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:1}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:2}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:3}),
+  DummyPlaceableInfo.Polaroid({
+    content: "갬성 사진", 
+    src: "https://cdn.thescoop.co.kr/news/photo/202102/42527_61056_1017.jpg",
+    thumbnail: "https://cdn.thescoop.co.kr/news/photo/202102/42527_61056_1017.jpg",
+  }),
+  DummyPlaceableInfo.Polaroid({
+    content: "", 
+    src: "https://www.cuonet.com/data/file/community2/3553229414_qIAgixUu_17231e24cd42385d7ad5c98f147ece8a37da2544.gif",
+    thumbnail: "https://www.cuonet.com/data/file/community2/3553229414_qIAgixUu_17231e24cd42385d7ad5c98f147ece8a37da2544.gif",
+  }),
+  DummyPlaceableInfo.Polaroid({
+    content: "갬성 사진", 
+    src: "https://mblogthumb-phinf.pstatic.net/MjAxODAzMjBfMTUw/MDAxNTIxNDg4NDQ1NzUz.nJAZpVQEen0mR_oasedsz-G1bbEPel_akhowP-N-uSYg.0UsO5f-TAjYZ3cQJ3lCOubAlESCLUMiqZJjnRFgdd5Ug.GIF.uprrsse/%EA%B0%AC%EC%84%B1_%EB%8F%8B%EB%8A%94_%EC%95%A0%EB%8B%88_%EC%9B%80%EC%A7%A4_%EB%AA%A8%EC%9D%8C__%28212%29.gif?type=w800",
+    thumbnail: "https://mblogthumb-phinf.pstatic.net/MjAxODAzMjBfMTUw/MDAxNTIxNDg4NDQ1NzUz.nJAZpVQEen0mR_oasedsz-G1bbEPel_akhowP-N-uSYg.0UsO5f-TAjYZ3cQJ3lCOubAlESCLUMiqZJjnRFgdd5Ug.GIF.uprrsse/%EA%B0%AC%EC%84%B1_%EB%8F%8B%EB%8A%94_%EC%95%A0%EB%8B%88_%EC%9B%80%EC%A7%A4_%EB%AA%A8%EC%9D%8C__%28212%29.gif?type=w800",
+  }),
+  DummyPlaceableInfo.Sticker({src:"💗"}),
+  DummyPlaceableInfo.Sticker({src:"🍕"}),
+  DummyPlaceableInfo.Sticker({src:"🍟"}),
+  DummyPlaceableInfo.Sticker({src:"🌸"}),
+  DummyPlaceableInfo.Sticker({src:"🥕"}),
+]; 
 
-const RoundButton: React.FC<PropsWithChildrenAndCSS> = ({ children, css, ...props }) => {
-  return <button {...{...props, css: [tw`rounded-full select-none`, css] }}>{children}</button>
-}
+const Board: React.FC<PropsWithChildren> = () => {
+  const onDragMove = useOnDragMove();
+  const onDragEnd = useOnDragEnd();
+  const [dragging] = useRecoilState(draggingState);
+  const [placeableInfoList, setPlaceableInfoList] = useRecoilState(placeableInfoListState);
+  const [, setPlaceableInfoMap] = useRecoilState(placeableInfoMapState);
 
-const Board: React.FC = () => {
-
-  const [selected, setSelected] = useState<SelectedInfo>();
-  const [isEdit, setIsEdit] = useRecoilState(isEditState) 
-  const [stickyNoteInfos , setStickyNoteInfos]= useRecoilState(stickyNoteInfosState);
-
-  const onTouchStart: TouchEventHandler = (event) => {
-    const { pageX, pageY, target } = event.targetTouches[0];
-    if (!isEdit || !(target instanceof HTMLElement)) return;
-    const { offsetTop, offsetLeft } = target;
-    setSelected(() => { return { target, offsetTop, offsetLeft, startX: pageX, startY: pageY } });
+  const init = () => {
+    setPlaceableInfoList(() => datas);
+    setPlaceableInfoMap((placeableInfoMap) => {
+      datas.forEach(data => { placeableInfoMap.set(data.id, data) });
+      return placeableInfoMap
+    })
   }
 
-  const onMouseDown: MouseEventHandler = ({ pageX, pageY, target }) => {
-    if (!isEdit || !(target instanceof HTMLElement)) return;
-    const {offsetTop, offsetLeft} = target
-    setSelected(() => { return { target, offsetTop, offsetLeft, startX: pageX, startY: pageY } });
-  };
-  
-  const onMouseMove: MouseEventHandler = ({ pageX, pageY }) => {
-    if (!isEdit || !selected?.target) return;
-    const { target, offsetTop, offsetLeft, startX, startY } = selected;
-    target.style.top = `${offsetTop + pageY - startY}px`; 
-    target.style.left = `${offsetLeft + pageX - startX}px`;
-  };
+  const updatePlaceableInfoMap = () => {
+    if (dragging && !dragging?.isDrag) {
+      setPlaceableInfoMap((placeableInfoMap) => {
+        placeableInfoList.forEach(placeableInfo => {
+          placeableInfoMap.set(placeableInfo.id, placeableInfo)
+        })
+        return placeableInfoMap;
+      })
+    }
+  }
 
-  const onTouchMove: TouchEventHandler = (event) => {
-    const { pageX, pageY} = event.targetTouches[0];
-    if (!isEdit || !selected?.target) return;
-    const { target, offsetTop, offsetLeft, startX, startY } = selected;
-    target.style.top = `${offsetTop + pageY - startY}px`; 
-    target.style.left = `${offsetLeft + pageX - startX}px`;
-  };
+  useEffect(init, [])
+  useEffect(updatePlaceableInfoMap, [dragging])
 
+  const props = {
+    onMouseMove: onDragMove,
+    onMouseUp: onDragEnd,
 
-  const onMouseUp: MouseEventHandler = () => setSelected((selected) => {
-    if (!isEdit || !selected?.target) return selected;
-    selected.target.style.transform = `rotate(${Math.random() * 10 - 5}deg)`
-    return undefined;
-  });
+    onTouchMove: onDragMove,
+    onTouchEnd: onDragEnd,
+  }
 
-  const onTouchEnd: TouchEventHandler = () => setSelected((selected) => {
-    if (!isEdit || !selected?.target) return selected;
-    selected.target.style.transform = `rotate(${Math.random() * 10 - 5}deg)`
-    return undefined;
-  });
-
+  const twStyles = [tw`w-screen h-screen bg-orange-200 bg-[url("https://transparenttextures.com/patterns/cardboard.png")]`]
   return (
-    <div {...{
-      onMouseMove, onMouseUp,
-      onTouchMove, onTouchEnd,
-      css: [tw`w-screen h-screen bg-orange-200 bg-[url("https://transparenttextures.com/patterns/cardboard.png")]`],
-    }}>
-      <FontStyles/>
-      {[...stickyNoteInfos]
-        .sort((a, b)=>a.zIndex-b.zIndex)
-        .map(({ content, css, id, zIndex, imgUrl }) =><Polaroid {...{ key: id, onMouseDown, onTouchStart, css: [...[css, isEdit ? tw`hover:cursor-move` : tw``]], zIndex, imgUrl }}>{content}</Polaroid>
-      )}
-      <RoundButton {...{
-        css: [tw`absolute bg-gray-300 p-5 bottom-20 right-40`],
-        onClick: () => { setStickyNoteInfos(prev=>[...prev, new PolaroidInfo({content:"새거"})]) }
-      }}>
-        생성
-      </RoundButton>
-      <RoundButton {...{
-        css: [tw`absolute bg-gray-300 p-5 bottom-20 right-20`],
-        onClick: () => { setIsEdit(isEdit => !isEdit) }
-      }}>
-        {isEdit? "편집모드" : "읽기모드"}
-      </RoundButton>
+    <div {...{...props, css:twStyles}}>
+      {[...placeableInfoList]
+        .sort((a,b)=>a.zIndex-b.zIndex)
+        .map((placeableInfo) => {
+        return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
+      })}
     </div>
   );
-};
+}
 
 export default Board;

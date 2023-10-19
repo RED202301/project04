@@ -9,7 +9,7 @@ import LoginRedirect from "./pages/Login/LoginRedirect";
 import Rolling from "./pages/Rolling";
 import RollingCreate from "./pages/RollingCreate";
 import RollingDetail from "./pages/RollingDetail";
-import Board from "./pages/Board/Board";
+import Board from "./pages/Board/Board"
 
 const App: React.FC = () => {
   const state = useRecoilValue(stateAtom).id
