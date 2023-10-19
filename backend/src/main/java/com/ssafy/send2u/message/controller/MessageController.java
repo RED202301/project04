@@ -20,10 +20,10 @@ public class MessageController {
 
     @GetMapping()
     public ResponseEntity<ApiResponse> getAllMessages() {
-        List<MessageDto.Response> list = messageService.getAllMessages();
+        List<MessageDto> list = messageService.getAllMessages();
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("회원정보")
+                .message("메세지 리스트")
                 .status(OK.value())
                 .data(list)
                 .build();
@@ -32,11 +32,11 @@ public class MessageController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse> create(@RequestParam Long senderId, @RequestBody MessageDto.CreateRequest request) {
-        MessageDto.Response response = messageService.createMessage(senderId, request.getContent());
+    public ResponseEntity<ApiResponse> create(@RequestBody MessageDto messageDto) {
+        MessageDto response = messageService.createMessage(messageDto.getSenderId(), messageDto.getReceiverId(), messageDto.getContent());
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("회원정보")
+                .message("메세지 작성")
                 .status(OK.value())
                 .data(response)
                 .build();

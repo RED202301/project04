@@ -24,21 +24,29 @@ public class MessageService {
     }
 
     @Transactional
-    public List<MessageDto.Response> getAllMessages() {
+    public List<MessageDto> getAllMessages() {
         return messageRepository.findAll().stream()
-                .map(message -> new MessageDto.Response(message.getId(), message.getContent(), message.getSender().getUserSeq()))
+                .map(message -> new MessageDto(message.getId(), message.getContent(),message.getSender().getUserSeq(), message.getReceiver().getUserSeq()))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public MessageDto.Response createMessage(Long senderId, String content) {
+    public MessageDto createMessage(Long senderId, Long receiverId, String content) {
+        MessageDto messageDto;
+
         User sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid sender Id:" + senderId));
+        User receiver = userRepository.findById(receiverId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid receiver Id:" + receiverId));
+
         Message message = new Message();
         message.setSender(sender);
+        message.setReceiver(receiver);
         message.setContent(content);
         Message savedMessage = messageRepository.save(message);
-        return new MessageDto.Response(savedMessage.getId(), savedMessage.getContent(), savedMessage.getSender().getUserSeq());
+
+        messageDto = new MessageDto(savedMessage.getId(), savedMessage.getContent(), savedMessage.getSender().getUserSeq(), savedMessage.getReceiver().getUserSeq());
+        return messageDto;
     }
 
 }
