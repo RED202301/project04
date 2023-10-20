@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,13 +26,14 @@ public class MessageService {
 
     @Transactional
     public List<MessageDto> getAllMessages() {
-        return messageRepository.findAll().stream()
-                .map(message -> new MessageDto(message.getId(), message.getContent(),message.getSender().getUserSeq(), message.getReceiver().getUserSeq()))
-                .collect(Collectors.toList());
+        List<MessageDto> list = messageRepository.findAll().stream().map(MessageDto::new).collect(Collectors.toList());
+        return list;
     }
 
     @Transactional
-    public MessageDto createMessage(Long senderId, Long receiverId, String content) {
+    public MessageDto createMessage(String content,
+                                    Float top, Float left, Float rotate,
+                                    Long zindex, Long type, Long bgcolor, Long senderId, Long receiverId) {
         MessageDto messageDto;
 
         User sender = userRepository.findById(senderId)
@@ -40,13 +42,30 @@ public class MessageService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid receiver Id:" + receiverId));
 
         Message message = new Message();
+        message.setContent(content);
+        message.setTop(top);
+        message.setLeft(left);
+        message.setRotate(rotate);
+        message.setZindex(zindex);
+        message.setType(type);
+        message.setBgcolor(bgcolor);
         message.setSender(sender);
         message.setReceiver(receiver);
-        message.setContent(content);
+
         Message savedMessage = messageRepository.save(message);
 
-        messageDto = new MessageDto(savedMessage.getId(), savedMessage.getContent(), savedMessage.getSender().getUserSeq(), savedMessage.getReceiver().getUserSeq());
+        messageDto = new MessageDto(savedMessage);
+
         return messageDto;
+    }
+
+    @Transactional
+    public Long deleteMessage(Long id) {
+        if (!messageRepository.existsById(id)) {
+            throw new IllegalArgumentException("Invalid message Id: " + id);
+        }
+        messageRepository.deleteById(id);
+        return id;
     }
 
 }
