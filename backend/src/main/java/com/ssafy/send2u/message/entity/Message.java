@@ -3,11 +3,16 @@ package com.ssafy.send2u.message.entity;
 import com.ssafy.send2u.user.entity.user.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "message")
 public class Message {
@@ -16,6 +21,26 @@ public class Message {
     private Long id;
 
     private String content;
+
+    @Column(name = "`top`")
+    private Float top;
+
+    @Column(name = "`left`")
+    private Float left;
+
+    @Column(name = "`rotate`")
+    private Float rotate;
+
+    @Column(name = "`z_index`")
+    private Long zIndex;
+
+    private Long type;
+    private Long bgcolor;
+
+    @Column(name = "created_at")
+    @CreatedDate
+    private LocalDateTime createdAt;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")

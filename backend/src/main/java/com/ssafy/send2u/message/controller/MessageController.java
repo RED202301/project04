@@ -32,8 +32,17 @@ public class MessageController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse> create(@RequestBody MessageDto messageDto) {
-        MessageDto response = messageService.createMessage(messageDto.getSenderId(), messageDto.getReceiverId(), messageDto.getContent());
+    public ResponseEntity<ApiResponse> createMessage(@RequestBody MessageDto messageDto) {
+        MessageDto response = messageService.createMessage(
+                messageDto.getContent(),
+                messageDto.getTop(),
+                messageDto.getLeft(),
+                messageDto.getRotate(),
+                messageDto.getZIndex(),
+                messageDto.getType(),
+                messageDto.getBgcolor(),
+                messageDto.getSenderId(),
+                messageDto.getReceiverId());
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("메세지 작성")
