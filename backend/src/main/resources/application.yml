@@ -32,6 +32,13 @@ spring:
         order_inserts: true
         order_updates: true
         format_sql: true
+
+  #Multipart
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 300MB
+      max-request-size: 300MB
   # Security OAuth
   security:
     oauth2.client:
@@ -41,7 +48,7 @@ spring:
           clientSecret: "${KAKAO_CLIENT_SECRET_KEY}"
           clientAuthenticationMethod: post
           authorizationGrantType: authorization_code
-          redirectUri: "http://192.168.30.218:8080/login/oauth2/code/kakao"
+          redirectUri: "http://localhost:8080/login/oauth2/code/kakao"
           scope:
             - profile_nickname
             - profile_image
@@ -83,3 +90,17 @@ app:
 
 kakao:
   admin: ${KAKAO_API_ADMIN_KEY}
+
+
+cloud:
+  aws:
+    s3:
+      bucket: send2u
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
