@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -38,7 +40,7 @@ public class MessageController {
                 messageDto.getTop(),
                 messageDto.getLeft(),
                 messageDto.getRotate(),
-                messageDto.getZIndex(),
+                messageDto.getZindex(),
                 messageDto.getType(),
                 messageDto.getBgcolor(),
                 messageDto.getSenderId(),
@@ -48,6 +50,22 @@ public class MessageController {
                 .message("메세지 작성")
                 .status(OK.value())
                 .data(response)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteMessage(@PathVariable Long id) {
+        Long deletedId = messageService.deleteMessage(id);
+
+        Map<String, Long> data = new HashMap<>();
+        data.put("id", deletedId);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(id + "번 ID 메세지 삭제")
+                .status(OK.value())
+                .data(data)
                 .build();
 
         return ResponseEntity.ok(apiResponse);

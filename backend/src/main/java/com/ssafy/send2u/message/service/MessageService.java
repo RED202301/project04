@@ -26,25 +26,14 @@ public class MessageService {
 
     @Transactional
     public List<MessageDto> getAllMessages() {
-        return messageRepository.findAll().stream()
-                .map(message -> new MessageDto(message.getId(),
-                        message.getContent(),
-                        message.getTop(),
-                        message.getLeft(),
-                        message.getRotate(),
-                        message.getZIndex(),
-                        message.getType(),
-                        message.getBgcolor(),
-                        message.getCreatedAt(),
-                        message.getSender().getUserSeq(),
-                        message.getReceiver().getUserSeq()))
-                .collect(Collectors.toList());
+        List<MessageDto> list = messageRepository.findAll().stream().map(MessageDto::new).collect(Collectors.toList());
+        return list;
     }
 
     @Transactional
     public MessageDto createMessage(String content,
                                     Float top, Float left, Float rotate,
-                                    Long zIndex, Long type, Long bgcolor, Long senderId, Long receiverId) {
+                                    Long zindex, Long type, Long bgcolor, Long senderId, Long receiverId) {
         MessageDto messageDto;
 
         User sender = userRepository.findById(senderId)
@@ -57,7 +46,7 @@ public class MessageService {
         message.setTop(top);
         message.setLeft(left);
         message.setRotate(rotate);
-        message.setZIndex(zIndex);
+        message.setZindex(zindex);
         message.setType(type);
         message.setBgcolor(bgcolor);
         message.setSender(sender);
@@ -65,12 +54,18 @@ public class MessageService {
 
         Message savedMessage = messageRepository.save(message);
 
-        messageDto = new MessageDto(savedMessage.getId(), savedMessage.getContent(),
-                savedMessage.getTop(), savedMessage.getLeft(),
-                savedMessage.getRotate(), savedMessage.getZIndex(),
-                savedMessage.getType(), savedMessage.getBgcolor(), savedMessage.getCreatedAt(), savedMessage.getSender().getUserSeq(),
-                savedMessage.getReceiver().getUserSeq());
+        messageDto = new MessageDto(savedMessage);
+
         return messageDto;
+    }
+
+    @Transactional
+    public Long deleteMessage(Long id) {
+        if (!messageRepository.existsById(id)) {
+            throw new IllegalArgumentException("Invalid message Id: " + id);
+        }
+        messageRepository.deleteById(id);
+        return id;
     }
 
 }

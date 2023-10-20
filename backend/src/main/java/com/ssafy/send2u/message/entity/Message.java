@@ -20,8 +20,6 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
-
     @Column(name = "`top`")
     private Float top;
 
@@ -32,10 +30,9 @@ public class Message {
     private Float rotate;
 
     @Column(name = "`z_index`")
-    private Long zIndex;
+    private Long zindex;
 
     private Long type;
-    private Long bgcolor;
 
     @Column(name = "created_at")
     @CreatedDate
@@ -49,4 +46,11 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
+
+    private Long bgcolor;
+    private String content;
+    private String thumbnail;
+    private String sourceSrc;
+    private String EmojiSrc;
+
 }
