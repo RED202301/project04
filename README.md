@@ -72,4 +72,5 @@
 - SSAFY DAY 일정
 
 
-일단 수능 몰빵
+일단 수능 몰빵하기로했습니다
+feature/board, refactor  작업중
