@@ -3,9 +3,13 @@ package com.ssafy.send2u.message.controller;
 import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.message.dto.MessageDto;
 import com.ssafy.send2u.message.service.MessageService;
+import com.ssafy.send2u.user.repository.user.UserRepository;
 import java.io.IOException;
+import java.nio.file.LinkOption;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -35,23 +39,14 @@ public class MessageController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping(consumes = { "multipart/form-data" })
-    public ResponseEntity<ApiResponse> createMessage(@RequestPart(value = "message", required = false) MessageDto messageDto,
-                                                     @RequestPart(value = "sourceFile", required = false) MultipartFile sourceFile,
-                                                     @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile)
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<ApiResponse> createMessage(
+            @RequestPart(value = "message", required = false) MessageDto messageDto,
+            @RequestPart(value = "sourceFile", required = false) MultipartFile sourceFile,
+            @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile)
             throws IOException {
-        MessageDto response = messageService.createMessage(
-                messageDto.getContent(),
-                messageDto.getTop(),
-                messageDto.getLeft(),
-                messageDto.getRotate(),
-                messageDto.getZindex(),
-                messageDto.getType(),
-                messageDto.getBgcolor(),
-                messageDto.getSenderId(),
-                messageDto.getReceiverId(),
-                sourceFile,
-                thumbnailFile);
+
+        MessageDto response = messageService.createMessage(messageDto, sourceFile, thumbnailFile);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("메세지 작성")
                 .status(OK.value())
@@ -90,5 +85,6 @@ public class MessageController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
 
 }
