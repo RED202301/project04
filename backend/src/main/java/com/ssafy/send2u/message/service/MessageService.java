@@ -32,6 +32,18 @@ public class MessageService {
     }
 
     @Transactional
+    public List<MessageDto> getUserReceivedMessages() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+
+        User user = userRepository.findByUserId(principal.getUsername());
+
+        List<Message> messages = messageRepository.findByReceiver(user);
+
+        return messages.stream().map(MessageDto::new).collect(Collectors.toList());
+    }
+
+    @Transactional
     public MessageDto createMessage(MessageDto messageDto, MultipartFile sourceFile, MultipartFile thumbnailFile)
             throws IOException {
 

@@ -38,6 +38,18 @@ public class MessageController {
 
         return ResponseEntity.ok(apiResponse);
     }
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse> getUserReceivedMessages() {
+        List<MessageDto> list = messageService.getUserReceivedMessages();
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("내가 받은 메세지 리스트")
+                .status(OK.value())
+                .data(list)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<ApiResponse> createMessage(
