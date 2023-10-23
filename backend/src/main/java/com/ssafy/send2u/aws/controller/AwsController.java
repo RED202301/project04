@@ -21,7 +21,7 @@ public class AwsController {
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> fileUpload(@RequestPart MultipartFile file) throws IOException {
 
-        String ret = awsService.fileUpload(file);
+        String ret = awsService.fileUpload(file, "images");
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("메세지 작성")
