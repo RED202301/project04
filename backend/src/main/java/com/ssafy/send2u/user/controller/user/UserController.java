@@ -26,8 +26,6 @@ public class UserController {
 
         UserInfoDto user = userService.getUser(principal.getUsername());
 
-
-
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("회원정보")
                 .status(OK.value())
