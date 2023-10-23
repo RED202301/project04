@@ -3,6 +3,7 @@ package com.ssafy.send2u.message.controller;
 import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.message.dto.MessageDto;
 import com.ssafy.send2u.message.service.MessageService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -33,8 +35,11 @@ public class MessageController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping()
-    public ResponseEntity<ApiResponse> createMessage(@RequestBody MessageDto messageDto) {
+    @PostMapping(consumes = { "multipart/form-data" })
+    public ResponseEntity<ApiResponse> createMessage(@RequestPart(value = "message", required = false) MessageDto messageDto,
+                                                     @RequestPart(value = "sourceFile", required = false) MultipartFile sourceFile,
+                                                     @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile)
+            throws IOException {
         MessageDto response = messageService.createMessage(
                 messageDto.getContent(),
                 messageDto.getTop(),
@@ -44,8 +49,9 @@ public class MessageController {
                 messageDto.getType(),
                 messageDto.getBgcolor(),
                 messageDto.getSenderId(),
-                messageDto.getReceiverId());
-
+                messageDto.getReceiverId(),
+                sourceFile,
+                thumbnailFile);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("메세지 작성")
                 .status(OK.value())

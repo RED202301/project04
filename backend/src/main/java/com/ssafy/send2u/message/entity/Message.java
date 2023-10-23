@@ -20,18 +20,19 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "`top`")
+    @Column(name = "`top`", nullable = false)
     private Float top;
 
-    @Column(name = "`left`")
+    @Column(name = "`left`", nullable = false)
     private Float left;
 
-    @Column(name = "`rotate`")
+    @Column(name = "`rotate`", nullable = false)
     private Float rotate;
 
-    @Column(name = "`z_index`")
+    @Column(name = "`z_index`", nullable = false)
     private Long zindex;
 
+    @Column(nullable = false)
     private Long type;
 
     @Column(name = "created_at")
@@ -49,8 +50,7 @@ public class Message {
 
     private Long bgcolor;
     private String content;
-    private String thumbnail;
-    private String sourceSrc;
-    private String EmojiSrc;
+    private String thumbnailFile;
+    private String sourceFile;
 
 }
