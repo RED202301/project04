@@ -9,6 +9,7 @@ import com.ssafy.send2u.user.repository.user.UserRepository;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -31,37 +32,49 @@ public class MessageService {
     }
 
     @Transactional
-    public MessageDto createMessage(String content,
-                                    Float top, Float left, Float rotate,
-                                    Long zindex, Long type, Long bgcolor, Long senderId, Long receiverId,
-                                    MultipartFile sourceFile, MultipartFile thumbnailFile) throws IOException {
-        MessageDto messageDto;
+    public List<MessageDto> getUserReceivedMessages() {
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
 
-        User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid sender Id:" + senderId));
-        User receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid receiver Id:" + receiverId));
+        User user = userRepository.findByUserId(principal.getUsername());
 
+        List<Message> messages = messageRepository.findByReceiver(user);
+
+        return messages.stream().map(MessageDto::new).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public MessageDto createMessage(MessageDto messageDto, MultipartFile sourceFile, MultipartFile thumbnailFile)
+            throws IOException {
+
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+
+//        User sender = userRepository.findById(senderId)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid sender Id:" + senderId));
+        User sender = userRepository.findByUserId(principal.getUsername());
+        User receiver = userRepository.findById(messageDto.getReceiverId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid receiver Id:" + messageDto.getReceiverId()));
 
         String sourceFileURL = null;
         String thumbnailFileUrl = null;
 
-        if (type == 2) {
+        if (messageDto.getType() == 2) {
             sourceFileURL = awsService.fileUpload(sourceFile, "image");
-            thumbnailFileUrl = awsService.fileUpload(thumbnailFile,"thumbnail");
-        } else if (type == 3) {
+            thumbnailFileUrl = awsService.fileUpload(thumbnailFile, "thumbnail");
+        } else if (messageDto.getType() == 3) {
             sourceFileURL = awsService.fileUpload(sourceFile, "video");
-            thumbnailFileUrl = awsService.fileUpload(thumbnailFile,"thumbnail");
+            thumbnailFileUrl = awsService.fileUpload(thumbnailFile, "thumbnail");
         }
 
         Message message = new Message();
-        message.setContent(content);
-        message.setTop(top);
-        message.setLeft(left);
-        message.setRotate(rotate);
-        message.setZindex(zindex);
-        message.setType(type);
-        message.setBgcolor(bgcolor);
+        message.setContent(messageDto.getContent());
+        message.setTop(messageDto.getTop());
+        message.setLeft(messageDto.getLeft());
+        message.setRotate(messageDto.getRotate());
+        message.setZindex(messageDto.getZindex());
+        message.setType(messageDto.getType());
+        message.setBgcolor(messageDto.getBgcolor());
         message.setSender(sender);
         message.setReceiver(receiver);
         message.setSourceFile(sourceFileURL);
@@ -69,9 +82,7 @@ public class MessageService {
 
         Message savedMessage = messageRepository.save(message);
 
-        messageDto = new MessageDto(savedMessage);
-
-        return messageDto;
+        return new MessageDto(savedMessage);
     }
 
     @Transactional
