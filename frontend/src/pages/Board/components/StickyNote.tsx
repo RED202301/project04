@@ -1,18 +1,18 @@
 import tw from "twin.macro";
 import { StickyNoteProps } from "../types/types"
 import Placing from "./Placing";
+import { bgcolors } from "../Styles/bgcolors";
+import { textures } from "../Styles/texture";
 
 const StickyNote: React.FC<StickyNoteProps> = ({ ...props }) => {
-  const { content, id, top, left, rotate, zIndex, color } = props;
-  const twColors =[
-    tw`bg-white`,
-    tw`bg-yellow-300`,
-    tw`bg-red-300`,
-    tw`bg-blue-300`,
+  const { content, id, top, left, rotate, zindex, bgcolor, type } = props;
+  
+  const twStyles = [
+    tw`absolute select-none drop-shadow-md p-4 font-['Cafe24Supermagic']`,
+    bgcolors[bgcolor],
+    textures[0],
   ]
-  const twColor = twColors[color]
-  const twStyles = [tw`w-36 h-36 absolute select-none drop-shadow-md p-4 font-['Nanum Brush Script'] bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`, ...(twColor?[twColor]:[])]
-  return <Placing {...{ id, top, left, rotate, zIndex, twStyles }}>
+  return <Placing {...{ id, top, left, rotate, zindex, twStyles, type}}>
       {content}
   </Placing>
 }

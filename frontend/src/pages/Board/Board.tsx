@@ -1,16 +1,32 @@
 import React, { PropsWithChildren, useEffect } from "react"
 import { useOnDragMove, useOnDragEnd } from "./hooks";
-import { placeableInfoMapState, placeableInfoListState, draggingState } from "./recoil/atoms";
+import { placeableInfoMapState, placeableInfoListState, draggingState, windowSizeState } from "./recoil/atoms";
 import { useRecoilState } from "recoil";
 import { PlaceableInfo, DummyPlaceableInfo } from "./types/types";
 import Placeable from "./components/Placeable";
 import tw from "twin.macro";
+import FontStyles from "./Styles/fonts";
+// import CreatePlaceableForm from "./components/CreatePlaceableForm";
+import { textures } from "./Styles/texture";
+import ModalComponent from "./components/d/Modal";
+
 
 const datas: PlaceableInfo[] = [
-  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:0}),
-  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:1}),
-  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:2}),
-  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", color:3}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:0}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:0}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
+  DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
   DummyPlaceableInfo.Polaroid({
     content: "갬성 사진", 
     src: "https://cdn.thescoop.co.kr/news/photo/202102/42527_61056_1017.jpg",
@@ -26,11 +42,21 @@ const datas: PlaceableInfo[] = [
     src: "https://mblogthumb-phinf.pstatic.net/MjAxODAzMjBfMTUw/MDAxNTIxNDg4NDQ1NzUz.nJAZpVQEen0mR_oasedsz-G1bbEPel_akhowP-N-uSYg.0UsO5f-TAjYZ3cQJ3lCOubAlESCLUMiqZJjnRFgdd5Ug.GIF.uprrsse/%EA%B0%AC%EC%84%B1_%EB%8F%8B%EB%8A%94_%EC%95%A0%EB%8B%88_%EC%9B%80%EC%A7%A4_%EB%AA%A8%EC%9D%8C__%28212%29.gif?type=w800",
     thumbnail: "https://mblogthumb-phinf.pstatic.net/MjAxODAzMjBfMTUw/MDAxNTIxNDg4NDQ1NzUz.nJAZpVQEen0mR_oasedsz-G1bbEPel_akhowP-N-uSYg.0UsO5f-TAjYZ3cQJ3lCOubAlESCLUMiqZJjnRFgdd5Ug.GIF.uprrsse/%EA%B0%AC%EC%84%B1_%EB%8F%8B%EB%8A%94_%EC%95%A0%EB%8B%88_%EC%9B%80%EC%A7%A4_%EB%AA%A8%EC%9D%8C__%28212%29.gif?type=w800",
   }),
-  DummyPlaceableInfo.Sticker({src:"💗"}),
-  DummyPlaceableInfo.Sticker({src:"🍕"}),
-  DummyPlaceableInfo.Sticker({src:"🍟"}),
-  DummyPlaceableInfo.Sticker({src:"🌸"}),
-  DummyPlaceableInfo.Sticker({src:"🥕"}),
+  DummyPlaceableInfo.Polaroid({
+    content: "가나다라마가나다라마", 
+    src: "https://cdn.eyesmag.com/content/uploads/posts/2020/05/08/city-pop-playlist-6-main-31cf461b-a668-4a92-aff5-abd6470d955c.gif",
+    thumbnail: "https://cdn.eyesmag.com/content/uploads/posts/2020/05/08/city-pop-playlist-6-main-31cf461b-a668-4a92-aff5-abd6470d955c.gif",
+  }),
+  DummyPlaceableInfo.StickyNote({content:"가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마", bgcolor:3}),
+  // DummyPlaceableInfo.Sticker({src:"💗"}),
+  // DummyPlaceableInfo.Sticker({src:"🍕"}),
+  // DummyPlaceableInfo.Sticker({src:"🍟"}),
+  // DummyPlaceableInfo.Sticker({src:"🌸"}),
+  // DummyPlaceableInfo.Sticker({src:"🥕"}),
+  // DummyPlaceableInfo.Sticker({src:"📌"}),
+  // DummyPlaceableInfo.Sticker({src:"📌"}),
+  // DummyPlaceableInfo.Sticker({src:"📌"}),
+  // DummyPlaceableInfo.Sticker({src:"📌"}),
 ]; 
 
 const Board: React.FC<PropsWithChildren> = () => {
@@ -39,6 +65,14 @@ const Board: React.FC<PropsWithChildren> = () => {
   const [dragging] = useRecoilState(draggingState);
   const [placeableInfoList, setPlaceableInfoList] = useRecoilState(placeableInfoListState);
   const [, setPlaceableInfoMap] = useRecoilState(placeableInfoMapState);
+
+  const [windowSize, setWindowSize] = useRecoilState(windowSizeState);
+  const handleResize = () => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    }) 
+  }
 
   const init = () => {
     setPlaceableInfoList(() => datas);
@@ -61,25 +95,41 @@ const Board: React.FC<PropsWithChildren> = () => {
 
   useEffect(init, [])
   useEffect(updatePlaceableInfoMap, [dragging])
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return ()=> window.removeEventListener("resize", handleResize); 
+  })
 
   const props = {
     onMouseMove: onDragMove,
     onMouseUp: onDragEnd,
+    onMouseLeave: onDragEnd,
 
     onTouchMove: onDragMove,
     onTouchEnd: onDragEnd,
   }
 
-  const twStyles = [tw`w-screen h-screen bg-orange-200 bg-[url("https://transparenttextures.com/patterns/cardboard.png")]`]
+  const twStyles = [tw`bg-orange-200`, textures[0]]
   return (
-    <div {...{...props, css:twStyles}}>
+    <div {...{
+      ...props,
+      css: twStyles,
+      style: {
+        width: windowSize.width,
+        height: windowSize.height,
+      }
+    }}>
+      <FontStyles/>
       {[...placeableInfoList]
-        .sort((a,b)=>a.zIndex-b.zIndex)
+        .sort((a,b)=>a.zindex-b.zindex)
         .map((placeableInfo) => {
         return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
-      })}
+        })}
+      {/* <CreatePlaceableForm></CreatePlaceableForm> */}
+        <ModalComponent/>
     </div>
   );
+  
 }
 
 export default Board;

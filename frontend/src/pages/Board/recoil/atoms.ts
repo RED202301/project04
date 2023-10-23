@@ -8,6 +8,19 @@ interface DraggingInfo {
   startY: number;
 }
 
+interface WindowSize {
+  width: number,
+  height: number,
+}
+
+const windowSizeState = atom<WindowSize>({
+  key: "windowSizeState",
+  default: {
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
+})
+
 const draggingState = atom<DraggingInfo>({
   key: "draggingState",
   default: { isDrag: false, placeableId: 0, startX: 0, startY: 0 },
@@ -28,4 +41,10 @@ const placeableInfoMapState = atom<Map<number, PlaceableInfo>>({
   default: new Map<number, PlaceableInfo>(),
 })
 
-export { draggingState, canDragState, placeableInfoListState, placeableInfoMapState };
+export {
+  windowSizeState,
+  draggingState,
+  canDragState,
+  placeableInfoListState,
+  placeableInfoMapState
+};

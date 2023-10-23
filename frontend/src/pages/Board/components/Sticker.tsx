@@ -4,10 +4,12 @@ import Placing from "./Placing";
 
 const Sticker: React.FC<StickerProps> = ({src, ...props}) => {
   
-  const { id, top, left, rotate, zIndex } = props;
-  const twStyles = [tw`absolute select-none text-7xl`]
+  const { id, top, left, rotate, zindex, type } = props;
+  const twStyles = [
+    tw`absolute select-none text-7xl`
+  ]
 
-  return <Placing {...{ id, top, left, rotate, zIndex, twStyles}}>
+  return <Placing {...{ id, top, left, rotate, zindex, twStyles, type }}>
     {src}
   </Placing>
 }

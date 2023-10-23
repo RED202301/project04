@@ -1,24 +1,32 @@
 import React from "react"
 import { useRecoilState } from "recoil";
-import { draggingState, placeableInfoMapState, placeableInfoListState, canDragState } from '../recoil/atoms'
+import { draggingState, placeableInfoMapState, placeableInfoListState, canDragState, windowSizeState } from '../recoil/atoms'
 
 const useOnDragStart = (placeableId: number) => {
   const [, setDragging] = useRecoilState(draggingState);
   const [placeableInfoMap,] = useRecoilState(placeableInfoMapState);
   const [, setPlaceableInfoList] = useRecoilState(placeableInfoListState);
   const [canDrag] = useRecoilState(canDragState);
+  const [windowSize] = useRecoilState(windowSizeState)
 
   const onDragStart = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
     if (!canDrag) return;
     const { pageX, pageY } = "targetTouches" in event ? event.targetTouches[0] : event;
 
-    setDragging(() => { return { isDrag: true, placeableId, startX: pageX, startY: pageY } });
+    setDragging(() => {
+      return {
+        isDrag: true,
+        placeableId,
+        startX: pageX / windowSize.width,
+        startY: pageY / windowSize.width,
+      }
+    });
 
-    const { zIndex } = placeableInfoMap.get(placeableId)!;
+    const { zindex } = placeableInfoMap.get(placeableId)!;
     setPlaceableInfoList(placeableInfoList => placeableInfoList.map(placeableInfo => {
       const updated = { ...placeableInfo };
-      if (updated.zIndex > zIndex) updated.zIndex -= 1;
-      else if (updated.zIndex === zIndex) updated.zIndex = placeableInfoList.length;
+      if (updated.zindex > zindex) updated.zindex -= 1;
+      else if (updated.zindex === zindex) updated.zindex = placeableInfoList.length;
       return updated
     })
     )
