@@ -17,8 +17,8 @@ public class AwsService {
 
 
     @Transactional
-    public String fileUpload(MultipartFile file) throws IOException {
-        String fileUrl = s3UploadService.saveFile(file,"image");
+    public String fileUpload(MultipartFile file, String dir) throws IOException {
+        String fileUrl = s3UploadService.saveFile(file, dir);
 
         System.out.println(fileUrl);
 

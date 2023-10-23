@@ -21,23 +21,27 @@ public class MessageDto {
     private LocalDateTime createdAt;
 
     private Long type;
-    private Long receiverId;
     private Long senderId;
+    private Long receiverId;
 
     private Long bgcolor;
     private String content;
+    private String thumbnailFile;
+    private String sourceFile;
 
     public MessageDto(Message message) {
-         this.id = message.getId();
-         this.top = message.getTop();
-         this.left = message.getLeft();
-         this.rotate = message.getRotate();
-         this.zindex = message.getZindex();
-         this.createdAt = message.getCreatedAt();
-         this.type = message.getType();
-         this.receiverId = message.getReceiver().getUserSeq();
-         this.senderId = message.getSender().getUserSeq();
-         this.bgcolor = message.getBgcolor();
-         this.content = message.getContent();
+        this.id = message.getId();
+        this.top = message.getTop();
+        this.left = message.getLeft();
+        this.rotate = message.getRotate();
+        this.zindex = message.getZindex();
+        this.createdAt = message.getCreatedAt();
+        this.type = message.getType();
+        this.receiverId = message.getReceiver().getUserSeq();
+        this.senderId = message.getSender().getUserSeq();
+        this.bgcolor = message.getBgcolor();
+        this.content = message.getContent();
+        this.thumbnailFile = message.getThumbnailFile();
+        this.sourceFile = message.getSourceFile();
     }
 }
