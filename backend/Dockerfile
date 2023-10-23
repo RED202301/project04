@@ -14,7 +14,7 @@ FROM openjdk:11.0-slim
 WORKDIR /app
 
 # 빌더 이미지에서 jar 파일만 복사
-COPY --from=builder /build/build/libs/<생성된 jar 파일명>.jar .
+COPY --from=builder /build/build/libs/send2u-0.0.1-SNAPSHOT.jar .
 
 EXPOSE 8080
 
@@ -25,5 +25,5 @@ ENTRYPOINT [ \
    "-jar", \
    "-Djava.security.egd=file:/dev/./urandom", \
    "-Dsun.net.inetaddr.ttl=0", \
-   "<send2u-0.0.1-SNAPSHOT>.jar" \
+   "send2u-0.0.1-SNAPSHOT.jar" \
 ]
