@@ -75,6 +75,29 @@ public class MessageService {
     }
 
     @Transactional
+    public MessageDto updateMessage(Long messageId, Float top, Float left, Float rotate, Long zindex) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message Id: " + messageId));
+
+        if (top != null) {
+            message.setTop(top);
+        }
+        if (left != null) {
+            message.setLeft(left);
+        }
+        if (rotate != null) {
+            message.setRotate(rotate);
+        }
+        if (zindex != null) {
+            message.setZindex(zindex);
+        }
+
+        Message updatedMessage = messageRepository.save(message);
+
+        return new MessageDto(updatedMessage);
+    }
+
+    @Transactional
     public Long deleteMessage(Long id) {
         if (!messageRepository.existsById(id)) {
             throw new IllegalArgumentException("Invalid message Id: " + id);

@@ -61,6 +61,20 @@ public class MessageController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateMessage(@PathVariable Long id, @RequestBody MessageDto messageDto) {
+        MessageDto updatedMessage = messageService.updateMessage(id, messageDto.getTop(), messageDto.getLeft(),
+                messageDto.getRotate(), messageDto.getZindex());
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(id + "번 메시지 수정")
+                .status(OK.value())
+                .data(updatedMessage)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteMessage(@PathVariable Long id) {
         Long deletedId = messageService.deleteMessage(id);
