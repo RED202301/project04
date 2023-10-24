@@ -69,7 +69,8 @@ const Board: React.FC<PropsWithChildren> = () => {
   const [windowSize, setWindowSize] = useRecoilState(windowSizeState);
   const handleResize = () => {
     setWindowSize({
-      width: window.innerWidth,
+      // width: window.innerWidth,
+      width: window.innerWidth >= 500 ? 500 : window.innerWidth,
       height: window.innerHeight,
     }) 
   }
@@ -117,6 +118,8 @@ const Board: React.FC<PropsWithChildren> = () => {
       style: {
         width: windowSize.width,
         height: windowSize.height,
+        marginLeft: "auto", 
+        marginRight: "auto",
       }
     }}>
       <FontStyles/>
@@ -126,7 +129,7 @@ const Board: React.FC<PropsWithChildren> = () => {
         return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
         })}
       {/* <CreatePlaceableForm></CreatePlaceableForm> */}
-        <ModalComponent/>
+        {/* <ModalComponent/> */}
     </div>
   );
   
