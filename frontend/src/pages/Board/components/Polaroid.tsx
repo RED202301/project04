@@ -11,7 +11,7 @@ import { windowSizeState } from "../recoil/atoms";
 const Polaroid: React.FC<PolaroidProps> = ({ ...props }) => {
   const { id, top, left, rotate, zindex, src, content, type } = props;
   const [windowSize] = useRecoilState(windowSizeState);
-  const twStyles = [tw`w-36 h-36 absolute select-none drop-shadow-md p-4 font-['Cafe24Supermagic']`, bgcolors[0], textures[0]]
+  const twStyles = [tw`w-36 h-36 drop-shadow-md p-4 font-['Cafe24Supermagic']`, bgcolors[0], textures[0]]
   const undraggable = css`
       -webkit-user-drag: none;
       -khtml-user-drag: none;

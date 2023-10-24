@@ -112,7 +112,7 @@ const Board: React.FC<PropsWithChildren> = () => {
 
   const twStyles = [tw`bg-orange-200`, textures[0]]
   return (
-    <div {...{
+    <section {...{
       ...props,
       css: twStyles,
       style: {
@@ -122,15 +122,27 @@ const Board: React.FC<PropsWithChildren> = () => {
         marginRight: "auto",
       }
     }}>
-      <FontStyles/>
-      {[...placeableInfoList]
-        .sort((a,b)=>a.zindex-b.zindex)
-        .map((placeableInfo) => {
-        return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
-        })}
+      <div
+        {...{
+          css: [
+            tw`absolute`
+          ],
+          style: {
+            width: windowSize.width,
+            height: windowSize.height,
+          }
+        }}
+      >
+        <FontStyles />
+        {[...placeableInfoList]
+          .sort((a,b)=>a.zindex-b.zindex)
+          .map((placeableInfo) => {
+          return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
+          })}
+        <ModalComponent/>
+      </div>
       {/* <CreatePlaceableForm></CreatePlaceableForm> */}
-        {/* <ModalComponent/> */}
-    </div>
+    </section>
   );
   
 }
