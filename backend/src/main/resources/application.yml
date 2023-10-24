@@ -16,6 +16,9 @@ spring:
       driver-class-name: ${spring.datasource.driver-class-name}
       data-source-properties:
         rewriteBatchedStatements: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   # JPA 설정
   jpa:
     generate-ddl: true

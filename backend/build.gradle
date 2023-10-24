@@ -55,6 +55,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+	//SWAGGER
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+
 }
 configurations {
 	all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
