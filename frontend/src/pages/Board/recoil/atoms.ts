@@ -16,7 +16,7 @@ interface WindowSize {
 const windowSizeState = atom<WindowSize>({
   key: "windowSizeState",
   default: {
-    width: window.innerWidth,
+    width: window.innerWidth >= 500 ? 500 : window.innerWidth,
     height: window.innerHeight
   }
 })

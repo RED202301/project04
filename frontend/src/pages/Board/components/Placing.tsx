@@ -1,6 +1,6 @@
 import { PlacingProps } from "../types/types";
 import { useOnDragStart } from "../hooks";
-import { css } from "twin.macro";
+import tw, { css } from "twin.macro";
 import { useRecoilState } from "recoil";
 import { windowSizeState } from "../recoil/atoms";
 import Ratio from "../Styles/ratios";
@@ -12,7 +12,7 @@ const Placing: React.FC<PlacingProps> = ({ children, id, top, left, rotate, twSt
     {...{
       onMouseDown: onDragStart,
       onTouchStart: onDragStart,
-      css:[ ...twStyles, css`transition: rotate .3s, top 0s, left 0s`, ],
+      css:[ ...twStyles, tw`absolute select-none`, css`transition: rotate .3s, top 0s, left 0s`, ],
       style: {
         top: top * windowSize.width,
         left: left * windowSize.width,

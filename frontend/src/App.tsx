@@ -10,11 +10,13 @@ import Rolling from "./pages/Rolling";
 import RollingCreate from "./pages/RollingCreate";
 import RollingDetail from "./pages/RollingDetail";
 import Board from "./pages/Board/Board"
+// import GlobalStyles from "./styles/GlobalStyles";
 
 const App: React.FC = () => {
   const state = useRecoilValue(stateAtom).id
   return (
     <React.Fragment>
+      {/* <GlobalStyles></GlobalStyles> */}
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />

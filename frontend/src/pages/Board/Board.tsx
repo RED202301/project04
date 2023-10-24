@@ -69,7 +69,8 @@ const Board: React.FC<PropsWithChildren> = () => {
   const [windowSize, setWindowSize] = useRecoilState(windowSizeState);
   const handleResize = () => {
     setWindowSize({
-      width: window.innerWidth,
+      // width: window.innerWidth,
+      width: window.innerWidth >= 500 ? 500 : window.innerWidth,
       height: window.innerHeight,
     }) 
   }
@@ -111,23 +112,37 @@ const Board: React.FC<PropsWithChildren> = () => {
 
   const twStyles = [tw`bg-orange-200`, textures[0]]
   return (
-    <div {...{
+    <section {...{
       ...props,
       css: twStyles,
       style: {
         width: windowSize.width,
         height: windowSize.height,
+        marginLeft: "auto", 
+        marginRight: "auto",
       }
     }}>
-      <FontStyles/>
-      {[...placeableInfoList]
-        .sort((a,b)=>a.zindex-b.zindex)
-        .map((placeableInfo) => {
-        return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
-        })}
-      {/* <CreatePlaceableForm></CreatePlaceableForm> */}
+      <div
+        {...{
+          css: [
+            tw`absolute`
+          ],
+          style: {
+            width: windowSize.width,
+            height: windowSize.height,
+          }
+        }}
+      >
+        <FontStyles />
+        {[...placeableInfoList]
+          .sort((a,b)=>a.zindex-b.zindex)
+          .map((placeableInfo) => {
+          return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
+          })}
         <ModalComponent/>
-    </div>
+      </div>
+      {/* <CreatePlaceableForm></CreatePlaceableForm> */}
+    </section>
   );
   
 }
