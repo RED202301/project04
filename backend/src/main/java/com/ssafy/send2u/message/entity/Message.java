@@ -50,7 +50,7 @@ public class Message {
 
     private Long bgcolor;
     private String content;
-    private String thumbnailFile;
-    private String sourceFile;
+    private String thumbnailFileUrl;
+    private String sourceFileUrl;
 
 }

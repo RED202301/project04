@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.nio.file.LinkOption;
+import javax.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +61,7 @@ public class MessageController {
     @ApiOperation(value = "일기생성")
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<ApiResponse> createMessage(
-            @RequestPart(value = "message", required = false) MessageDto messageDto,
+            @Valid @ModelAttribute MessageDto messageDto,
             @RequestPart(value = "sourceFile", required = false) MultipartFile sourceFile,
             @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile)
             throws IOException {
