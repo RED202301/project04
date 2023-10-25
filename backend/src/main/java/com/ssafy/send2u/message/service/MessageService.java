@@ -77,8 +77,8 @@ public class MessageService {
         message.setBgcolor(messageDto.getBgcolor());
         message.setSender(sender);
         message.setReceiver(receiver);
-        message.setSourceFile(sourceFileURL);
-        message.setThumbnailFile(thumbnailFileUrl);
+        message.setSourceFileUrl(sourceFileURL);
+        message.setThumbnailFileUrl(thumbnailFileUrl);
 
         Message savedMessage = messageRepository.save(message);
 
