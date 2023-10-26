@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import VideoThumbnail from "../components/Videothumbnail";
 import tw from "twin.macro";
 import FilePicker from "../components/FilePicker";
+import SoundPicker from "../components/soundPicker";
 
 const Rolling: React.FC = () => {
   // const [videoUrl, setVideoUrl] = useState<string | null>("");
@@ -21,7 +22,8 @@ const Rolling: React.FC = () => {
       {/* {videoUrl && <VideoThumbnail videoUrl={videoUrl} />} */}
 
       {/* 1. 사진/동영상 불러오기 */}
-      <FilePicker></FilePicker>
+      <FilePicker/>
+      <SoundPicker/>
     </div>
   );
 }
