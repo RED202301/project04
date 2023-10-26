@@ -6,10 +6,13 @@ const FilePicker: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 //   const [fileUrl, setFileUrl] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string | null>("");
+    // 3. videoUrl 들어오면, VideoThumbnail 실행
 
+  //2. 파일 들어왔을 때, 파일 저장 / bloburl 생성
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
+        console.log('이미지/동영상?', file)
       setSelectedFile(file);
       const fileurl = URL.createObjectURL(file)
     //   setFileUrl(URL.createObjectURL(file));
@@ -41,7 +44,12 @@ const FilePicker: React.FC = () => {
     <div>
     {!selectedFile && (
       <label htmlFor="file">
-        <div css={tw`flex justify-center border border-gray-700 bg-green-300 rounded-md w-[50%] h-[20vh]`}>파일 업로드하기</div>
+        <div css={tw`flex justify-center border border-gray-700 bg-green-300 rounded-md w-[50%] h-[20vh]`}>
+            <div css={tw`border rounded-md mt-[auto] mb-[auto] h-[90%] w-[94%] flex justify-center`}>
+            <p css={tw`text-sm`}>파일 업로드하기</p>
+            <img></img>
+            </div>
+        </div>
       </label>
     )}
     <input

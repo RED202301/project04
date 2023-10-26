@@ -4,10 +4,12 @@ interface VideoThumbnailProps {
   videoUrl: string;
 }
 
+
 const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [thumbnailUrl, setThumbnail] = useState<string>("");
-
+  
+  //5. base64 > 파일 변환
   const dataURLtoFile = (dataurl: string, fileName: string): File => {
     const arr = dataurl.split(',');
     const mime = arr[0].match(/:(.*?);/)?.[1];
@@ -22,6 +24,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
     return new File([u8arr], fileName, { type: mime });
   }
 
+  //4. blob url로 base64 생성 후 파일 변환 요청
   useEffect(() => {
     const generateThumbnail = () => {
       if (videoRef.current) {
@@ -38,7 +41,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
             ctx.drawImage(videoElement ,0 ,0 ,canvas.width ,canvas.height );
             setThumbnail(canvas.toDataURL());
             dataURLtoFile(canvas.toDataURL(), 'thumbnail')
-            console.log(dataURLtoFile(canvas.toDataURL(), 'thumbnail'))
+            console.log('썸네일', dataURLtoFile(canvas.toDataURL(), 'thumbnail'))
           }
         };
 

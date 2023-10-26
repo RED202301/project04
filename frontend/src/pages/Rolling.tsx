@@ -20,8 +20,11 @@ const Rolling: React.FC = () => {
     <div>
       {/* <button css={tw`border rounded-md border-black`} onClick={handleButtonClick}>썸네일 생성버튼</button> */}
       {/* {videoUrl && <VideoThumbnail videoUrl={videoUrl} />} */}
+
+      {/* 1. 사진/동영상 불러오기 */}
       <FilePicker></FilePicker>
-      <CameraCapture ></CameraCapture>
+
+      {/* <CameraCapture ></CameraCapture> */}
     </div>
   );
 }
