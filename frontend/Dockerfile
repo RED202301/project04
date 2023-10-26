@@ -1,5 +1,6 @@
 FROM node:18.16.1-alpine as builder
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
+WORKDIR /S09P31E206/frontend
 COPY package.json .
 RUN npm install
 COPY ./ ./
