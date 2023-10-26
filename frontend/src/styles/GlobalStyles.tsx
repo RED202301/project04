@@ -9,10 +9,12 @@ const customStyles = css({
     WebkitTapHighlightColor: theme`colors.purple.500`,
     ...tw`antialiased`,
     overflowX: "hidden",
-    // maxWidth: "500px",
-    // minWidth: "200px",
-    // marginLeft: "auto", 
-    // marginRight: "auto",
+    maxWidth: "500px",
+    minWidth: "200px",
+    maxHeight: window.innerHeight,
+    minHeight: '500px',
+    marginLeft: "auto", 
+    marginRight: "auto",
   },
 });
 

@@ -23,6 +23,8 @@ const Login: React.FC = () => {
     <div css={twStyles} style={{    
     maxWidth: "500px",
     minWidth: "200px",
+    maxHeight: window.innerHeight,
+    minHeight: '500px',
     marginLeft: "auto", 
     marginRight: "auto",
     backgroundColor:"#59B379",
@@ -38,7 +40,7 @@ const Login: React.FC = () => {
         <a css={tw`flex justify-center`} href={KAKAO_AUTH_URI} onClick={handleLogin}>
           <img css={tw`rounded shadow-xl mr-2 ml-2`} src={kakaoImg} width={"100%"} alt=""></img>
         </a>
-        <p css={tw`text-sm mt-2`}>시작할 경우, Sand2U의 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.</p>
+        <p css={tw`text-sm mt-2 text-gray-800`}>시작할 경우, Send2U의 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.</p>
       </div>
     </div>
   );
