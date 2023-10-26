@@ -2,15 +2,17 @@ package com.ssafy.send2u.message.dto;
 
 import com.ssafy.send2u.message.entity.Message;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
-
-import java.sql.Time;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@ToString
 public class MessageDto {
     @ApiModelProperty(hidden = true)
     private Long id;
@@ -26,9 +28,9 @@ public class MessageDto {
     private Long type;
 
     @ApiModelProperty(hidden = true)
-    private Long senderId;
+    private String senderId;
 
-    private Long receiverId;
+    private String receiverId;
 
     private Long bgcolor;
     private String content;
@@ -48,8 +50,8 @@ public class MessageDto {
         this.zindex = message.getZindex();
         this.createdAt = message.getCreatedAt();
         this.type = message.getType();
-        this.receiverId = message.getReceiver().getUserSeq();
-        this.senderId = message.getSender().getUserSeq();
+        this.receiverId = message.getReceiver().getUserId();
+        this.senderId = message.getSender().getUserId();
         this.bgcolor = message.getBgcolor();
         this.content = message.getContent();
         this.thumbnailFileUrl = message.getThumbnailFileUrl();

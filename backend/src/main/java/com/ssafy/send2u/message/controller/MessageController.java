@@ -1,27 +1,30 @@
 package com.ssafy.send2u.message.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.message.dto.MessageDto;
 import com.ssafy.send2u.message.service.MessageService;
-import com.ssafy.send2u.user.repository.user.UserRepository;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
-import java.nio.file.LinkOption;
-import javax.validation.Valid;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import static org.springframework.http.HttpStatus.OK;
 
 @Api(tags = {"message"}, description = "일단이것만사용하세요하세요하세요하세요")
 @RestController
@@ -44,6 +47,7 @@ public class MessageController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
     @ApiOperation(value = "내메시지조회")
     @GetMapping("/my")
     public ResponseEntity<ApiResponse> getUserReceivedMessages() {
@@ -65,6 +69,9 @@ public class MessageController {
             @RequestPart(value = "sourceFile", required = false) MultipartFile sourceFile,
             @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile)
             throws IOException {
+
+        System.out.println(messageDto);
+        System.out.println(messageDto);
 
         MessageDto response = messageService.createMessage(messageDto, sourceFile, thumbnailFile);
         ApiResponse apiResponse = ApiResponse.builder()
