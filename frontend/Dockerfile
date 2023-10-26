@@ -1,11 +1,11 @@
 FROM node:18.16.1-alpine as builder
-# WORKDIR /usr/src/app
-WORKDIR /S09P31E206/frontend
+WORKDIR /usr/src/app
+# WORKDIR /S09P31E206/frontend
 COPY package.json .
 RUN npm install
 COPY ./ ./
-RUN npm run build
 EXPOSE 5173
+RUN npm run build
 
 # FROM nginx
 # EXPOSE 5173
