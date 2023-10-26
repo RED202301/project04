@@ -38,7 +38,7 @@ const Login: React.FC = () => {
       <img css={tw`flex justify-center rounded ml-[5%] pt-[10%]`} src={Logo} width={"90%"} alt=""></img>
       <div css={tw`fixed top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 overflow-hidden rounded-xl w-[77%] sm:w-[60%] md:w-[40%] lg:w-[27%]`}>
         <a css={tw`flex justify-center`} href={KAKAO_AUTH_URI} onClick={handleLogin}>
-          <img  css={tw`rounded shadow-xl mr-2 ml-2`} src={kakaoImg} width={"100%"} alt=""></img>
+          <img css={tw`rounded shadow-xl mr-2 ml-2`} src={kakaoImg} width={"100%"} alt=""></img>
         </a>
         <p css={tw`text-sm mt-2 text-gray-800`}>시작할 경우, Send2U의 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.</p>
       </div>
