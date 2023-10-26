@@ -7,15 +7,12 @@ import com.ssafy.send2u.message.repository.MessageRepository;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -53,8 +50,7 @@ public class MessageService {
 //        User sender = userRepository.findById(senderId)
 //                .orElseThrow(() -> new IllegalArgumentException("Invalid sender Id:" + senderId));
         User sender = userRepository.findByUserId(principal.getUsername());
-        User receiver = userRepository.findById(messageDto.getReceiverId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid receiver Id:" + messageDto.getReceiverId()));
+        User receiver = userRepository.findByUserId(messageDto.getReceiverId());
 
         String sourceFileURL = null;
         String thumbnailFileUrl = null;
