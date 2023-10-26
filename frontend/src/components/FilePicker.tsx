@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import tw from "twin.macro";
 import VideoThumbnail from "./Videothumbnail";
+import file from '/file.png'
+// import camera from '/camera.png'
+import refresh from '/refresh.png';
 
 const FilePicker: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -44,10 +47,13 @@ const FilePicker: React.FC = () => {
     <div>
     {!selectedFile && (
       <label htmlFor="file">
-        <div css={tw`flex justify-center border border-gray-700 bg-gray-200 rounded-md w-[50%] h-[20vh]`}>
-            <div css={tw`border border-black border-dotted rounded-md mt-[auto] mb-[auto] h-[90%] w-[94%] flex justify-center`}>
-            <p css={tw`text-sm`}>파일 업로드하기</p>
-            <img></img>
+        <div css={tw`flex justify-center border border-gray-500 bg-gray-100 rounded-md w-[50%] h-[18vh]`}>
+            <div css={tw`border border-gray-400 border-dashed rounded-md mt-[auto] mb-[auto] h-[90%] w-[94%] flex justify-center items-center`}>
+            <div>
+            {/* <p css={tw`text-sm mt-[auto] mb-[auto] flex justify-center`}>파일 업로드하기</p> */}
+            <img css={tw`ml-[auto] mr-[auto]`} src={file} width={`50%`}></img>
+            {/* <img css={tw`ml-[auto] mr-[auto]`} src={camera} width={`50%`}></img> */}
+            </div>
             </div>
         </div>
       </label>
@@ -63,18 +69,28 @@ const FilePicker: React.FC = () => {
     {selectedFile && (
       <>
         {selectedFile.type.startsWith("image") ? (
-            <div css={tw` border border-gray-700 rounded-md w-[50%] h-[auto] overflow-hidden`}>
-                <label htmlFor="file">
-                  <div css={tw`flex justify-center`}>파일 업로드하기</div>
-                </label>
-                <img css={tw`flex ml-[5%]`} src={URL.createObjectURL(selectedFile)} alt="Selected Image" style={{ maxWidth: "90%" }} />
-            </div>
+            <div css={tw` flex justify-center border border-gray-500 bg-gray-100 rounded-md w-[50%] h-[auto] overflow-hidden`}>
+            <label htmlFor="file">
+              <div css={tw`flex justify-center items-center`}>
+                <img css={tw``} src={refresh} width={`5%`}></img>
+                <div css={tw`flex justify-center text-xs font-bold`}>다시 고르기</div>
+              </div>
+              <div css={tw`border border-gray-400 border-dashed rounded-md mt-[auto] mb-[auto] ml-[3%] h-[90%] w-[94%] flex justify-center items-center overflow-hidden`}>
+                <img css={tw`flex justify-center`} src={URL.createObjectURL(selectedFile)} alt="Selected Image" style={{ maxWidth: "100%" }} />
+              </div>
+            </label>
+        </div>
         ) : (
-            <div css={tw`border border-gray-700 rounded-md w-[50%] h-[auto] overflow-hidden`}>
+            <div css={tw` flex justify-center border border-gray-500 bg-gray-100 rounded-md w-[50%] h-[auto] pb-1 overflow-hidden`}>
                 <label htmlFor="file">
-                  <div css={tw`flex justify-center`}>파일 업로드하기</div>
+                  <div css={tw`flex justify-center items-center`}>
+                    <img css={tw``} src={refresh} width={`5%`}></img>
+                    <div css={tw`flex justify-center text-xs font-bold`}>다시 고르기</div>
+                  </div>
+                  <div css={tw`border border-gray-400 border-dashed rounded-md mt-[auto] mb-[auto] ml-[3%] w-[94%] flex justify-center items-center overflow-hidden`}>
+                    <video css={tw`flex justify-center`} src={URL.createObjectURL(selectedFile)} controls controlsList="nodownload" style={{ maxWidth: "100%", }} />
+                  </div>
                 </label>
-                <video css={tw`flex ml-[5%]`} src={URL.createObjectURL(selectedFile)} controls controlsList="nodownload" style={{ maxWidth: "90%" }} />
             </div>
         )}
       </>
