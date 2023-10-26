@@ -8,7 +8,7 @@ const StickyNote: React.FC<StickyNoteProps> = ({ ...props }) => {
   const { content, id, top, left, rotate, zindex, bgcolor, type } = props;
   
   const twStyles = [
-    tw`drop-shadow-md p-4 font-['Cafe24Supermagic']`,
+    tw`drop-shadow-md font-['Cafe24Supermagic']`,
     bgcolors[bgcolor],
     textures[0],
   ]

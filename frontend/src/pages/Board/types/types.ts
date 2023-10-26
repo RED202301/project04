@@ -2,10 +2,10 @@ import { TwStyle } from "twin.macro";
 import { SerializedStyles } from "@emotion/react/macro"
 
 enum PlaceableType {
-  Sticker = "sticker",
-  StickyNote = "stickynote",
-  PolaroidVideo = "video",
-  PolaroidPhoto = "photo",
+  Sticker = 0,
+  StickyNote = 1,
+  PolaroidVideo = 2,
+  PolaroidPhoto = 3,
 }
 
 interface PlacingInfo {
