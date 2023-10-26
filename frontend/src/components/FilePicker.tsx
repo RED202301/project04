@@ -17,12 +17,13 @@ const FilePicker: React.FC = () => {
     if (file) {
         console.log('이미지/동영상?', file)
       setSelectedFile(file);
-      const fileurl = URL.createObjectURL(file)
+      
+      if(file.type.startsWith('video')){const fileurl = URL.createObjectURL(file)
     //   setFileUrl(URL.createObjectURL(file));
     //   console.log(file)
     //   console.log(fileurl)
     //   window.localStorage.setItem('bloburl', fileurl)
-      setVideoUrl(fileurl)
+      setVideoUrl(fileurl)}
     }
   };
 
@@ -62,7 +63,7 @@ const FilePicker: React.FC = () => {
       type="file"
       name="file"
       id="file"
-      accept="image/*, video/*"
+      accept="audio/*, image/*, video/*"
       onChange={handleFileChange}
       style={{ display: "none" }}
     />
@@ -75,7 +76,7 @@ const FilePicker: React.FC = () => {
                 <img css={tw``} src={refresh} width={`5%`}></img>
                 <div css={tw`flex justify-center text-xs font-bold`}>다시 고르기</div>
               </div>
-              <div css={tw`border border-gray-400 border-dashed rounded-md mt-[auto] mb-[auto] ml-[3%] h-[90%] w-[94%] flex justify-center items-center overflow-hidden`}>
+              <div css={tw`border border-gray-400 border-dashed rounded-md mt-[auto] mb-[auto] ml-[3%] w-[94%] flex justify-center items-center overflow-hidden`}>
                 <img css={tw`flex justify-center`} src={URL.createObjectURL(selectedFile)} alt="Selected Image" style={{ maxWidth: "100%" }} />
               </div>
             </label>
@@ -88,7 +89,7 @@ const FilePicker: React.FC = () => {
                     <div css={tw`flex justify-center text-xs font-bold`}>다시 고르기</div>
                   </div>
                   <div css={tw`border border-gray-400 border-dashed rounded-md mt-[auto] mb-[auto] ml-[3%] w-[94%] flex justify-center items-center overflow-hidden`}>
-                    <video css={tw`flex justify-center`} src={URL.createObjectURL(selectedFile)} controls controlsList="nodownload" style={{ maxWidth: "100%", }} />
+                    <video css={tw`flex justify-center`} src={URL.createObjectURL(selectedFile)} controls controlsList="nodownload" style={{ maxWidth: "100%",}} />
                   </div>
                 </label>
             </div>
