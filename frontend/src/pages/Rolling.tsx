@@ -2,7 +2,6 @@ import React,{useState} from "react";
 import VideoThumbnail from "../components/Videothumbnail";
 import tw from "twin.macro";
 import FilePicker from "../components/FilePicker";
-import CameraCapture from "../components/camera";
 
 const Rolling: React.FC = () => {
   // const [videoUrl, setVideoUrl] = useState<string | null>("");
@@ -20,7 +19,7 @@ const Rolling: React.FC = () => {
     <div>
       {/* <button css={tw`border rounded-md border-black`} onClick={handleButtonClick}>썸네일 생성버튼</button> */}
       {/* {videoUrl && <VideoThumbnail videoUrl={videoUrl} />} */}
-      
+
       {/* 1. 사진/동영상 불러오기 */}
       <FilePicker></FilePicker>
     </div>
