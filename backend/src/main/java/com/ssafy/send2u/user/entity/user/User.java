@@ -1,19 +1,24 @@
 package com.ssafy.send2u.user.entity.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.send2u.common.oauth.entity.ProviderType;
 import com.ssafy.send2u.common.oauth.entity.RoleType;
 import com.ssafy.send2u.message.entity.Message;
+import java.time.LocalDateTime;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -22,12 +27,13 @@ import java.util.List;
 @Entity
 @Table(name = "USER")
 public class User {
-    @JsonIgnore
+    //    @JsonIgnore
+//    @Id
+//    @Column(name = "USER_SEQ")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long userSeq;
+//
     @Id
-    @Column(name = "USER_SEQ")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userSeq;
-
     @Column(name = "USER_ID", length = 64, unique = true)
     @NotNull
     @Size(max = 64)
