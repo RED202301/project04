@@ -13,7 +13,7 @@ const AudioRecorder: React.FC = () => {
       }
     };
 
-    const handleError = (error: MediaStreamError) => {
+    const handleError = (error: MediaStream) => {
       console.error('Error accessing microphone:', error);
     };
 
