@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import VideoThumbnail from "../components/Videothumbnail";
 import tw from "twin.macro";
 import FilePicker from "../components/FilePicker";
-import SoundPicker from "../components/soundPicker";
+import SoundPicker from "../components/SoundPicker";
 
 const Rolling: React.FC = () => {
   // const [videoUrl, setVideoUrl] = useState<string | null>("");
