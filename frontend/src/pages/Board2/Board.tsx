@@ -2,11 +2,10 @@ import MobileScreen from "./MobileScreen"
 import tw, { css } from "twin.macro"
 import React, { useEffect } from "react"
 import { useRecoilState } from "recoil"
-import { messagesState, mobileSizeState, selectedMessageState } from "./recoil/atoms"
+import { messagesState, mobileSizeState} from "./recoil/atoms"
 import StickyNote from "./components/StickyNote"
 import useDrag from "./hooks/useDrag"
 import messagesAPI from "./api/messagesAPI"
-import ModalBackground from "./components/ModalBackGround"
 
 const Section: React.FC = () => {
   const [[,msgList], setMessages] = useRecoilState(messagesState)
@@ -46,8 +45,6 @@ const Section: React.FC = () => {
 }
 
 const ModalComponent: React.FC = () => {
-  const [{ isZoomed, messageId }] = useRecoilState(selectedMessageState)
-  const [[msgMap]] = useRecoilState(messagesState);
 
   return (
     <>
