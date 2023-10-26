@@ -5,11 +5,11 @@ import useZoom from "../hooks/useZoom";
 import useDoubleTap from "../hooks/useDoubleTap";
 import tw, { css } from "twin.macro";
 import ModalBackground from "./ModalBackGround";
-import { PlaceableInfo } from "../types/types";
 import useSelect from "../hooks/useSelect";
+import { StickyNoteInfo } from "../types/types";
 
-const StickyNote: React.FC<PlaceableInfo> = (msgData) => {
-
+const StickyNote: React.FC = (_msgData) => {
+  const msgData = _msgData as StickyNoteInfo;
   const ref = useRef() as React.MutableRefObject<HTMLDivElement>;
   
   const [isRendered, setIsRendered] = useState(false);

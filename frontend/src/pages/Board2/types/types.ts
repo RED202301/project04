@@ -44,4 +44,4 @@ interface PolaroidInfo extends _PlaceableInfo {
 
 type PlaceableInfo = StickerInfo | StickyNoteInfo | PolaroidInfo;
 
-export type { MobileSizeType, PlaceableInfo };
+export type { MobileSizeType, PlaceableInfo, StickyNoteInfo };

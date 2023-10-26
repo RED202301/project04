@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PlaceableInfo } from "../types/types";
+import { StickyNoteInfo } from "../types/types";
 
 const baseURL = "http://localhost:8080/api/v1";
 const msgURL = `${baseURL}/messages`;
@@ -36,7 +36,7 @@ const getAll = async () => {
       method: `GET`,
     });
 
-    return response.data.data as PlaceableInfo[];
+    return response.data.data as StickyNoteInfo[];
   } catch (error) {
     console.log(error)
   }
