@@ -12,9 +12,15 @@ import com.ssafy.send2u.common.oauth.service.CustomOAuth2UserService;
 import com.ssafy.send2u.common.oauth.service.CustomUserDetailsService;
 import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
 import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
+import java.io.IOException;
+import java.util.Arrays;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,12 +35,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
-
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /*
      * UserDetailsService 설정
@@ -92,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(oAuth2AuthenticationFailureHandler())
                 .and()
                 .logout()
-                .deleteCookies("JSESSIONID","refresh_token")
+                .deleteCookies("JSESSIONID", "refresh_token")
                 .logoutUrl("/logout") // 로그아웃 U
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
 
@@ -102,7 +103,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         System.out.println("success");
                     }
                 });
-
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
@@ -150,7 +150,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 tokenProvider,
                 appProperties,
                 userRefreshTokenRepository,
-                oAuth2AuthorizationRequestBasedOnCookieRepository()
+                oAuth2AuthorizationRequestBasedOnCookieRepository(),
+                redisTemplate
         );
     }
 
