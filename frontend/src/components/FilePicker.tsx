@@ -44,8 +44,8 @@ const FilePicker: React.FC = () => {
     <div>
     {!selectedFile && (
       <label htmlFor="file">
-        <div css={tw`flex justify-center border border-gray-700 bg-green-300 rounded-md w-[50%] h-[20vh]`}>
-            <div css={tw`border rounded-md mt-[auto] mb-[auto] h-[90%] w-[94%] flex justify-center`}>
+        <div css={tw`flex justify-center border border-gray-700 bg-gray-200 rounded-md w-[50%] h-[20vh]`}>
+            <div css={tw`border border-black border-dotted rounded-md mt-[auto] mb-[auto] h-[90%] w-[94%] flex justify-center`}>
             <p css={tw`text-sm`}>파일 업로드하기</p>
             <img></img>
             </div>
