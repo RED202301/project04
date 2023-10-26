@@ -36,7 +36,8 @@ const CreatePlaceableForm = () => {
                     type: "radio",
                     name: "bgcolor",
                     id: `bgcolor-${i}`,
-                    onChange: () => setBgcolor(i), css: tw`hidden`
+                    onChange: () => setBgcolor(i),
+                    css: tw`hidden`
                   }} />
               </div>
             </label>

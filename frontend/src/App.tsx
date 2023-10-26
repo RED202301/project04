@@ -10,6 +10,7 @@ import Rolling from "./pages/Rolling";
 import RollingCreate from "./pages/RollingCreate";
 import RollingDetail from "./pages/RollingDetail";
 import Board from "./pages/Board/Board"
+import Board2 from "./pages/Board2/Board"
 // import GlobalStyles from "./styles/GlobalStyles";
 
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/rollingcreate" element={<PrivateRoute state={state} authenticated={1} component={[<RollingCreate key="Rollingcreate-component"/>]}/>}/>
         <Route path="/rollingdetail" element={<PrivateRoute state={state} authenticated={1} component={[<RollingDetail key="Rollingdetail-component"/>]}/>}/>
         <Route path="/board" element={<PrivateRoute state={state} authenticated={1} component={[<Board key="Board-component"/>]}/>}/>
+        <Route path="/board2" element={<PrivateRoute state={state} authenticated={1} component={[<Board2 key="Board2-component"/>]}/>}/>
         <Route path="/*" element={<NotFound key="notfound"/>} />
       </Routes>
       </Router>
