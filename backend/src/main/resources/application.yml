@@ -1,0 +1,105 @@
+spring:
+  profiles.active: local
+  # 데이터 소스 설정
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/send2u?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: ${DB_PASSWORD}
+    hikari:
+      pool-name: jpa-hikari-pool
+      maximum-pool-size: 5
+      jdbc-url: ${spring.datasource.url}
+      username: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+      driver-class-name: ${spring.datasource.driver-class-name}
+      data-source-properties:
+        rewriteBatchedStatements: true
+  # JPA 설정
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        hbm2ddl.import_files_sql_extractor: org.hibernate.tool.hbm2ddl.MultipleLinesSqlCommandExtractor
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        default_batch_fetch_size: ${chunkSize:100}
+        jdbc.batch_size: 20
+        order_inserts: true
+        order_updates: true
+        format_sql: true
+
+  #Multipart
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 300MB
+      max-request-size: 300MB
+  # Security OAuth
+  security:
+    oauth2.client:
+      registration:
+        kakao:
+          clientId: "${KAKAO_CLIENT_ID_KEY}"
+          clientSecret: "${KAKAO_CLIENT_SECRET_KEY}"
+          clientAuthenticationMethod: post
+          authorizationGrantType: authorization_code
+          redirectUri: "http://localhost:8080/login/oauth2/code/kakao"
+          scope:
+            - profile_nickname
+            - profile_image
+            - account_email
+          clientName: Kakao
+      # Provider 설정
+      provider:
+        naver:
+          authorizationUri: https://nid.naver.com/oauth2.0/authorize
+          tokenUri: https://nid.naver.com/oauth2.0/token
+          userInfoUri: https://openapi.naver.com/v1/nid/me
+          userNameAttribute: response
+        kakao:
+          authorizationUri: https://kauth.kakao.com/oauth/authorize
+          tokenUri: https://kauth.kakao.com/oauth/token
+          userInfoUri: https://kapi.kakao.com/v2/user/me
+          userNameAttribute: id
+
+# cors 설정
+cors:
+  allowed-origins: 'http://localhost:5173'
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: '*'
+  max-age: 3600
+
+# jwt secret key 설정
+jwt.secret: ${JWT_SECRET_KEY}
+
+# 토큰 관련 secret Key 및 RedirectUri 설정
+app:
+  auth:
+    tokenSecret: ${AUTHENTICATION_TOKEN_SECRET}
+    #    tokenExpiry: 1800000
+    tokenExpiry: 18000000000
+    refreshTokenExpiry: 604800000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:5173/oauth/redirect
+
+kakao:
+  admin: ${KAKAO_API_ADMIN_KEY}
+
+
+cloud:
+  aws:
+    s3:
+      bucket: send2u
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
