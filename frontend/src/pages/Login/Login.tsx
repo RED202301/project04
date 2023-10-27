@@ -7,7 +7,7 @@ import Logo from "/Logo.gif"
 
 const base_URL = import.meta.env.VITE_SERVER_URL;
 const Login: React.FC = () => {
-  const [handleTouchStart, handleTouchMove, handleTouchEnd] = useLongPressBlocker();
+  // const [handleTouchStart, handleTouchMove, handleTouchEnd] = useLongPressBlocker();
   // const Backserver_URI = 'http://192.168.30.201:8080';
   const Backserver_URI = base_URL;
   // const REDIRECT_URI = "http://127.0.0.1:5173/oauth/redirect"; // redirect 주소
