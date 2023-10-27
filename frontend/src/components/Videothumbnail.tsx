@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
+import { fileAtom } from '../recoil/fileAtom'
+import { useSetRecoilState } from "recoil";
 
 interface VideoThumbnailProps {
   videoUrl: string;
@@ -7,7 +9,9 @@ interface VideoThumbnailProps {
 
 const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [thumbnailUrl, setThumbnail] = useState<string>("");
+  const [thumbnailUrl, setThumbnailurl] = useState<string>("");
+  const Setfiles = useSetRecoilState(fileAtom);
+  // const files = useRecoilValue()
   
   //5. base64 > 파일 변환
   const dataURLtoFile = (dataurl: string, fileName: string): File => {
@@ -22,6 +26,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
     }
 
     return new File([u8arr], fileName, { type: mime });
+    
   }
 
   //4. blob url로 base64 생성 후 파일 변환 요청
@@ -39,9 +44,17 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
           const ctx=canvas.getContext('2d');
           if(ctx){
             ctx.drawImage(videoElement ,0 ,0 ,canvas.width ,canvas.height );
-            setThumbnail(canvas.toDataURL());
-            dataURLtoFile(canvas.toDataURL(), 'thumbnail')
-            console.log('썸네일', dataURLtoFile(canvas.toDataURL(), 'thumbnail'))
+            setThumbnailurl(canvas.toDataURL());
+            if (canvas.toDataURL){
+              const zz = dataURLtoFile(canvas.toDataURL(), 'thumbnail.png')
+              if (zz){
+                Setfiles((prevfile) => ({
+                  ...prevfile,
+                  thumbnailFile: zz,
+                }));
+                console.log('썸네일', dataURLtoFile(canvas.toDataURL(), 'thumbnail'))
+              }
+            }
           }
         };
 
