@@ -17,7 +17,7 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="manifest" href="manifest.json" />
-    <title>zzzz</title> 
+    <title>Send2U</title> 
     <style>
       /* 여기에 원하는 디자인을 추가하세요. */
       body {
@@ -46,20 +46,6 @@
       } else {
         // console.log("Service workers are not supported.");
       }
-    </script>
-    <script>
-      $(window).on('touchstart', function (e) {
-    startY = e.originalEvent.changedTouches[0].pageY;
-});
-if(useEventListener) {
-    window.addEventListener("touchmove", function(e){
-        var currentY = e.changedTouches[0].pageY;
-         if ($(window).scrollTop() <= 0 && startY <= currentY) {
-             e.preventDefault();
-             return false;
-         }
-    },{passive:false});
-}
     </script>
   </body>
 </html>
