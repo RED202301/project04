@@ -14,6 +14,7 @@ import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
 import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -100,11 +101,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                                 Authentication authentication) throws IOException, ServletException {
+                        String accessToken = extractAccessToken(request); // Access Token 추출하는 로직 필요
+                        redisTemplate.opsForValue().set(accessToken, "logout");
+                        redisTemplate.expire(accessToken, 30, TimeUnit.MINUTES);
                         System.out.println("success");
                     }
                 });
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private String extractAccessToken(HttpServletRequest request) {
+        // Authorization 헤더에서 추출
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7); // "Bearer " 이후의 토큰 부분 반환
+        }
+
+        // 추출할 수 있는 위치에서 토큰을 찾지 못한 경우
+        throw new IllegalArgumentException("Access Token을 추출할 수 없습니다.");
     }
 
     /*
