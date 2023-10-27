@@ -4,9 +4,14 @@ import VideoThumbnail from "./Videothumbnail";
 import file from '/file.png'
 // import camera from '/camera.png'
 import refresh from '/refresh.png';
+import { fileAtom } from '../recoil/fileAtom'
+import { useSetRecoilState } from "recoil";
+
 
 const FilePicker: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const Setfiles = useSetRecoilState(fileAtom);
+
 //   const [fileUrl, setFileUrl] = useState<string>("");
   const [videoUrl, setVideoUrl] = useState<string | null>("");
     // 3. videoUrl 들어오면, VideoThumbnail 실행
@@ -17,12 +22,23 @@ const FilePicker: React.FC = () => {
     if (file) {
         console.log('이미지/동영상?', file)
       setSelectedFile(file);
+      Setfiles((prevfile) => ({
+        ...prevfile,
+        sourceFile: file,
+        thumbnailFile: file,
+        type: 2,
+      }));
       
       if(file.type.startsWith('video')){const fileurl = URL.createObjectURL(file)
     //   setFileUrl(URL.createObjectURL(file));
     //   console.log(file)
     //   console.log(fileurl)
     //   window.localStorage.setItem('bloburl', fileurl)
+    Setfiles((prevfile) => ({
+        ...prevfile,
+        thumbnailFile: null,
+        type: 3,
+      }));
       setVideoUrl(fileurl)}
     }
   };

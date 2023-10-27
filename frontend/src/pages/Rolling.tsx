@@ -1,9 +1,14 @@
 import React,{useState} from "react";
-import VideoThumbnail from "../components/Videothumbnail";
-import tw from "twin.macro";
+// import VideoThumbnail from "../components/Videothumbnail";
+// import tw from "twin.macro";
 import FilePicker from "../components/FilePicker";
 import SoundPicker from "../components/SoundPicker";
 import AudioRecorder from "../components/Audio";
+import axios from "axios";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { fileAtom } from "../recoil/fileAtom";
+
+const base_URL = `http://192.168.30.218:8080`;
 
 const Rolling: React.FC = () => {
   // const [videoUrl, setVideoUrl] = useState<string | null>("");
@@ -16,6 +21,35 @@ const Rolling: React.FC = () => {
   //     setVideoUrl(url);
   //   }, 1000);
   // };
+  const thumbnailFile = useRecoilValue(fileAtom).thumbnailFile
+  const sourceFile = useRecoilValue(fileAtom).sourceFile
+  const type = useRecoilValue(fileAtom).type
+
+  const accessToken = window.localStorage.getItem("accessToken");
+  const test = () => {
+    const formData = new FormData()
+    formData.append('receiverId', '3101567072');
+    formData.append('top', '0');
+    formData.append('left', '0');
+    formData.append('rotate', '0');
+    formData.append('zindex', '0');
+    formData.append('content', 'zz');
+    formData.append('type', String(type));
+    formData.append('sourceFile', sourceFile);
+    formData.append('thumbnailFile', thumbnailFile)
+    console.log(formData)
+    axios.post(base_URL + '/api/v1/messages', formData, {
+      headers: {'Content-Type': 'multipart/form-data', charset: 'utf-8', Authorization: `Bearer ${accessToken}`},
+  }).then(response => {
+    console.log(response)
+    console.log(thumbnailFile)
+    console.log(sourceFile)
+  }).catch(err=>{
+    console.log(err)
+    console.log(thumbnailFile)
+    console.log(sourceFile)
+  })
+  };
 
   return (
     <div>
@@ -25,7 +59,9 @@ const Rolling: React.FC = () => {
       {/* 1. 사진/동영상 불러오기 */}
       <FilePicker/>
       <SoundPicker/>
+      <div onClick={test}>제출버튼</div>
       {/* <AudioRecorder></AudioRecorder> */}
+      
     </div>
   );
 }
