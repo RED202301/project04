@@ -2,21 +2,20 @@ import React, { useRef } from 'react';
 
 const useLongPressBlocker = () => {
   const touchStartTimeRef = useRef<number | null>(null);
-  const isLongPressRef = useRef<boolean>(false);
 
   const handleTouchStart = () => {
     touchStartTimeRef.current = Date.now();
-    isLongPressRef.current = false;
   };
 
-  const handleTouchMove = () => {
-    if (touchStartTimeRef.current) {
-      isLongPressRef.current = true;
-    }
+  const handleTouchMove = (event: React.TouchEvent) => {
+    event.preventDefault(); // 드래그 동작 막기
   };
 
   const handleTouchEnd = (event: React.TouchEvent) => {
-    if (isLongPressRef.current) {
+    const touchEndTime = Date.now();
+    const touchDuration = touchEndTime - (touchStartTimeRef.current || 0);
+
+    if (touchDuration > 200) { 
       event.preventDefault(); // 기본 동작 막기
       return;
     }

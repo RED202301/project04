@@ -30,6 +30,7 @@ const Login: React.FC = () => {
     marginLeft: "auto", 
     marginRight: "auto",
     backgroundColor:"#59B379",
+    userSelect: 'none',
     }}
     onTouchStart={handleTouchStart}
     onTouchMove={handleTouchMove}
