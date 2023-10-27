@@ -9,7 +9,7 @@ const useDrag = () => {
   const [, setMessages] = useRecoilState(messagesState)
 
   const handleDragMove = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-    if (!isMovable || !isDragged) return;
+    if (!isMovable || !isDragged || !messageId) return;
     const { pageX, pageY } = "targetTouches" in event ? event.targetTouches[0] : event;
     const top = (offsetTop + (pageY / clientWidth - startY));
     const left = (offsetLeft + (pageX / clientWidth - startX));
@@ -26,7 +26,7 @@ const useDrag = () => {
   }
 
   const handleDragEnd = () => {
-    if (!isMovable) return;
+    if (!isMovable || !isDragged) return;
     setMessages(([msgMap]) => {
       const updated = { ...msgMap.get(messageId!)! };
       updated.rotate = Math.random() * 20 - 10;

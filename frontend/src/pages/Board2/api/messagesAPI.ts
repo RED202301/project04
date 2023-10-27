@@ -56,8 +56,10 @@ const get = async (id: number) => {
 }
 
 const create = async (createInfo: CreateInfo) => {
+  console.log(createInfo)
   try {
     const response = await axios({
+      headers: { 'Content-Type': 'multipart/form-data', charset: 'utf-8', Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
       url: `${msgURL}`,
       method: `POST`,
       data: createInfo
