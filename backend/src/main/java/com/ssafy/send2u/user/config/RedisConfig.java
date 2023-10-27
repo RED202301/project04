@@ -25,7 +25,7 @@ public class RedisConfig {
     private String redisPassword;
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory(int dbIndex) {
+    public RedisConnectionFactory redisConnectionFactory() {
         final RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
         redisStandaloneConfiguration.setPort(redisPort);
