@@ -6,6 +6,7 @@ const mobileSizeState = atom<MobileSizeType>({
   default: { clientWidth: 0, clientHeight: 0 },
 })
 
+
 const isMovableState = atom({
   key: "isMovableState",
   default: true
@@ -42,4 +43,22 @@ const selectedMessageState = atom<{
   }
 })
 
-export { mobileSizeState, isMovableState, isEditableState, messagesState, selectedMessageState };
+const isAnimatedState = atom({
+  key: "isAnimatedState",
+  default: false,
+})
+
+const formVisibilityState = atom({
+  key: "formVisibilityState",
+  default: false
+})
+
+export {
+  mobileSizeState,
+  isMovableState,
+  isEditableState,
+  messagesState,
+  selectedMessageState,
+  isAnimatedState,
+  formVisibilityState
+};

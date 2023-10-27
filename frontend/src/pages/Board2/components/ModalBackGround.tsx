@@ -1,26 +1,37 @@
 import { useState, useEffect } from "react"
 import { useRecoilState } from "recoil";
-import { mobileSizeState } from "../recoil/atoms";
 import tw, { css } from "twin.macro";
+import { formVisibilityState, isAnimatedState, isEditableState, isMovableState, selectedMessageState } from "../recoil/atoms";
 
 
-const ModalBackground: React.FC = (props) => {
+const ModalBackground: React.FC = () => {
   const [isRendered, setIsRendered] = useState(false);
-  const [{ clientWidth, clientHeight }] = useRecoilState(mobileSizeState)
+  const [, setSelectedMessage] = useRecoilState(selectedMessageState)
+  const [isMovable, setIsMovable] = useRecoilState(isMovableState);
+  const [, setIsAnimated] = useRecoilState(isAnimatedState);
+  const [, setFormVisibility] = useRecoilState(formVisibilityState)
+  const [, setIsEditable] = useRecoilState(isEditableState);
   const twcss = [
-    tw`absolute`,
+    tw`absolute w-screen h-screen`,
     css`
-      width: ${clientWidth}px;
-      height: ${clientHeight}px;
-
       transition: background-color .5s ease-in-out;
-      background-color: ${isRendered ? "rgba(1, 1, 1, .5)" : "rgba(1, 1, 1, 0)"};
+      background-color: ${(isRendered && !isMovable) ? "rgba(1, 1, 1, .5)" : "rgba(1, 1, 1, 0)"};
     `
   ]
-
   useEffect(() => { setIsRendered(true) }, []);
-
-  return <div {...{ css: twcss, ...props }}></div>
+  return <div {...{
+    css: twcss,
+    onClick: () => {
+      setSelectedMessage(prev => ({ ...prev, isZoomed: false }))
+      setIsMovable(() => true);
+      setIsAnimated(() => true);
+      setFormVisibility(() => false);
+      setIsEditable(()=>false)
+      setTimeout(() => {
+        setIsAnimated(()=>false);
+      }, 500);
+    }
+  }}></div>
 }
 
 export default ModalBackground
