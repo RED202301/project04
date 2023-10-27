@@ -55,10 +55,10 @@ public class MessageService {
         String sourceFileURL = null;
         String thumbnailFileUrl = null;
 
-        if (messageDto.getType() == 2) {
+        if (messageDto.getType() == 2 && sourceFile != null && thumbnailFile != null) {
             sourceFileURL = awsService.fileUpload(sourceFile, "image");
             thumbnailFileUrl = awsService.fileUpload(thumbnailFile, "thumbnail");
-        } else if (messageDto.getType() == 3) {
+        } else if (messageDto.getType() == 3 && sourceFile != null && thumbnailFile != null) {
             sourceFileURL = awsService.fileUpload(sourceFile, "video");
             thumbnailFileUrl = awsService.fileUpload(thumbnailFile, "thumbnail");
         }
