@@ -3,7 +3,7 @@ import kakaoImg from "/kakao_login_large_narrow.png";
 import tw from "twin.macro";
 import GlobalStyles from "../../styles/GlobalStyles";
 import Logo from "/Logo.gif"
-import useLongPressBlocker from "../../components/useLongPressBlocker";
+// import useLongPressBlocker from "../../components/useLongPressBlocker";
 
 const base_URL = import.meta.env.VITE_SERVER_URL;
 const Login: React.FC = () => {
@@ -32,9 +32,9 @@ const Login: React.FC = () => {
     backgroundColor:"#59B379",
     userSelect: 'none',
     }}
-    onTouchStart={handleTouchStart}
-    onTouchMove={handleTouchMove}
-    onTouchEnd={handleTouchEnd}
+    // onTouchStart={handleTouchStart}
+    // onTouchMove={handleTouchMove}
+    // onTouchEnd={handleTouchEnd}
     >
       {/* <GlobalStyles></GlobalStyles> */}
       <div css={tw``}></div>  
