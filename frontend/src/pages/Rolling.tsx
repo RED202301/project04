@@ -25,7 +25,7 @@ const Rolling: React.FC = () => {
       {/* 1. 사진/동영상 불러오기 */}
       <FilePicker/>
       <SoundPicker/>
-      <AudioRecorder></AudioRecorder>
+      {/* <AudioRecorder></AudioRecorder> */}
     </div>
   );
 }
