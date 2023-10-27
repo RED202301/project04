@@ -76,12 +76,11 @@ const StickyNoteForm: React.FC = () => {
           <div {...{ css: [tw`m-auto`] }}>
             <textarea
               {...{
-                readOnly: true,
                 spellCheck: false,
                 maxLength: 60,
                 placeholder: "내용을 입력해주세용.\n(공백 포함 최대 60자)",
                 value: textInput,
-                onChange: (e) => {()=>setTextInput(e.target.value)},
+                onChange: (e) => setTextInput(e.target.value),
                 css: [
                   tw`resize-none`,
                   css`

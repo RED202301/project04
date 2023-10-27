@@ -1,34 +1,27 @@
-import { useState } from "react"
 import { useRecoilState } from "recoil";
-import { isEditableState, isMovableState, selectedMessageState } from "../recoil/atoms";
+import { isAnimatedState, isEditableState, isMovableState, selectedMessageState } from "../recoil/atoms";
 
 
-const useZoom = (ref: React.MutableRefObject<HTMLDivElement>) => {
+const useZoom = () => {
   const [, setIsMovable] = useRecoilState(isMovableState);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [, setSelectedMessage] = useRecoilState(selectedMessageState)
+  const [{ isZoomed }, setSelectedMessage] = useRecoilState(selectedMessageState)
   const [, setIseisEditable] = useRecoilState(isEditableState);
+  const [, setIsAnimated] = useRecoilState(isAnimatedState);
   const handleZoom = () => {
     setIseisEditable(isEditable => !isEditable);
-    ref.current.style.transition = `
-      scale .5s ease-in-out, 
-      rotate .5s ease-in-out,
-      top .5s ease-in-out, 
-      left .5s ease-in-out
-    `
-    setTimeout(() => ref.current.style.transition = "", 500);
+    setIsAnimated(() => true)
+    setTimeout(() => setIsAnimated(() => false), 500);
 
     if (isZoomed) {
-      setIsZoomed(() => false)
       setSelectedMessage((selectedMessage) => ({ ...selectedMessage, isZoomed: false }))
       setIsMovable(() => true)
     } else {
-      setIsZoomed(() => true)
       setSelectedMessage((selectedMessage) => ({ ...selectedMessage, isZoomed: true }))
       setIsMovable(() => false)
     }
+
   };
-  return { isZoomed, handleZoom }
+  return { handleZoom }
 }
 
 export default useZoom
