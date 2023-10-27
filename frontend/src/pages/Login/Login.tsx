@@ -7,7 +7,7 @@ import useLongPressBlocker from "../../components/useLongPressBlocker";
 
 const base_URL = import.meta.env.VITE_SERVER_URL;
 const Login: React.FC = () => {
-  const [handleTouchStart, handleTouchEnd] = useLongPressBlocker();
+  const [handleTouchStart, handleTouchMove, handleTouchEnd] = useLongPressBlocker();
   // const Backserver_URI = 'http://192.168.30.201:8080';
   const Backserver_URI = base_URL;
   // const REDIRECT_URI = "http://127.0.0.1:5173/oauth/redirect"; // redirect 주소
@@ -22,7 +22,7 @@ const Login: React.FC = () => {
   // const twStyles = [tw`bg-gray-100 h-[100vh] bg-[url("https://transparenttextures.com/patterns/grid-me.png")]`]
   const twStyles = [tw`bg-gray-100 h-[100vh] `]
   return (
-    <div css={twStyles} style={{    
+    <div css={twStyles} style={{
     maxWidth: "500px",
     minWidth: "200px",
     maxHeight: window.innerHeight,
@@ -31,7 +31,10 @@ const Login: React.FC = () => {
     marginRight: "auto",
     backgroundColor:"#59B379",
     }}
-    onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    onTouchStart={handleTouchStart}
+    onTouchMove={handleTouchMove}
+    onTouchEnd={handleTouchEnd}
+    >
       {/* <GlobalStyles></GlobalStyles> */}
       <div css={tw``}></div>  
       <div className="flex justify-center ml-[10%] w-[80vw] h-[50vh]">

@@ -9,6 +9,18 @@ import { useRecoilState } from "recoil";
 
 const twStyles = [tw`bg-gray-100 h-[100vh] `]
 const Login2: React.FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const accessToken = new URL(window.location.href).searchParams.get("token");
+    window.localStorage.setItem("accessToken", accessToken);
+    if (window.localStorage.getItem("accessToken")){
+      navigate('../rolling');
+    }
+    else{
+      navigate('../')
+    }
+  })
 return (
   <div css={twStyles} style={{    
   maxWidth: "500px",
