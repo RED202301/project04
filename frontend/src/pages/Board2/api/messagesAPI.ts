@@ -29,10 +29,11 @@ interface UpdateInfo {
   zindex: number;
 }
 
+
 const getAll = async () => {
   try {
     const response = await axios({
-      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
+      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
       url: `${msgURL}`,
       method: `GET`,
     });
@@ -46,7 +47,7 @@ const getAll = async () => {
 const get = async (id: number) => {
   try {
     const response = await axios({
-      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
+      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
       url: `${msgURL}/${id}`,
       method: `GET`,
     });
@@ -62,7 +63,7 @@ const create = async (createInfo: CreateInfo) => {
   console.log(createInfo)
   try {
     const response = await axios({
-      headers: { 'Content-Type': 'multipart/form-data', charset: 'utf-8', Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
+      headers: { 'Content-Type': 'multipart/form-data', charset: 'utf-8', Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
       url: `${msgURL}`,
       method: `POST`,
       data: createInfo
@@ -77,7 +78,7 @@ const create = async (createInfo: CreateInfo) => {
 const update = async ({ id, ...updateInfo }: UpdateInfo) => {
   try {
     const response = await axios({
-      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
+      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
       url: `${msgURL}/${id}`,
       method: `PUT`,
       data: updateInfo
@@ -93,7 +94,7 @@ const update = async ({ id, ...updateInfo }: UpdateInfo) => {
 const remove = async (id: number) => {
   try {
     const response = await axios({
-      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
+      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
       url: `${msgURL}/${id}`,
       method: `DELETE`,
     });
