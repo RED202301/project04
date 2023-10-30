@@ -14,7 +14,7 @@ const Login: React.FC = () => {
   const REDIRECT_URI = `${base_URL}/oauth/redirect`; // redirect 주소
   // const KAKAO_AUTH_URI = `${Backserver_URI}/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}`;
   // const KAKAO_AUTH_URI = `http://k9e206.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=http://k9e206.p.ssafy.io/oauth/redirect`;
-  const KAKAO_AUTH_URI = `http://k9e206.p.ssafy.io:8057/oauth2/authorization/kakao?redirect_uri=http://localhost:5173/oauth/redirect`;
+  const KAKAO_AUTH_URI = `${base_URL}/oauth2/authorization/kakao?redirect_uri=${base_URL}/oauth/redirect`;
 
   const handleLogin = () => 
   {
