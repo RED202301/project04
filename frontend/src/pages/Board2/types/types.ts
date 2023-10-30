@@ -33,6 +33,7 @@ interface StickyNoteInfo extends _PlaceableInfo {
   type: PlaceableType.StickyNote;
   bgcolor: number;
   content: string;
+  createdAt?: string;
 }
 
 interface PolaroidInfo extends _PlaceableInfo {
