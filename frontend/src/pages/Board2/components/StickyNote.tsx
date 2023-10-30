@@ -139,7 +139,7 @@ const StickyNote: React.FC = (_msgData) => {
         </div>
       </>}
       {isFocused && !isEditable && <IoTrashOutline {...{
-        css: [tw_button, tw_bottom_right],
+        css: [tw_button, tw_bottom_right, tw`absolute`],
         onClick: handleDelete
       }} />}
     
