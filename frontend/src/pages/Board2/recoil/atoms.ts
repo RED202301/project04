@@ -6,59 +6,47 @@ const mobileSizeState = atom<MobileSizeType>({
   default: { clientWidth: 0, clientHeight: 0 },
 })
 
-
-const isMovableState = atom({
-  key: "isMovableState",
-  default: true
+const messageMapState = atom<Map<number, PlaceableInfo>>({
+  key: 'messageMapState',
+  default: new Map()
 })
 
-const isEditableState = atom({
-  key: 'isEditableState',
-  default: false
-})
-
-const messagesState = atom<[Map<number, PlaceableInfo>, PlaceableInfo[]]>({
-  key: 'messagesState',
-  default: [new Map(), []]
-})
-
-const selectedMessageState = atom<{
-  isDragged: boolean,
-  isZoomed: boolean,
-  messageId: number | null,
-  offsetTop: number,
-  offsetLeft: number,
-  startX: number,
-  startY: number
-}>({
-  key: 'selectedMessageState',
+const globalStateState = atom({
+  key: "globalstateState",
   default: {
-    isDragged: false,
-    isZoomed: false,
-    messageId: null,
-    offsetTop: 0,
-    offsetLeft: 0,
-    startX: 0,
-    startY: 0
+    isMovable: true,
+    isModalOpen: false,
   }
 })
 
-const isAnimatedState = atom({
-  key: "isAnimatedState",
+const selectedMessageState = atom<
+  {
+    id: number,
+    top: number,
+    left: number,
+    startX: number,
+    startY: number,
+    isDragged: boolean,
+  } | null>({
+    key: 'selectedMessageState',
+    default: null
+  })
+
+const isOnTransitionState = atom({
+  key: "isOnTransitionState",
   default: false,
 })
 
-const formVisibilityState = atom({
-  key: "formVisibilityState",
+const isEditableState = atom({
+  key: "isEditableState",
   default: false
 })
 
 export {
   mobileSizeState,
-  isMovableState,
-  isEditableState,
-  messagesState,
+  messageMapState,
   selectedMessageState,
-  isAnimatedState,
-  formVisibilityState
+  globalStateState,
+  isOnTransitionState,
+  isEditableState
 };
