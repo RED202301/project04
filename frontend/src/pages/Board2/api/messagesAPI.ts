@@ -33,7 +33,7 @@ interface UpdateInfo {
 const getAll = async () => {
   try {
     const response = await axios({
-      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
       url: `${msgURL}`,
       method: `GET`,
     });
@@ -47,7 +47,7 @@ const getAll = async () => {
 const get = async (id: number) => {
   try {
     const response = await axios({
-      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
       url: `${msgURL}/${id}`,
       method: `GET`,
     });
@@ -63,7 +63,7 @@ const create = async (createInfo: CreateInfo) => {
   console.log(createInfo)
   try {
     const response = await axios({
-      headers: { 'Content-Type': 'multipart/form-data', charset: 'utf-8', Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
+      headers: { 'Content-Type': 'multipart/form-data', charset: 'utf-8', Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
       url: `${msgURL}`,
       method: `POST`,
       data: createInfo
@@ -78,7 +78,7 @@ const create = async (createInfo: CreateInfo) => {
 const update = async ({ id, ...updateInfo }: UpdateInfo) => {
   try {
     const response = await axios({
-      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
       url: `${msgURL}/${id}`,
       method: `PUT`,
       data: updateInfo
@@ -94,7 +94,7 @@ const update = async ({ id, ...updateInfo }: UpdateInfo) => {
 const remove = async (id: number) => {
   try {
     const response = await axios({
-      headers: { Authorization: `Bearer ${localStorage.getItem("acessToken")}`, },
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
       url: `${msgURL}/${id}`,
       method: `DELETE`,
     });
