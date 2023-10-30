@@ -10,7 +10,7 @@ const useHandleCreate = () => {
   const { closeModal } = useHandleModal();
 
   const basicMessage = {
-    receiverId: 1,
+    receiverId: 3101440165,
     top: (clientHeight / clientWidth - .8) / 2,
     left: (clientWidth / clientWidth - .8) / 2,
     rotate: Math.random() * 20 - 10,
