@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,12 +50,12 @@ public class MessageController {
     }
 
     @ApiOperation(value = "내메시지조회")
-    @GetMapping("/my")
-    public ResponseEntity<ApiResponse> getUserReceivedMessages() {
-        List<MessageDto> list = messageService.getUserReceivedMessages();
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> getUserReceivedMessages(@RequestParam(required = false) String receiverId) {
+        List<MessageDto> list = messageService.getUserReceivedMessages(receiverId);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("내가 받은 메세지 리스트")
+                .message("받은 메세지 리스트")
                 .status(OK.value())
                 .data(list)
                 .build();
