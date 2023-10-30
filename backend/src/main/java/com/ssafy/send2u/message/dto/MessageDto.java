@@ -42,6 +42,13 @@ public class MessageDto {
     @ApiModelProperty(hidden = true)
     private String sourceFileUrl;
 
+    @ApiModelProperty(hidden = true)
+    private String senderName;
+
+    @ApiModelProperty(hidden = true)
+    private String receiverName;
+
+
     public MessageDto(Message message) {
         this.id = message.getId();
         this.top = message.getTop();
@@ -56,5 +63,7 @@ public class MessageDto {
         this.content = message.getContent();
         this.thumbnailFileUrl = message.getThumbnailFileUrl();
         this.sourceFileUrl = message.getSourceFileUrl();
+        this.senderName = message.getSender().getUsername();
+        this.receiverName = message.getReceiver().getUsername();
     }
 }
