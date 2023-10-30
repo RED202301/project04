@@ -3,14 +3,14 @@ import messagesAPI from "../api/messagesAPI";
 import useHandleModal from "./useHandleModal";
 import { messageMapState, mobileSizeState, selectedMessageState } from "../recoil/atoms";
 
-const useHandleCreate = () => {
+const useHandleCreate = ({ receiverId }) => {
   const { clientWidth, clientHeight } = useRecoilValue(mobileSizeState);
   const [msgMap, setMessageMap] = useRecoilState(messageMapState);
   const setSelectedMessage = useSetRecoilState(selectedMessageState);
   const { closeModal } = useHandleModal();
 
   const basicMessage = {
-    receiverId: 3101440165,
+    receiverId,
     top: (clientHeight / clientWidth - .8) / 2,
     left: (clientWidth / clientWidth - .8) / 2,
     rotate: Math.random() * 20 - 10,
