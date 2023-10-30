@@ -1,7 +1,7 @@
 import axios from "axios";
 import { StickyNoteInfo } from "../types/types";
 
-const baseURL = "http://localhost:8080/api/v1";
+const baseURL = "http://k9e206.p.ssafy.io/api/v1";
 const msgURL = `${baseURL}/messages`;
 
 
@@ -32,6 +32,7 @@ interface UpdateInfo {
 const getAll = async () => {
   try {
     const response = await axios({
+      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
       url: `${msgURL}`,
       method: `GET`,
     });
@@ -45,6 +46,7 @@ const getAll = async () => {
 const get = async (id: number) => {
   try {
     const response = await axios({
+      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
       url: `${msgURL}/${id}`,
       method: `GET`,
     });
@@ -54,6 +56,7 @@ const get = async (id: number) => {
     console.log(error)
   }
 }
+
 
 const create = async (createInfo: CreateInfo) => {
   console.log(createInfo)
@@ -74,6 +77,7 @@ const create = async (createInfo: CreateInfo) => {
 const update = async ({ id, ...updateInfo }: UpdateInfo) => {
   try {
     const response = await axios({
+      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
       url: `${msgURL}/${id}`,
       method: `PUT`,
       data: updateInfo
@@ -89,6 +93,7 @@ const update = async ({ id, ...updateInfo }: UpdateInfo) => {
 const remove = async (id: number) => {
   try {
     const response = await axios({
+      headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzMTAxNDY1NjkyIiwicm9sZSI6IlJPTEVfVVNFUiIsInVzZXJOYW1lIjoi7ZmN7KCV7ZiEIiwiZXhwIjoxNzE2Mzg2MDY3fQ.fT5olploCo1ewPAUsOFolnRey7VfPNzxhPt7qQKuqhM", },
       url: `${msgURL}/${id}`,
       method: `DELETE`,
     });

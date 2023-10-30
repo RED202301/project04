@@ -32,7 +32,7 @@ const useDoubleTap = (callback: () => void) => {
 
     }
   }
-  return [handleDoubleTap]
+  return handleDoubleTap
 }
 
 export default useDoubleTap;
