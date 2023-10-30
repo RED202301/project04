@@ -1,12 +1,12 @@
 import { atom } from "recoil";
-import { MobileSizeType, PlaceableInfo } from "../types/types";
+import { MessageGetType, MobileSizeType } from "../types/types";
 
 const mobileSizeState = atom<MobileSizeType>({
   key: "mobileSizeState",
   default: { clientWidth: 0, clientHeight: 0 },
 })
 
-const messageMapState = atom<Map<number, PlaceableInfo>>({
+const messageMapState = atom<Map<number, MessageGetType>>({
   key: 'messageMapState',
   default: new Map()
 })
