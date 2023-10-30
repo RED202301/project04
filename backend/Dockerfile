@@ -22,6 +22,7 @@ EXPOSE 8080
 USER nobody
 ENTRYPOINT [ \
    "java", \
+   "-Duser.timezone=\"Asia/Seoul\"",\
    "-jar", \
    "-Djava.security.egd=file:/dev/./urandom", \
    "-Dsun.net.inetaddr.ttl=0", \
