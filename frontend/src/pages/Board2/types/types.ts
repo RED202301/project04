@@ -3,46 +3,50 @@ interface MobileSizeType {
   clientHeight: number;
 }
 
-enum PlaceableType {
-  Sticker = 0,
-  StickyNote = 1,
-  PolaroidVideo = 2,
-  PolaroidPhoto = 3,
+enum MessageType {
+  Sticker,
+  Text,
+  Photo,
+  Video
 }
 
-interface PlacingInfo {
-  id: number;
-  top: number;
-  left: number;
-  rotate: number;
-  zindex: number;
+interface MessageGetType {
+  id: number
+  senderId: number
+  receiverId: number
+  senderName: string
+  receiverName: string
+
+  top: number
+  left: number
+  rotate: number
+  zindex: number
+
+  type: MessageType
+
+  content?: string
+  bgcolor: number
+
+  sourceFileUrl: string
+  thumbnailFileUrl: string
+  createdAt: string
 }
 
-interface _PlaceableInfo extends PlacingInfo {
-  type: PlaceableType;
-  receiverId: number;
-  senderId: number;
+interface MessagePostType {
+  receiverId: number
+  top: number
+  left: number
+  rotate: number
+  zindex: number
+
+  type: number
+
+  content?: string
+  bgcolor?: number
+  sourceFile?: File
+  thumbnailFile?: File
 }
 
-interface StickerInfo extends _PlaceableInfo {
-  type: PlaceableType.Sticker;
-  src: string;
-}
 
-interface StickyNoteInfo extends _PlaceableInfo {
-  type: PlaceableType.StickyNote;
-  bgcolor: number;
-  content: string;
-  createdAt?: string;
-}
-
-interface PolaroidInfo extends _PlaceableInfo {
-  type: PlaceableType.PolaroidPhoto | PlaceableType.PolaroidVideo;
-  thumbnail: string;
-  src: string;
-  content?: string;
-}
-
-type PlaceableInfo = StickerInfo | StickyNoteInfo | PolaroidInfo;
-
-export type { MobileSizeType, PlaceableInfo, StickyNoteInfo };
+export { MessageType }
+export type { MobileSizeType, MessageGetType, MessagePostType };

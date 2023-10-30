@@ -27,6 +27,7 @@ const App: React.FC = () => {
         <Route path="/rollingdetail" element={<PrivateRoute state={state} authenticated={1} component={[<RollingDetail key="Rollingdetail-component"/>]}/>}/>
         <Route path="/board" element={<PrivateRoute state={state} authenticated={1} component={[<Board key="Board-component"/>]}/>}/>
         <Route path="/board2" element={<PrivateRoute state={state} authenticated={1} component={[<Board2 key="Board2-component"/>]}/>}/>
+        <Route path="/rolling/:receiverId" element={<PrivateRoute state={state} authenticated={1} component={[<Board2 key="Board2-component"/>]}/>}/>
         <Route path="/*" element={<NotFound key="notfound"/>} />
       </Routes>
       </Router>
