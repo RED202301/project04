@@ -1,57 +1,65 @@
-import React, { useRef, useState, useEffect } from "react"
-import { useRecoilState } from "recoil";
-import { formVisibilityState, isAnimatedState, isEditableState, isMovableState, messagesState, mobileSizeState, selectedMessageState } from "../recoil/atoms";
-import useZoom from "../hooks/useZoom";
+import React, { useState, useEffect } from "react"
+import { useRecoilValue } from "recoil";
+import { mobileSizeState } from "../recoil/atoms";
 import useDoubleTap from "../hooks/useDoubleTap";
 import tw, { css } from "twin.macro";
 import useSelect from "../hooks/useSelect";
 import { StickyNoteInfo } from "../types/types";
-import messagesAPI from "../api/messagesAPI";
+import useHandleModal from "../hooks/useHandleModal";
+import useMessageComponentState from "../hooks/useMessageComponentState";
+import useHandleDelete from "../hooks/useHandleDelete";
+import useHandleCreate from "../hooks/useHandleCreate";
+import {IoTrashOutline, IoCreateOutline} from "react-icons/io5"
 
-
-
+const WIDTH_RATIO = 0.8;
+const HEIGHT_RATIO = WIDTH_RATIO;
+const PADDING_RATIO = 0.06;
+const FONT_SIZE_RATIO = 0.07;
+const BUTTON_SIZE_RATIO = 0.10;
 
 const StickyNote: React.FC = (_msgData) => {
   const msgData = _msgData as StickyNoteInfo;
-
-  const ref = useRef() as React.MutableRefObject<HTMLDivElement>;
   
+
   const [isRendered, setIsRendered] = useState(false);
-  const [{ clientWidth, clientHeight }] = useRecoilState(mobileSizeState);
-  const [isEditable] = useRecoilState(isEditableState);
+  const { isFocused, isAnimated, isDragged, isEditable } = useMessageComponentState(msgData.id);
   
-  const { handleSelect } = useSelect(msgData.id);
-  
-  const [{isZoomed, messageId}] = useRecoilState(selectedMessageState)
-  const { handleZoom } = useZoom();
-  const [handleDoubleTap] = useDoubleTap(handleZoom)
-  const [isAnimated] = useRecoilState(isAnimatedState)
+  const { clientWidth, clientHeight } = useRecoilValue(mobileSizeState);
+  const [CW, CH] = [clientWidth, clientHeight]
+  const WIDTH = CW * WIDTH_RATIO;
+  const HEIGHT = CW * HEIGHT_RATIO;
+  const FONT_SIZE = CW * FONT_SIZE_RATIO;
+ 
 
-
-  
   const [content, setContent] = useState(msgData.content)
+  const [bgcolorIndex, setBgcolorIndex] = useState(msgData.bgcolor);
 
-  const [[,msgList], setMessages] = useRecoilState(messagesState)
-
-  const bgcolors = [tw`bg-yellow-300`, tw`bg-red-300`, tw`bg-blue-300`]
-  const twcss = [
-    tw`absolute text-7xl flex drop-shadow-md`,
-    bgcolors[msgData.bgcolor],
-    tw`bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`,
+  const tw_zindex= css`z-index: ${isAnimated || isFocused ? 1 : 0};`
+  
+  
+  const tw_bgcolors = [tw`bg-yellow-300`, tw`bg-red-300`, tw`bg-blue-300`, tw`bg-green-300`] 
+  const tw_texture = tw`bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`
+  const tw_msg = [
+    tw`absolute text-7xl flex`,
+    tw_bgcolors[bgcolorIndex],
+    tw_zindex,
+    tw_texture,
+    isDragged ? tw`drop-shadow-2xl` : tw`drop-shadow-md`,
     css`
-      width: ${clientWidth * 0.8}px; 
-      min-height: ${clientWidth * 0.8}px;
-      scale: ${(isZoomed && messageId === msgData.id) ? 1 : isRendered ? .4 : 0};
-      transition: ${isAnimated
-        ?
-        `scale .5s ease-in-out,
-        rotate .5s ease-in-out,
-        top .5s ease-in-out, 
-        left .5s ease-in-out;`
-        :
-        `scale .5s ease-in-out,
-        rotate .3s ease-in-out;`
-      }
+      width: ${WIDTH}px; 
+      min-height: ${HEIGHT}px;
+      scale: ${isRendered ? isFocused ? 1 : .4 : 0};
+    `,
+    css`
+      top: ${isFocused ? (CH - HEIGHT) / 2 : msgData.top * CW}px;
+      left: ${isFocused ? (CW - WIDTH) / 2 : msgData.left * CW}px;
+      rotate: ${isFocused ? 0 : msgData.rotate}deg;
+    `,
+    css`
+      transition:
+      background-color .3s ease-in-out,
+      scale .5s ease-in-out, rotate .5s ease-in-out, filter .5s ease-in-out
+      ${isAnimated && `, top .5s ease-in-out, left .5s ease-in-out`};
     `,
     css`
       -webkit-user-drag: none;
@@ -61,96 +69,105 @@ const StickyNote: React.FC = (_msgData) => {
       user-drag: none;
     `
   ]
-  const textareaTwcss = [
-    tw`
-      m-auto
-      bg-transparent
-      resize-none outline-none select-none
-      font-['Cafe24Supermagic']
-    `,
+
+  const tw_content = [
+    tw`m-auto bg-transparent resize-none outline-none select-none`,
+    tw_zindex,
     css`
-      width: ${clientWidth * (0.8 - 0.096)}px; 
-      min-height: ${clientWidth * (0.8 - 0.096)}px;
-      font-size: ${clientWidth * 0.08}px;
+      width: ${WIDTH * (1 - PADDING_RATIO * 2)}px; 
+      min-height: ${HEIGHT * (1 - PADDING_RATIO * 2)}px;
+      font-size: ${FONT_SIZE}px;
     `,
-  ];
+  ]
+
+  const tw_button = [
+    tw`rounded-full bg-white`,
+    tw_zindex,
+    css`
+      width: ${CW * BUTTON_SIZE_RATIO}px;
+      height: ${CW * BUTTON_SIZE_RATIO}px;
+    `
+  ]
+
+  const tw_bottom_right = css`
+    right: ${CW * BUTTON_SIZE_RATIO}px;
+    bottom: ${CW * BUTTON_SIZE_RATIO}px;
+  `
 
   useEffect(() => {
-    setTimeout(() => setIsRendered(true), 100 * msgData.zindex)
+    setTimeout(() => setIsRendered(true), 50* msgData.zindex)
+    // if (isEditable) setTimeout(() => setIsRendered(true), 100)
+    // else setTimeout(() => setIsRendered(true), 100 * msgData.zindex)
   }, [])
+  
 
 
-  const [, setSelectedMessage] = useRecoilState(selectedMessageState);
-  const [,setIsMovable] = useRecoilState(isMovableState)
-  const [,setFormVisibility] =useRecoilState(formVisibilityState)
-  const [,setIsEditable] = useRecoilState(isEditableState)
-  const [,setIsAnimated] = useRecoilState(isAnimatedState)
+  const handleCreate = useHandleCreate();
+  const handleDelete = useHandleDelete(msgData.id);
+  const handleSelect = useSelect(msgData.id);
+  const { toggleModal } = useHandleModal();
+  const handleDoubleTap = useDoubleTap(toggleModal)
 
-  const buttonTW = tw`w-8 h-8 rounded-full bg-white`
-  return <div {...{
-    style: {
-      position: "absolute",
-      zIndex: (isZoomed || isAnimated) && messageId === msgData.id ? 1 : 0
-    }
-  }}>
-    {isEditable && messageId === msgData.id
-      ? <div {...{
-        css: buttonTW, onClick: () => {
-          (async () => {
-            const msg = await messagesAPI.create(
-              {
-                receiverId: 1,
-                top: (clientHeight/clientWidth - .8) / 2,
-                left: (clientWidth/clientWidth - .8) / 2,
-                rotate: Math.random() *20-10,
-                zindex: msgList.length+1,
-                type: 1,
-              
-                content,
-                bgcolor: 1,
-              }
-            )
-            setMessages(([msgMap]) => {
-              msgMap.set(msg.id, msg);
-              return [msgMap, [...msgMap.values()]]
-            })
+  const [date, time] = (msgData.createdAt || "aa").split("T")
+  const [year, mon, day] = (date||"").split("-")
+  const [hour, min] = (time||"").split(":")
 
-
-            setSelectedMessage(prev => ({ ...prev, isZoomed: false }))
-            setIsMovable(() => true);
-            setIsAnimated(() => true);
-            setFormVisibility(() => false);
-            setIsEditable(()=>false)
-            setTimeout(() => {
-              setIsAnimated(()=>false);
-            }, 500);
-          })()
-          
-      } }}>생성</div> : null}
-    <div {...{
-      ref,
-      css: [...twcss],
-      style: {
-        top: `${(isZoomed && messageId === msgData.id) ? (clientHeight - clientWidth * 0.8) / 2 :msgData.top * clientWidth}px`,
-        left: `${(isZoomed && messageId === msgData.id) ? (clientWidth - clientWidth * 0.8) / 2 :msgData.left * clientWidth}px`,
-        rotate: `${(isZoomed && messageId === msgData.id) ? 0 : msgData.rotate}deg`,  
-      },
-      
-      onMouseDown: handleSelect,
-      onTouchStart:handleSelect,
-
-      onDoubleClick: handleZoom,
-      onTouchEnd: handleDoubleTap
-    }}>
-      <textarea {...{
-        css: textareaTwcss,
-        readOnly: isEditable ? false : true,
-        value: content,
-        placeholder:"내용을 입력해주세용.\n(공백 포함 최대 60자)",
-        onChange: (e) => setContent(e.target.value),
-      }}/>
-    </div>
-  </div>
+  return <>
+      {isFocused && isEditable && <>
+      <IoCreateOutline {...{
+        css: [tw_button, tw_bottom_right, tw`absolute`],
+        onClick: () =>{ handleCreate({ content, bgcolor: bgcolorIndex }) }
+      }} />
+      <div {...{
+        css: [
+          tw`absolute flex place-content-around`,
+          css`
+            width: ${CW}px;
+            heigth: ${CW * BUTTON_SIZE_RATIO}px;
+            top: ${CH*(1 - WIDTH_RATIO)/2}px;
+          `]
+        }}>
+          {tw_bgcolors
+            .map((tw_bgcolor, index) => <label {...{
+              css: [ tw_button, tw_bgcolor, tw_texture ]
+            }}>
+              <input {...{
+                css: tw`hidden`,
+                type: "radio", name: "bgcolor", onClick: () => setBgcolorIndex(index)
+              }} />
+            </label>)}
+        </div>
+      </>}
+      {isFocused && !isEditable && <IoTrashOutline {...{
+        css: [tw_button, tw_bottom_right, tw`absolute`],
+        onClick: handleDelete
+      }} />}
+    
+      <div {...{
+        css: tw_msg,
+        onMouseDown: handleSelect,
+        onTouchStart: handleSelect,
+        onDoubleClick: !isEditable ? toggleModal : undefined,
+        onTouchEnd: !isEditable ? handleDoubleTap : undefined
+      }}>
+        {isEditable
+          ? <>
+            <textarea {...{
+              css: tw_content, value: content,
+              placeholder: "내용을 입력해주세용.\n(공백 포함 최대 60자)",
+              onChange: (e) => setContent(e.target.value),
+            }} />
+          </>
+          : <div {...{ css: tw_content }}>{content}</div>
+        }
+      </div>
+      {isFocused && !isEditable && <>
+        <div {...{ css: [tw`absolute bg-white`, tw_zindex] }}>
+          <div>작성자: {msgData.senderId} </div>
+          <div>작성 날짜: {`${year}년 ${mon}월 ${day}일`} </div>
+          <div>작성 시간: {`${hour}시 ${min}분`} </div>
+        </div>
+      </>}
+  </>
 }
-
 export default StickyNote
