@@ -2,7 +2,7 @@ import axios from "axios";
 import { MessageGetType } from "../types/types";
 
 
-const baseURL = import.meta.env.VITE_SERVER_URL;
+const baseURL = `${import.meta.env.VITE_SERVER_URL}/api/v1`;
 // const baseURL = "http://k9e206.p.ssafy.io/api/v1";
 // const baseURL = "http://k9e206.p.ssafy.io:8057/api/v1";
 const messagesURL = `${baseURL}/messages`;
