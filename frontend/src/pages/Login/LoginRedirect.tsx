@@ -4,8 +4,11 @@ import tw from "twin.macro";
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useRecoilState } from "recoil";
+import messagesAPI from "../Board2/api/messagesAPI";
 
 // const base_URL = import.meta.env.VITE_SERVER_URL;
+
+
 
 const twStyles = [tw`bg-gray-100 h-[100vh] `]
 const Login2: React.FC = () => {
@@ -14,8 +17,12 @@ const Login2: React.FC = () => {
   useEffect(() => {
     const accessToken = new URL(window.location.href).searchParams.get("token");
     window.localStorage.setItem("accessToken", accessToken);
-    if (window.localStorage.getItem("accessToken")){
-      navigate('../rolling');
+    
+    
+    if (window.localStorage.getItem("accessToken")) {
+      (async () => {
+        navigate(`../rolling/${(await messagesAPI.getUser()).userId}`);
+      })()
     }
     else{
       navigate('../')

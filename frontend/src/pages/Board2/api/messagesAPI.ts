@@ -1,9 +1,40 @@
 import axios from "axios";
-import { StickyNoteInfo } from "../types/types";
+import { MessageGetType } from "../types/types";
 
-const baseURL = "http://k9e206.p.ssafy.io/api/v1";
-const msgURL = `${baseURL}/messages`;
 
+const baseURL = import.meta.env.VITE_SERVER_URL;
+// const baseURL = "http://k9e206.p.ssafy.io/api/v1";
+// const baseURL = "http://k9e206.p.ssafy.io:8057/api/v1";
+const messagesURL = `${baseURL}/messages`;
+const usersURL = `${baseURL}/users`;
+
+
+const getUser = async () => {
+  try {
+    const response = await axios({
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
+      url: usersURL,
+      method: `GET`,
+    });
+    return response.data.data as { userId: number, userName: string };
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getUserName = async (id: number) => {
+  try {
+    const response = await axios({
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
+      url: `${usersURL}/${id}`,
+      method: `GET`,
+    });
+    console.log(response.data.data)
+    return response.data.data as string
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 
 interface CreateInfo {
@@ -29,16 +60,29 @@ interface UpdateInfo {
   zindex: number;
 }
 
+const search = async ({ receiverId }) => {
+  try {
+    const response = await axios({
+      headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
+      params: { receiverId },
+      url: `${messagesURL}/search`,
+      method: `GET`,
+    });
+    return response.data.data as MessageGetType[];
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 const getAll = async () => {
   try {
     const response = await axios({
       headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
-      url: `${msgURL}`,
+      url: `${messagesURL}`,
       method: `GET`,
     });
-
-    return response.data.data as StickyNoteInfo[];
+    return response.data.data as MessageGetType[];
   } catch (error) {
     console.log(error)
   }
@@ -48,7 +92,7 @@ const get = async (id: number) => {
   try {
     const response = await axios({
       headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
-      url: `${msgURL}/${id}`,
+      url: `${messagesURL}/${id}`,
       method: `GET`,
     });
 
@@ -64,7 +108,7 @@ const create = async (createInfo: CreateInfo) => {
   try {
     const response = await axios({
       headers: { 'Content-Type': 'multipart/form-data', charset: 'utf-8', Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
-      url: `${msgURL}`,
+      url: `${messagesURL}`,
       method: `POST`,
       data: createInfo
     });
@@ -79,7 +123,7 @@ const update = async ({ id, ...updateInfo }: UpdateInfo) => {
   try {
     const response = await axios({
       headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
-      url: `${msgURL}/${id}`,
+      url: `${messagesURL}/${id}`,
       method: `PUT`,
       data: updateInfo
     });
@@ -95,7 +139,7 @@ const remove = async (id: number) => {
   try {
     const response = await axios({
       headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}`, },
-      url: `${msgURL}/${id}`,
+      url: `${messagesURL}/${id}`,
       method: `DELETE`,
     });
     return response.data.data;
@@ -104,8 +148,11 @@ const remove = async (id: number) => {
   }
 }
 
-
 export default {
+  getUser,
+  getUserName,
+
+  search,
   create,
   getAll,
   get,

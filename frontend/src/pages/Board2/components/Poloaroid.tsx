@@ -4,13 +4,12 @@ import { mobileSizeState } from "../recoil/atoms";
 import useDoubleTap from "../hooks/useDoubleTap";
 import tw, { css } from "twin.macro";
 import useSelect from "../hooks/useSelect";
-import { MessageGetType, MessageType } from "../types/types";
+import { MessageGetType } from "../types/types";
 import useHandleModal from "../hooks/useHandleModal";
 import useMessageComponentState from "../hooks/useMessageComponentState";
 import useHandleDelete from "../hooks/useHandleDelete";
 import useHandleCreate from "../hooks/useHandleCreate";
 import {IoTrashOutline, IoCreateOutline} from "react-icons/io5"
-import { useParams } from "react-router-dom";
 
 const WIDTH_RATIO = 0.8;
 const HEIGHT_RATIO = WIDTH_RATIO;
@@ -18,8 +17,10 @@ const PADDING_RATIO = 0.06;
 const FONT_SIZE_RATIO = 0.07;
 const BUTTON_SIZE_RATIO = 0.10;
 
-const StickyNote: React.FC = (msgData:MessageGetType) => {
+const StickyNote: React.FC = (_msgData) => {
+  const msgData = _msgData as MessageGetType;
   
+
   const [isRendered, setIsRendered] = useState(false);
   const { isFocused, isAnimated, isDragged, isEditable } = useMessageComponentState(msgData.id);
   
@@ -38,18 +39,20 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
   
   const tw_bgcolors = [tw`bg-yellow-300`, tw`bg-red-300`, tw`bg-blue-300`, tw`bg-green-300`] 
   const tw_texture = tw`bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`
+  
   const tw_undraggable = css`
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
-`;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+  `
   const tw_msg = [
     tw`absolute text-7xl flex`,
     tw_bgcolors[bgcolorIndex],
     tw_zindex,
     tw_texture,
+    tw_undraggable,
     isDragged ? tw`drop-shadow-2xl` : tw`drop-shadow-md`,
     css`
       width: ${WIDTH}px; 
@@ -66,7 +69,7 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
       background-color .3s ease-in-out,
       scale .5s ease-in-out, rotate .5s ease-in-out, filter .5s ease-in-out
       ${isAnimated && `, top .5s ease-in-out, left .5s ease-in-out`};
-    `
+    `,
   ]
 
   const tw_content = [
@@ -100,8 +103,8 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
   }, [])
   
 
-  const {receiverId} = useParams()
-  const handleCreate = useHandleCreate({receiverId});
+
+  const handleCreate = useHandleCreate();
   const handleDelete = useHandleDelete(msgData.id);
   const handleSelect = useSelect(msgData.id);
   const { toggleModal } = useHandleModal();
@@ -141,6 +144,7 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
       css: [tw_button, tw_bottom_right, tw`absolute`],
       onClick: handleDelete
     }} />}
+    <div></div>
     
     <div {...{
       css: tw_msg,
@@ -149,11 +153,7 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
       onDoubleClick: !isEditable ? toggleModal : undefined,
       onTouchEnd: !isEditable ? handleDoubleTap : undefined
     }}>
-      {(msgData.type === MessageType.Photo || msgData.type === MessageType.Video) && (
-        isEditable && <>
-          <img {...{ src:msgData.thumbnailFileUrl, css: [tw`select-none`, tw_undraggable] }} alt="사진" />
-        </>)}
-
+      <img {...{ src:msgData.src, css: [tw`select-none`, tw_undraggable] }} alt="사진" />
       {isEditable ? <>
         <textarea {...{
           css: tw_content, value: content,
@@ -165,7 +165,7 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
     </div>
     {isFocused && !isEditable && <>
       <div {...{ css: [tw`absolute bg-white`, tw_zindex] }}>
-        <div>작성자: {msgData.senderName} </div>
+        <div>작성자: {msgData.senderId} </div>
         <div>작성 날짜: {`${year}년 ${mon}월 ${day}일`} </div>
         <div>작성 시간: {`${hour}시 ${min}분`} </div>
       </div>
