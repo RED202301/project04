@@ -1,7 +1,7 @@
 {
   "name": "Send2U",
   "short_name": "Send2U",
-  "start_url": "",
+  "start_url": "/",
   "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#485EEE",
