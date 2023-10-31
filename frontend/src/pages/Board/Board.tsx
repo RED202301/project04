@@ -1,150 +1,125 @@
-import React, { PropsWithChildren, useEffect } from "react"
-import { useOnDragMove, useOnDragEnd } from "./hooks";
-import { placeableInfoMapState, placeableInfoListState, draggingState, windowSizeState } from "./recoil/atoms";
-import { useRecoilState } from "recoil";
-import { PlaceableInfo, DummyPlaceableInfo } from "./types/types";
-import Placeable from "./components/Placeable";
-import tw from "twin.macro";
-import FontStyles from "./Styles/fonts";
-// import CreatePlaceableForm from "./components/CreatePlaceableForm";
-import { textures } from "./Styles/texture";
-import ModalComponent from "./components/d/Modal";
+import tw, { css } from "twin.macro"
+import React, { useState, useEffect } from "react"
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
+import { globalStateState, isEditableState, isOnTransitionState, messageMapState, mobileSizeState, selectedMessageState} from "../../recoil/atoms"
+import StickyNote from "./components/StickyNote"
+import messagesAPI from "../../api/messagesAPI"
+import ModalBackground from "./components/ModalBackGround"
+import useDrag from "./hooks/useDrag"
+import useHandleModal from "./hooks/useHandleModal"
 
+import {IoAdd} from "react-icons/io5"
+import { useParams } from "react-router-dom"
 
-const datas: PlaceableInfo[] = [
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:0}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:3}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:0}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:1}),
-  // DummyPlaceableInfo.StickyNote({content:"포스트잇 입니당", bgcolor:2}),
-  DummyPlaceableInfo.Polaroid({
-    content: "갬성 사진", 
-    src: "https://cdn.thescoop.co.kr/news/photo/202102/42527_61056_1017.jpg",
-    thumbnail: "https://cdn.thescoop.co.kr/news/photo/202102/42527_61056_1017.jpg",
-  }),
-  DummyPlaceableInfo.Polaroid({
-    content: "", 
-    src: "https://www.cuonet.com/data/file/community2/3553229414_qIAgixUu_17231e24cd42385d7ad5c98f147ece8a37da2544.gif",
-    thumbnail: "https://www.cuonet.com/data/file/community2/3553229414_qIAgixUu_17231e24cd42385d7ad5c98f147ece8a37da2544.gif",
-  }),
-  DummyPlaceableInfo.Polaroid({
-    content: "갬성 사진", 
-    src: "https://mblogthumb-phinf.pstatic.net/MjAxODAzMjBfMTUw/MDAxNTIxNDg4NDQ1NzUz.nJAZpVQEen0mR_oasedsz-G1bbEPel_akhowP-N-uSYg.0UsO5f-TAjYZ3cQJ3lCOubAlESCLUMiqZJjnRFgdd5Ug.GIF.uprrsse/%EA%B0%AC%EC%84%B1_%EB%8F%8B%EB%8A%94_%EC%95%A0%EB%8B%88_%EC%9B%80%EC%A7%A4_%EB%AA%A8%EC%9D%8C__%28212%29.gif?type=w800",
-    thumbnail: "https://mblogthumb-phinf.pstatic.net/MjAxODAzMjBfMTUw/MDAxNTIxNDg4NDQ1NzUz.nJAZpVQEen0mR_oasedsz-G1bbEPel_akhowP-N-uSYg.0UsO5f-TAjYZ3cQJ3lCOubAlESCLUMiqZJjnRFgdd5Ug.GIF.uprrsse/%EA%B0%AC%EC%84%B1_%EB%8F%8B%EB%8A%94_%EC%95%A0%EB%8B%88_%EC%9B%80%EC%A7%A4_%EB%AA%A8%EC%9D%8C__%28212%29.gif?type=w800",
-  }),
-  DummyPlaceableInfo.Polaroid({
-    content: "가나다라마가나다라마", 
-    src: "https://cdn.eyesmag.com/content/uploads/posts/2020/05/08/city-pop-playlist-6-main-31cf461b-a668-4a92-aff5-abd6470d955c.gif",
-    thumbnail: "https://cdn.eyesmag.com/content/uploads/posts/2020/05/08/city-pop-playlist-6-main-31cf461b-a668-4a92-aff5-abd6470d955c.gif",
-  }),
-  DummyPlaceableInfo.StickyNote({content:"가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마가나다라마", bgcolor:3}),
-  // DummyPlaceableInfo.Sticker({src:"💗"}),
-  // DummyPlaceableInfo.Sticker({src:"🍕"}),
-  // DummyPlaceableInfo.Sticker({src:"🍟"}),
-  // DummyPlaceableInfo.Sticker({src:"🌸"}),
-  // DummyPlaceableInfo.Sticker({src:"🥕"}),
-  // DummyPlaceableInfo.Sticker({src:"📌"}),
-  // DummyPlaceableInfo.Sticker({src:"📌"}),
-  // DummyPlaceableInfo.Sticker({src:"📌"}),
-  // DummyPlaceableInfo.Sticker({src:"📌"}),
-]; 
+const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 
-const Board: React.FC<PropsWithChildren> = () => {
-  const onDragMove = useOnDragMove();
-  const onDragEnd = useOnDragEnd();
-  const [dragging] = useRecoilState(draggingState);
-  const [placeableInfoList, setPlaceableInfoList] = useRecoilState(placeableInfoListState);
-  const [, setPlaceableInfoMap] = useRecoilState(placeableInfoMapState);
+const Section: React.FC = () => {
+  const [msgMap, setMessageMap] = useRecoilState(messageMapState)
+  const [selectedMessage, setSelectedMessage] = useRecoilState(selectedMessageState)
+  const setIsEditable = useSetRecoilState(isEditableState);
 
-  const [windowSize, setWindowSize] = useRecoilState(windowSizeState);
-  const handleResize = () => {
-    setWindowSize({
-      // width: window.innerWidth,
-      width: window.innerWidth >= 500 ? 500 : window.innerWidth,
-      height: window.innerHeight,
-    }) 
+  const { receiverId } = useParams()
+  const [receiverName, setReceiverName] = useState('')
+
+  const getUserNAme = async() => {
+    const userName = await messagesAPI.getUserName(parseInt(receiverId));
+    setReceiverName(userName)
   }
 
-  const init = () => {
-    setPlaceableInfoList(() => datas);
-    setPlaceableInfoMap((placeableInfoMap) => {
-      datas.forEach(data => { placeableInfoMap.set(data.id, data) });
-      return placeableInfoMap
+  const getAllMessages = async () => {
+    const msgs = await messagesAPI.search({receiverId});
+    setMessageMap(msgMap => {
+      msgs.forEach(msg => msgMap.set(msg.id, msg))
+      return new Map(msgMap);
     })
   }
-
-  const updatePlaceableInfoMap = () => {
-    if (dragging && !dragging?.isDrag) {
-      setPlaceableInfoMap((placeableInfoMap) => {
-        placeableInfoList.forEach(placeableInfo => {
-          placeableInfoMap.set(placeableInfo.id, placeableInfo)
-        })
-        return placeableInfoMap;
-      })
-    }
-  }
-
-  useEffect(init, [])
-  useEffect(updatePlaceableInfoMap, [dragging])
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return ()=> window.removeEventListener("resize", handleResize); 
-  })
+    getUserNAme()
+    getAllMessages()
+  }, []);
 
-  const props = {
-    onMouseMove: onDragMove,
-    onMouseUp: onDragEnd,
-    onMouseLeave: onDragEnd,
+  const { clientWidth, clientHeight } = useRecoilValue(mobileSizeState); const [CW, CH] = [clientWidth, clientHeight];
+  const bg_board = tw`bg-orange-200 bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`
+  const size_mobile = css`width: ${CW}px; height: ${CH}px;`
 
-    onTouchMove: onDragMove,
-    onTouchEnd: onDragEnd,
-  }
+  const BUTTON_SIZE_RATIO = 0.10;
+  const tw_button = [
+    tw`absolute rounded-full bg-white`,
+    css`
+      width: ${CW * BUTTON_SIZE_RATIO}px;
+      height: ${CW * BUTTON_SIZE_RATIO}px;
+      right: ${CW * BUTTON_SIZE_RATIO}px;
+      bottom: ${CW * BUTTON_SIZE_RATIO}px;
+    `
+  ]
 
-  const twStyles = [tw`bg-orange-200`, textures[0]]
+  const { isModalOpen } = useRecoilValue(globalStateState);
+  const { openModal } = useHandleModal()
   return (
-    <section {...{
-      ...props,
-      css: twStyles,
-      style: {
-        width: windowSize.width,
-        height: windowSize.height,
-        marginLeft: "auto", 
-        marginRight: "auto",
-      }
-    }}>
-      <div
-        {...{
-          css: [
-            tw`absolute`
-          ],
-          style: {
-            width: windowSize.width,
-            height: windowSize.height,
-          }
-        }}
-      >
-        <FontStyles />
-        {[...placeableInfoList]
-          .sort((a,b)=>a.zindex-b.zindex)
-          .map((placeableInfo) => {
-          return <Placeable {...{...placeableInfo, key:placeableInfo.id}}></Placeable>
-          })}
-        <ModalComponent/>
+    <div {...{ css: [size_mobile, bg_board, tw`m-auto font-['IMHyeminBold']`, ] }}>
+      <div {...{ css: [size_mobile, tw`absolute`] }}>
+        <h1>{receiverName}</h1>
+        <button {...{
+          onClick: () => {
+            const content = `${front_base_URL}/rolling/${receiverId}`;
+            navigator.share({
+              title: `[SEND2U]`,
+              text: `${receiverName}님에게 글 남기기`,
+              url: content
+            })
+        }}}>현재 링크를 클립보드에 저장</button>
+        {[...msgMap.values()]
+          .sort((a, b) => a.zindex - b.zindex)
+          .map((msg) => <StickyNote {...{ ...msg, key: msg.id }} />)
+        }
+        
+        {!isModalOpen && <IoAdd {...{
+          css: tw_button, onClick: () => {
+            openModal()
+            setIsEditable(true);
+            setSelectedMessage(prev=>({...prev, id:-1}));
+        }}}/>}
+        {isModalOpen && selectedMessage.id === -1 && <StickyNote {...{
+          id: -1,
+          receiverId: 1,
+          top: (clientHeight / clientWidth - .8) / 2,
+          left: (clientWidth / clientWidth - .8) / 2,
+          rotate: Math.random() * 20 - 10,
+          zindex: msgMap.size + 1,
+          type: 1,
+          content: "",
+          bgcolor: 0,
+          key: "form",
+          createdAt:""
+  }} />}
       </div>
-      {/* <CreatePlaceableForm></CreatePlaceableForm> */}
-    </section>
+    </div>
   );
-  
 }
 
-export default Board;
+
+
+const Board: React.FC = () => {
+  const [{ clientWidth }] = useRecoilState(mobileSizeState)
+  const { isModalOpen } = useRecoilValue(globalStateState)
+  const isOnTransition = useRecoilValue(isOnTransitionState)
+  
+  const w_mobile = css`width: ${clientWidth}px`
+  const bg_board = tw`bg-orange-300 bg-[url("https://transparenttextures.com/patterns/polaroid.png")]`
+
+  const {handleDragMove, handleDragEnd } = useDrag();
+  return (
+    <div {...{
+      css: [tw`m-auto h-screen flex`, w_mobile, bg_board],
+      onMouseMove: handleDragMove,
+      onMouseUp: handleDragEnd,
+      onTouchMove: handleDragMove,
+      onTouchEnd: handleDragEnd
+    }}>
+      <Section />
+      {isModalOpen || isOnTransition ? <ModalBackground /> : null}
+    </div>
+  )
+}
+
+export default Board

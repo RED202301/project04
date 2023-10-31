@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import messagesAPI from "../api/messagesAPI";
+import messagesAPI from "../../../api/messagesAPI";
 import useHandleModal from "./useHandleModal";
-import { messageMapState, mobileSizeState, selectedMessageState } from "../recoil/atoms";
+import { messageMapState, mobileSizeState, selectedMessageState } from "../../../recoil/atoms";
 
 const useHandleCreate = ({ receiverId }) => {
   const { clientWidth, clientHeight } = useRecoilValue(mobileSizeState);
