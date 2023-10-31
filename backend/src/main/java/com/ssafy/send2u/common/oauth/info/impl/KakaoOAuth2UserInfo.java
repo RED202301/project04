@@ -1,7 +1,6 @@
 package com.ssafy.send2u.common.oauth.info.impl;
 
 import com.ssafy.send2u.common.oauth.info.OAuth2UserInfo;
-
 import java.util.Map;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
@@ -24,11 +23,6 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
         }
 
         return (String) properties.get("nickname");
-    }
-
-    @Override
-    public String getEmail() {
-        return (String) attributes.get("account_email");
     }
 
     @Override
