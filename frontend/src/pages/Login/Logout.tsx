@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 
-const base_URL = import.meta.env.VITE_SERVER_URL;
+const base_URL = import.meta.env.VITE_BACK_SERVER_URL;
 const Logout: React.FC = () => {
 
     const accessToken = localStorage.getItem('accessToken');

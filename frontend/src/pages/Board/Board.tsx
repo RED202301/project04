@@ -10,6 +10,8 @@ import useHandleModal from "./hooks/useHandleModal"
 
 import {IoAdd} from "react-icons/io5"
 import { useParams } from "react-router-dom"
+import Signout from "../Login/Signout"
+import Logout from "../Login/Logout"
 
 const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 
@@ -59,6 +61,8 @@ const Section: React.FC = () => {
     <div {...{ css: [size_mobile, bg_board, tw`m-auto font-['IMHyeminBold']`, ] }}>
       <div {...{ css: [size_mobile, tw`absolute`] }}>
         <h1>{receiverName}</h1>
+        <Signout/>
+        <Logout/>
         <button {...{
           onClick: () => {
             const content = `${front_base_URL}/rolling/${receiverId}`;
