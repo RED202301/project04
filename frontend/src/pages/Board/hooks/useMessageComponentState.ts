@@ -1,5 +1,5 @@
 import { useRecoilValue } from "recoil";
-import { globalStateState, isEditableState, isOnTransitionState, selectedMessageState } from "../recoil/atoms";
+import { globalStateState, isEditableState, isOnTransitionState, selectedMessageState } from "../../../recoil/atoms";
 
 const useMessageComponentState = (id) => {
   const selectedMessage = useRecoilValue(selectedMessageState);

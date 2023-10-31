@@ -1,6 +1,6 @@
 import { useSetRecoilState } from "recoil";
-import messagesAPI from "../api/messagesAPI";
-import { messageMapState, selectedMessageState } from "../recoil/atoms";
+import messagesAPI from "../../../api/messagesAPI";
+import { messageMapState, selectedMessageState } from "../../../recoil/atoms";
 import useHandleModal from "./useHandleModal";
 
 const useHandleDelete = (id) => {

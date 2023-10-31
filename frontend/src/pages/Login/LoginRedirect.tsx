@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tw from "twin.macro";
-
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useRecoilState } from "recoil";
-import messagesAPI from "../Board2/api/messagesAPI";
-
-// const base_URL = import.meta.env.VITE_SERVER_URL;
-
+import messagesAPI from "../../api/messagesAPI";
 
 
 const twStyles = [tw`bg-gray-100 h-[100vh] `]

@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { mobileSizeState, messageMapState, selectedMessageState, globalStateState } from "../recoil/atoms";
+import { mobileSizeState, messageMapState, selectedMessageState, globalStateState } from "../../../recoil/atoms";
 
-const useSelect = (id: number) => {
+const useSelect = (id: number, ref) => {
   const [{ clientWidth }] = useRecoilState(mobileSizeState);
   const { isMovable } = useRecoilValue(globalStateState)
   const [, setSelectedMessage] = useRecoilState(selectedMessageState)
@@ -13,6 +13,7 @@ const useSelect = (id: number) => {
     const { top, left } = msgMap.get(id)!;
     setSelectedMessage(() => ({
       id,
+      ref,
       top,
       left,
       startX: pageX / clientWidth,
