@@ -60,7 +60,6 @@ spring:
           scope:
             - profile_nickname
             - profile_image
-            - account_email
           clientName: Kakao
       # Provider 설정
       provider:

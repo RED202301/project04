@@ -44,16 +44,15 @@ public class User {
     @Size(max = 100)
     private String username;
 
-
-    @Column(name = "EMAIL", length = 512, unique = false)
-    @NotNull
-    @Size(max = 512)
-    private String email;
-
-    @Column(name = "EMAIL_VERIFIED_YN", length = 1)
-    @NotNull
-    @Size(min = 1, max = 1)
-    private String emailVerifiedYn;
+//    @Column(name = "EMAIL", length = 512, unique = false)
+//    @NotNull
+//    @Size(max = 512)
+//    private String email;
+//
+//    @Column(name = "EMAIL_VERIFIED_YN", length = 1)
+//    @NotNull
+//    @Size(min = 1, max = 1)
+//    private String emailVerifiedYn;
 
     @Column(name = "PROFILE_IMAGE_URL", length = 512)
     @NotNull
@@ -88,8 +87,6 @@ public class User {
     public User(
             @NotNull @Size(max = 64) String userId,
             @NotNull @Size(max = 100) String username,
-            @NotNull @Size(max = 512) String email,
-            @NotNull @Size(max = 1) String emailVerifiedYn,
             @NotNull @Size(max = 512) String profileImageUrl,
             @NotNull ProviderType providerType,
             @NotNull RoleType roleType,
@@ -98,8 +95,6 @@ public class User {
     ) {
         this.userId = userId;
         this.username = username;
-        this.email = email != null ? email : "NO_EMAIL";
-        this.emailVerifiedYn = emailVerifiedYn;
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
         this.providerType = providerType;
         this.roleType = roleType;
