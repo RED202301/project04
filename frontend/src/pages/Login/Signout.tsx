@@ -7,8 +7,8 @@ const Signout: React.FC = () => {
 
     const accessToken = localStorage.getItem('accessToken');
         const signOut = () => {
-        axios.get(
-        `${base_URL}/api/v1/oauth/`, 
+        axios.delete(
+        `${base_URL}/api/v1/users/`, 
         {headers: {
             Authorization: `Bearer ${accessToken}`
             }
