@@ -1,5 +1,5 @@
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { globalStateState, isEditableState } from "../recoil/atoms";
+import { globalStateState, isEditableState } from "../../../recoil/atoms";
 import useTransition from "./useTransition";
 
 const useHandleModal = () => {

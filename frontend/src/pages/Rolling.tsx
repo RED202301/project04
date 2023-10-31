@@ -1,11 +1,11 @@
-import React,{useState} from "react";
+import React from "react";
 // import VideoThumbnail from "../components/Videothumbnail";
 // import tw from "twin.macro";
 import FilePicker from "../components/FilePicker";
 import SoundPicker from "../components/SoundPicker";
-import AudioRecorder from "../components/Audio";
+// import AudioRecorder from "../components/Audio";
 import axios from "axios";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { fileAtom } from "../recoil/fileAtom";
 
 const base_URL = `http://192.168.30.218:8080`;

@@ -1,12 +1,10 @@
 import axios from "axios";
-import { MessageGetType } from "../types/types";
+import { MessageGetType } from "../pages/Board/types/types";
 
 
-const baseURL = `${import.meta.env.VITE_SERVER_URL}/api/v1`;
-// const baseURL = "http://k9e206.p.ssafy.io/api/v1";
-// const baseURL = "http://k9e206.p.ssafy.io:8057/api/v1";
-const messagesURL = `${baseURL}/messages`;
-const usersURL = `${baseURL}/users`;
+const back_base_URL = `${import.meta.env.VITE_BACK_SERVER_URL}/api/v1`;
+const messagesURL = `${back_base_URL}/messages`;
+const usersURL = `${back_base_URL}/users`;
 
 
 const getUser = async () => {
