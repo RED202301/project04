@@ -12,7 +12,6 @@ import com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedO
 import com.ssafy.send2u.common.oauth.token.AuthToken;
 import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
 import com.ssafy.send2u.common.utils.CookieUtil;
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
@@ -40,7 +39,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final OAuth2AuthorizedClientService authorizedClientService;
