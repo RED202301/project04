@@ -11,7 +11,7 @@ import useHandleModal from "./hooks/useHandleModal"
 import {IoAdd} from "react-icons/io5"
 import { useParams } from "react-router-dom"
 
-const base_URL = import.meta.env.VITE_SERVER_URL;
+const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 
 const Section: React.FC = () => {
   const [msgMap, setMessageMap] = useRecoilState(messageMapState)
@@ -61,7 +61,7 @@ const Section: React.FC = () => {
         <h1>{receiverName}</h1>
         <button {...{
           onClick: () => {
-            const content = `${base_URL}/rolling/${receiverId}`;
+            const content = `${front_base_URL}/rolling/${receiverId}`;
             navigator.share({
               title: `[SEND2U]`,
               text: `${receiverName}님에게 글 남기기`,
