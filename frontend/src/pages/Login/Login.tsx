@@ -38,7 +38,7 @@ const Login: React.FC = () => {
       <div className="">
       </div>
       <img css={tw`flex justify-center rounded ml-[5%] pt-[10%]`} src={Logo} width={"90%"} alt=""></img>
-      <div css={tw`fixed top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 overflow-hidden rounded-xl w-[77%] sm:w-[60%] md:w-[40%] lg:w-[27%]`}>
+      <div css={tw`fixed top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 overflow-hidden rounded-xl w-[77%] sm:w-[60%] md:w-[30%] lg:w-[27%]`}>
         <a css={tw`flex justify-center`} href={KAKAO_AUTH_URI} onClick={handleLogin}>
           <img css={tw`rounded shadow-xl mr-2 ml-2`} src={kakaoImg} width={"100%"} alt=""></img>
         </a>
