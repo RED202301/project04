@@ -1,5 +1,5 @@
 import { useRecoilState, useRecoilValue } from "recoil";
-import { mobileSizeState, messageMapState, selectedMessageState, globalStateState } from "../recoil/atoms";
+import { mobileSizeState, messageMapState, selectedMessageState, globalStateState } from "../../../recoil/atoms";
 
 const useSelect = (id: number) => {
   const [{ clientWidth }] = useRecoilState(mobileSizeState);

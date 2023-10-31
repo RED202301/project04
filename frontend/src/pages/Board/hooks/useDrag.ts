@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { mobileSizeState, messageMapState, selectedMessageState, globalStateState } from "../recoil/atoms";
-import messagesAPI from "../api/messagesAPI";
+import { mobileSizeState, messageMapState, selectedMessageState, globalStateState } from "../../../recoil/atoms";
+import messagesAPI from "../../../api/messagesAPI";
 
 const useDrag = () => {
   const { clientWidth, clientHeight } = useRecoilValue(mobileSizeState);

@@ -1,5 +1,5 @@
 import { useSetRecoilState } from "recoil";
-import { isOnTransitionState } from "../recoil/atoms";
+import { isOnTransitionState } from "../../../recoil/atoms";
 
 const useTransition = () => {
   const setIsOnTransition = useSetRecoilState(isOnTransitionState)

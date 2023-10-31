@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
 import { Global } from "@emotion/react";
 import tw, { css, theme, GlobalStyles as BaseStyles } from "twin.macro";
-import { atom, useRecoilState, useSetRecoilState } from "recoil";
-
-const mobileSizeState = atom({
-  key: "mobileSizeState",
-  default: { clientWidth: 0, clientHeight: 0 },
-})
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { mobileSizeState } from "../recoil/atoms";
 
 const useHandleResize = () => {
   const setMobileSize = useSetRecoilState(mobileSizeState);

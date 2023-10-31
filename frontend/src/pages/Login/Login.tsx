@@ -1,21 +1,14 @@
 import React from "react";
 import kakaoImg from "/kakao_login_large_narrow.png";
 import tw from "twin.macro";
-import GlobalStyles from "../../styles/GlobalStyles";
 import Logo from "/Logo.gif"
 // import useLongPressBlocker from "../../components/useLongPressBlocker";
 
 const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
 const Login: React.FC = () => {
-  // const [handleTouchStart, handleTouchMove, handleTouchEnd] = useLongPressBlocker();
-  // const Backserver_URI = 'http://192.168.30.201:8080';
-  const Backserver_URI = back_base_URL;
-  // const REDIRECT_URI = "http://127.0.0.1:5173/oauth/redirect"; // redirect 주소
   const REDIRECT_URI = `${front_base_URL}/oauth/redirect`; // redirect 주소
-  // const KAKAO_AUTH_URI = `${Backserver_URI}/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}`;
-  // const KAKAO_AUTH_URI = `http://k9e206.p.ssafy.io/oauth2/authorization/kakao?redirect_uri=http://k9e206.p.ssafy.io/oauth/redirect`;
-  const KAKAO_AUTH_URI = `${back_base_URL}/oauth2/authorization/kakao?redirect_uri=${front_base_URL}/oauth/redirect`;
+  const KAKAO_AUTH_URI = `${back_base_URL}/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}`;
 
   const handleLogin = () => 
   {

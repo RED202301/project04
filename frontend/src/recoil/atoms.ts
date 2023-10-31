@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { MessageGetType, MobileSizeType } from "../types/types";
+import { MessageGetType, MobileSizeType } from "../pages/Board/types/types";
 
 const mobileSizeState = atom<MobileSizeType>({
   key: "mobileSizeState",

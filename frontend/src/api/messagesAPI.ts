@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MessageGetType } from "../types/types";
+import { MessageGetType } from "../pages/Board/types/types";
 
 
 const back_base_URL = `${import.meta.env.VITE_BACK_SERVER_URL}/api/v1`;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useRecoilValue } from "recoil";
 import tw, { css } from "twin.macro";
-import { globalStateState, mobileSizeState } from "../recoil/atoms";
+import { globalStateState, mobileSizeState } from "../../../recoil/atoms";
 import useHandleModal from "../hooks/useHandleModal";
 
 
