@@ -22,6 +22,7 @@ const globalStateState = atom({
 const selectedMessageState = atom<
   {
     id: number,
+    ref: React.MutableRefObject<HTMLElement>,
     top: number,
     left: number,
     startX: number,

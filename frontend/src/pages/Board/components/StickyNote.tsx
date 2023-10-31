@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useRecoilValue } from "recoil";
 import { mobileSizeState } from "../../../recoil/atoms";
 import useDoubleTap from "../hooks/useDoubleTap";
@@ -99,11 +99,11 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
     // else setTimeout(() => setIsRendered(true), 100 * msgData.zindex)
   }, [])
   
-
+  const ref = useRef();
   const {receiverId} = useParams()
   const handleCreate = useHandleCreate({receiverId});
   const handleDelete = useHandleDelete(msgData.id);
-  const handleSelect = useSelect(msgData.id);
+  const handleSelect = useSelect(msgData.id, ref);
   const { toggleModal } = useHandleModal();
   const handleDoubleTap = useDoubleTap(toggleModal)
 
@@ -143,6 +143,7 @@ const StickyNote: React.FC = (msgData:MessageGetType) => {
     }} />}
     
     <div {...{
+      ref,
       css: tw_msg,
       onMouseDown: handleSelect,
       onTouchStart: handleSelect,
