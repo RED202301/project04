@@ -11,7 +11,6 @@ import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
 import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.common.utils.CookieUtil;
 import com.ssafy.send2u.common.utils.HeaderUtil;
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import io.jsonwebtoken.Claims;
 import java.util.Date;
 import javax.servlet.http.Cookie;
@@ -33,7 +32,6 @@ public class AuthController {
     private final AppProperties appProperties;
     private final AuthTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
     private final static long THREE_DAYS_MSEC = 259200000;
