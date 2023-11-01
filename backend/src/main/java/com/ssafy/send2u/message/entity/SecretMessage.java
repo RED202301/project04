@@ -28,7 +28,7 @@ public class SecretMessage {
     private Long id;
 
     @Column(nullable = false)
-    private String content;
+    private Long type;
 
     @Column(name = "created_at")
     @CreatedDate
@@ -41,5 +41,14 @@ public class SecretMessage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
-    
+
+    private Long bgcolor;
+    private String content;
+    private String thumbnailFileUrl;
+    private String sourceFileUrl;
+    private Float top;
+    private Float left;
+    private Float rotate;
+    private Long zindex;
+
 }
