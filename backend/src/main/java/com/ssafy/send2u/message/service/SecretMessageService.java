@@ -108,8 +108,15 @@ public class SecretMessageService {
 
     @Transactional
     public Long deleteSecretMessage(Long id) {
-        if (!secretMessageRepository.existsById(id)) {
-            throw new IllegalArgumentException("Invalid message Id: " + id);
+        SecretMessage secretMessage = secretMessageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message Id: " + id));
+
+        // 파일이 있는 경우 S3에서도 삭제
+        if (secretMessage.getSourceFileUrl() != null) {
+            awsService.fileDelete(secretMessage.getSourceFileUrl());
+        }
+        if (secretMessage.getThumbnailFileUrl() != null) {
+            awsService.fileDelete(secretMessage.getThumbnailFileUrl());
         }
         secretMessageRepository.deleteById(id);
         return id;
