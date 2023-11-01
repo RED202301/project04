@@ -44,7 +44,7 @@ public class UserController {
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("회원 이름")
                 .status(OK.value())
-                .data(user.getUserName()) // userName만 반환합
+                .data(user)
                 .build();
 
         return ResponseEntity.ok(apiResponse);

@@ -4,7 +4,6 @@ import com.ssafy.send2u.common.error.ErrorCode;
 import com.ssafy.send2u.common.error.exception.OAuthException;
 import com.ssafy.send2u.user.dto.UserInfoDto;
 import com.ssafy.send2u.user.entity.user.User;
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import com.ssafy.send2u.user.repository.user.UserRepository;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final RedisTemplate redisTemplate;
 
 
@@ -38,6 +36,7 @@ public class UserService {
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setUserName(user.getUsername());
         userInfoDto.setUserId(user.getUserId());
+        userInfoDto.setUserProfileImageUrl(user.getProfileImageUrl());
         return userInfoDto;
     }
 
@@ -53,24 +52,17 @@ public class UserService {
     }
 
     private void unlinkKakaoUser(User user) {
-        System.out.println("여긴온다5");
         ClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        System.out.println("여긴온다6");
         RestTemplate restTemplate = new RestTemplate(httpRequestFactory);
-
-        System.out.println("여긴온다1");
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         httpHeaders.set("Authorization", "KakaoAK " + kakaoAdminKey);
 
-        System.out.println("여긴온다2");
-
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("target_id_type", "user_id");
         parameters.add("target_id", user.getUserId());
 
-        System.out.println("여긴온다3");
         HttpEntity formEntity = new HttpEntity<>(parameters, httpHeaders);
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(

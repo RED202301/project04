@@ -11,7 +11,6 @@ import com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedO
 import com.ssafy.send2u.common.oauth.service.CustomOAuth2UserService;
 import com.ssafy.send2u.common.oauth.service.CustomUserDetailsService;
 import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService userDetailsService;
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
@@ -166,7 +164,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new OAuth2AuthenticationSuccessHandler(
                 tokenProvider,
                 appProperties,
-                userRefreshTokenRepository,
                 oAuth2AuthorizationRequestBasedOnCookieRepository(),
                 redisTemplate,
                 authorizedClientService
