@@ -13,13 +13,17 @@ import lombok.ToString;
 @Data
 @ToString
 public class SecretMessageDto {
+    @ApiModelProperty(hidden = true)
     private Long id;
 
     private Float top;
     private Float left;
     private Float rotate;
     private Long zindex;
+
+    @ApiModelProperty(hidden = true)
     private LocalDateTime createdAt;
+
     private Long type;
 
     @ApiModelProperty(hidden = true)

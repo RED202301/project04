@@ -47,7 +47,10 @@ public class SecretMessage {
     private String thumbnailFileUrl;
     private String sourceFileUrl;
     private Float top;
+    
+    @Column(name = "`left`")
     private Float left;
+
     private Float rotate;
     private Long zindex;
 

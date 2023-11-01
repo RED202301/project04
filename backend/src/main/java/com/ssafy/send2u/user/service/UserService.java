@@ -36,6 +36,7 @@ public class UserService {
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setUserName(user.getUsername());
         userInfoDto.setUserId(user.getUserId());
+        userInfoDto.setUserProfileImageUrl(user.getProfileImageUrl());
         return userInfoDto;
     }
 

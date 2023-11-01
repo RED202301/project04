@@ -3,8 +3,8 @@ package com.ssafy.send2u.message.controller;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.ssafy.send2u.common.response.ApiResponse;
-import com.ssafy.send2u.message.dto.MessageDto;
-import com.ssafy.send2u.message.service.MessageService;
+import com.ssafy.send2u.message.dto.SecretMessageDto;
+import com.ssafy.send2u.message.service.SecretMessageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
@@ -19,43 +19,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@Api(tags = {"message"}, description = "일반메시지")
+@Api(tags = {"secretMessage"}, description = "비밀메시지")
 @RestController
-@RequestMapping("/api/v1/messages")
+@RequestMapping("/api/v1/secretMessages")
 @RequiredArgsConstructor
-public class MessageController {
-    private final MessageService messageService;
+public class SecretMessageController {
+    private final SecretMessageService secretMessageService;
 
-
-    @ApiOperation(value = "전체메시지조회")
+    @ApiOperation(value = "비밀메시지전체조회")
     @GetMapping()
-    public ResponseEntity<ApiResponse> getAllMessages() {
-        List<MessageDto> list = messageService.getAllMessages();
+    public ResponseEntity<ApiResponse> getAllSecretMessages() {
+        List<SecretMessageDto> list = secretMessageService.getAllSecretMessages();
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("메세지 리스트")
+                .message("비밀메시지 리스트")
                 .status(OK.value())
                 .data(list)
                 .build();
-
         return ResponseEntity.ok(apiResponse);
     }
 
-    @ApiOperation(value = "내메시지조회")
+    @ApiOperation(value = "내비밀메시지조회")
     @GetMapping("/search")
     public ResponseEntity<ApiResponse> getUserReceivedMessages(@RequestParam(required = false) String receiverId) {
-        List<MessageDto> list = messageService.getUserReceivedMessages(receiverId);
+        List<SecretMessageDto> list = secretMessageService.getUserReceivedSecretMessages(receiverId);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("받은 메세지 리스트")
+                .message("받은 비밀메세지 리스트")
                 .status(OK.value())
                 .data(list)
                 .build();
@@ -63,20 +59,34 @@ public class MessageController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @ApiOperation(value = "일기생성")
+
+    @ApiOperation(value = "받은 비밀메시지 수 조회")
+    @GetMapping("/count")
+    public ResponseEntity<ApiResponse> getUserReceivedSecretMessagesCount(
+            @RequestParam(required = false) String receiverId) {
+        int count = secretMessageService.getUserReceivedSecretMessagesCount(receiverId);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("받은 메세지 수")
+                .status(OK.value())
+                .data(count)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @ApiOperation(value = "비밀일기생성")
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse> createMessage(
-            @Valid @ModelAttribute MessageDto messageDto,
+    public ResponseEntity<ApiResponse> createSecretMessage(
+            @Valid @ModelAttribute SecretMessageDto secretMessageDto,
             @RequestPart(value = "sourceFile", required = false) MultipartFile sourceFile,
             @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile)
             throws IOException {
 
-        System.out.println(messageDto);
-        System.out.println(messageDto);
-
-        MessageDto response = messageService.createMessage(messageDto, sourceFile, thumbnailFile);
+        SecretMessageDto response = secretMessageService.createSecretMessage(secretMessageDto, sourceFile,
+                thumbnailFile);
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("메세지 작성")
+                .message("비밀메시지작성")
                 .status(OK.value())
                 .data(response)
                 .build();
@@ -84,25 +94,10 @@ public class MessageController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @ApiOperation(value = "일기수정", notes = "#######top,left,rotate,zindex만 넣으면됨######")
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateMessage(@PathVariable Long id, @RequestBody MessageDto messageDto) {
-        MessageDto updatedMessage = messageService.updateMessage(id, messageDto.getTop(), messageDto.getLeft(),
-                messageDto.getRotate(), messageDto.getZindex());
-
-        ApiResponse apiResponse = ApiResponse.builder()
-                .message(id + "번 메시지 수정")
-                .status(OK.value())
-                .data(updatedMessage)
-                .build();
-
-        return ResponseEntity.ok(apiResponse);
-    }
-
-    @ApiOperation(value = "일기삭제")
+    @ApiOperation(value = "비밀일기삭제")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteMessage(@PathVariable Long id) {
-        Long deletedId = messageService.deleteMessage(id);
+    public ResponseEntity<ApiResponse> deleteSecretMessage(@PathVariable Long id) {
+        Long deletedId = secretMessageService.deleteSecretMessage(id);
 
         Map<String, Long> data = new HashMap<>();
         data.put("id", deletedId);
@@ -115,6 +110,5 @@ public class MessageController {
 
         return ResponseEntity.ok(apiResponse);
     }
-
 
 }
