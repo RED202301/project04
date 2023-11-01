@@ -119,8 +119,15 @@ public class MessageService {
 
     @Transactional
     public Long deleteMessage(Long id) {
-        if (!messageRepository.existsById(id)) {
-            throw new IllegalArgumentException("Invalid message Id: " + id);
+        Message message = messageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message Id: " + id));
+        
+        // 파일이 있는 경우 S3에서도 삭제
+        if (message.getSourceFileUrl() != null) {
+            awsService.fileDelete(message.getSourceFileUrl());
+        }
+        if (message.getThumbnailFileUrl() != null) {
+            awsService.fileDelete(message.getThumbnailFileUrl());
         }
         messageRepository.deleteById(id);
         return id;
