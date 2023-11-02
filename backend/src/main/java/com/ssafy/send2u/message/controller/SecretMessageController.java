@@ -95,7 +95,7 @@ public class SecretMessageController {
     }
 
     @ApiOperation(value = "비밀일기삭제")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{messageId}")
     public ResponseEntity<ApiResponse> deleteSecretMessage(@PathVariable Long messageId) {
         Long deletedId = secretMessageService.deleteSecretMessage(messageId);
 
