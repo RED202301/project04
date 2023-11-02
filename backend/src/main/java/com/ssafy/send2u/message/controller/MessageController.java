@@ -82,7 +82,7 @@ public class MessageController {
     }
 
     @ApiOperation(value = "일기수정", notes = "#######top,left,rotate,zindex만 넣으면됨######")
-    @PutMapping("/{id}")
+    @PutMapping("/{messageId}")
     public ResponseEntity<ApiResponse> updateMessage(@PathVariable Long messageId, @RequestBody MessageDto messageDto) {
         MessageDto updatedMessage = messageService.updateMessage(messageId, messageDto.getTop(), messageDto.getLeft(),
                 messageDto.getRotate(), messageDto.getZindex());
@@ -97,7 +97,7 @@ public class MessageController {
     }
 
     @ApiOperation(value = "일기삭제")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{messageId}")
     public ResponseEntity<ApiResponse> deleteMessage(@PathVariable Long messageId) {
         Long deletedId = messageService.deleteMessage(messageId);
 
