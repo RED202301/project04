@@ -43,11 +43,14 @@ public class SecretMessage {
     private User receiver;
 
     private Long bgcolor;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
+
     private String thumbnailFileUrl;
     private String sourceFileUrl;
     private Float top;
-    
+
     @Column(name = "`left`")
     private Float left;
 
