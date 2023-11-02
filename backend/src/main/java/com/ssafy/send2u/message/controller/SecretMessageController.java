@@ -96,14 +96,14 @@ public class SecretMessageController {
 
     @ApiOperation(value = "비밀일기삭제")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteSecretMessage(@PathVariable Long id) {
-        Long deletedId = secretMessageService.deleteSecretMessage(id);
+    public ResponseEntity<ApiResponse> deleteSecretMessage(@PathVariable Long messageId) {
+        Long deletedId = secretMessageService.deleteSecretMessage(messageId);
 
         Map<String, Long> data = new HashMap<>();
         data.put("id", deletedId);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message(id + "번 ID 메세지 삭제")
+                .message(messageId + "번 ID 메세지 삭제")
                 .status(OK.value())
                 .data(data)
                 .build();

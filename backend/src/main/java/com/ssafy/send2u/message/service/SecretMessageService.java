@@ -109,9 +109,9 @@ public class SecretMessageService {
     }
 
     @Transactional
-    public Long deleteSecretMessage(Long id) {
-        SecretMessage secretMessage = secretMessageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid message Id: " + id));
+    public Long deleteSecretMessage(Long messageId) {
+        SecretMessage secretMessage = secretMessageRepository.findById(messageId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid message Id: " + messageId));
 
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
@@ -130,8 +130,8 @@ public class SecretMessageService {
         if (secretMessage.getThumbnailFileUrl() != null) {
             awsService.fileDelete(secretMessage.getThumbnailFileUrl());
         }
-        secretMessageRepository.deleteById(id);
-        return id;
+        secretMessageRepository.deleteById(messageId);
+        return messageId;
     }
 
 }
