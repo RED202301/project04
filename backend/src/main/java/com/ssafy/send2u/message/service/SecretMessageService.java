@@ -1,6 +1,8 @@
 package com.ssafy.send2u.message.service;
 
 import com.ssafy.send2u.aws.service.AwsService;
+import com.ssafy.send2u.common.error.ErrorCode;
+import com.ssafy.send2u.common.error.exception.NoAuthorizationException;
 import com.ssafy.send2u.message.dto.SecretMessageDto;
 import com.ssafy.send2u.message.entity.SecretMessage;
 import com.ssafy.send2u.message.repository.SecretMessageRepository;
@@ -110,6 +112,16 @@ public class SecretMessageService {
     public Long deleteSecretMessage(Long id) {
         SecretMessage secretMessage = secretMessageRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid message Id: " + id));
+
+        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+
+        User currentUser = userRepository.findByUserId(principal.getUsername());
+
+        // 본인이 적은 글인지 확인
+        if (!secretMessage.getSender().equals(currentUser)) {
+            throw new NoAuthorizationException(ErrorCode.NO_Authorization);
+        }
 
         // 파일이 있는 경우 S3에서도 삭제
         if (secretMessage.getSourceFileUrl() != null) {
