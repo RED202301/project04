@@ -15,12 +15,13 @@ const Login: React.FC = () => {
     window.location.href = KAKAO_AUTH_URI;
   };
   // const twStyles = [tw`bg-gray-100 h-[100vh] bg-[url("https://transparenttextures.com/patterns/grid-me.png")]`]
-  const twStyles = [tw`bg-gray-100 h-[100vh] `]
+  const twStyles = [tw`bg-gray-100 h-[100vh]`]
   return (
     <div css={twStyles} style={{
     maxWidth: "500px",
     minWidth: "200px",
-    maxHeight: window.innerHeight,
+    // maxHeight: window.innerHeight,
+    // height: window.innerHeight, 
     minHeight: '500px',
     marginLeft: "auto", 
     marginRight: "auto",
@@ -31,18 +32,15 @@ const Login: React.FC = () => {
     // onTouchMove={handleTouchMove}
     // onTouchEnd={handleTouchEnd}
     >
-      {/* <GlobalStyles></GlobalStyles> */}
-      <div css={tw``}></div>  
-      <div className="flex justify-center ml-[10%] w-[80vw] h-[50vh]">
+      {/* <GlobalStyles></GlobalStyles> */}       
+      <div css={tw`flex-wrap`}>
+        <img css={tw`flex justify-center rounded ml-[5%] pt-[10%]`} src={Logo} width={"90%"} alt=""></img>
       </div>
-      <div className="">
-      </div>
-      <img css={tw`flex justify-center rounded ml-[5%] pt-[10%]`} src={Logo} width={"90%"} alt=""></img>
-      <div css={tw`fixed top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 overflow-hidden rounded-xl w-[77%] sm:w-[60%] md:w-[30%] lg:w-[27%]`}>
-        <a css={tw`flex justify-center`} href={KAKAO_AUTH_URI} onClick={handleLogin}>
-          <img css={tw`rounded shadow-xl mr-2 ml-2`} src={kakaoImg} width={"100%"} alt=""></img>
-        </a>
-        <p css={tw`text-sm mt-2 text-gray-800`}>시작할 경우, Send2U의 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.</p>
+      <div css={tw`relative w-full`} style={{paddingTop: '75%'}}>
+      <a href={KAKAO_AUTH_URI} onClick={handleLogin}>
+      <img css={tw`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[420px] w-[90%] h-auto`} src={kakaoImg}/>
+      </a>
+      <p css={tw`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-2/4 text-xs mt-20 text-gray-800 sm:text-sm  max-w-[420px] w-[90%] h-auto`}>시작할 경우, Send2U의 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.</p>
       </div>
     </div>
   );

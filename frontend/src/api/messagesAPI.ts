@@ -27,8 +27,8 @@ const getUserName = async (id: number) => {
       url: `${usersURL}/${id}`,
       method: `GET`,
     });
-    console.log(response.data.data)
-    return response.data.data as string
+    console.log(response.data.data.userName)
+    return response.data.data.userName as string
   } catch (error) {
     console.log(error)
   }
