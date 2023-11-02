@@ -1,6 +1,14 @@
 package com.ssafy.send2u.common.error;
 
-import com.ssafy.send2u.common.error.exception.*;
+import com.ssafy.send2u.common.error.exception.AWSException;
+import com.ssafy.send2u.common.error.exception.ConflictException;
+import com.ssafy.send2u.common.error.exception.ConnectionException;
+import com.ssafy.send2u.common.error.exception.InvalidRequestException;
+import com.ssafy.send2u.common.error.exception.JsonException;
+import com.ssafy.send2u.common.error.exception.NoAuthorizationException;
+import com.ssafy.send2u.common.error.exception.NotFoundException;
+import com.ssafy.send2u.common.error.exception.OAuthException;
+import com.ssafy.send2u.common.error.exception.TokenValidFailedException;
 import com.ssafy.send2u.common.response.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,13 +24,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(OAuthException.class)
     public ResponseEntity<ErrorResponse> handleOAuthProviderMissMatchException(
-        OAuthException e) {
+            OAuthException e) {
         return handleException(e, e.getErrorCode());
     }
 
     @ExceptionHandler(TokenValidFailedException.class)
     public ResponseEntity<ErrorResponse> handleTokenValidFailedException(
-        TokenValidFailedException e) {
+            TokenValidFailedException e) {
         return handleException(e, e.getErrorCode());
     }
 
@@ -56,8 +64,14 @@ public class GlobalExceptionHandler {
         return handleException(e, e.getErrorCode());
     }
 
+    @ExceptionHandler(NoAuthorizationException.class)
+    public ResponseEntity<ErrorResponse> handleNoAuthorizationException(NoAuthorizationException e) {
+        return handleException(e, e.getErrorCode());
+    }
+
     private ResponseEntity<ErrorResponse> handleException(Exception e, ErrorCode errorCode) {
         ErrorResponse errorResponse = ErrorResponse.of(errorCode);
         return ResponseEntity.status(errorResponse.getStatus()).body(errorResponse);
     }
+
 }
