@@ -1,31 +1,22 @@
 package com.ssafy.send2u.message.controller;
 
-import static org.springframework.http.HttpStatus.OK;
-
 import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.message.dto.MessageDto;
 import com.ssafy.send2u.message.service.MessageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @Api(tags = {"message"}, description = "일반메시지")
 @RestController
@@ -44,6 +35,19 @@ public class MessageController {
                 .message("메세지 리스트")
                 .status(OK.value())
                 .data(list)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+    @ApiOperation(value = "메시지조회")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getMessage(@PathVariable Long id) {
+        MessageDto message = messageService.getMessage(id);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("메세지")
+                .status(OK.value())
+                .data(message)
                 .build();
 
         return ResponseEntity.ok(apiResponse);
