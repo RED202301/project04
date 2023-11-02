@@ -71,9 +71,6 @@ public class MessageController {
             @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile)
             throws IOException {
 
-        System.out.println(messageDto);
-        System.out.println(messageDto);
-
         MessageDto response = messageService.createMessage(messageDto, sourceFile, thumbnailFile);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("메세지 작성")
@@ -86,12 +83,12 @@ public class MessageController {
 
     @ApiOperation(value = "일기수정", notes = "#######top,left,rotate,zindex만 넣으면됨######")
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateMessage(@PathVariable Long id, @RequestBody MessageDto messageDto) {
-        MessageDto updatedMessage = messageService.updateMessage(id, messageDto.getTop(), messageDto.getLeft(),
+    public ResponseEntity<ApiResponse> updateMessage(@PathVariable Long messageId, @RequestBody MessageDto messageDto) {
+        MessageDto updatedMessage = messageService.updateMessage(messageId, messageDto.getTop(), messageDto.getLeft(),
                 messageDto.getRotate(), messageDto.getZindex());
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message(id + "번 메시지 수정")
+                .message(messageId + "번 메시지 수정")
                 .status(OK.value())
                 .data(updatedMessage)
                 .build();
@@ -101,14 +98,14 @@ public class MessageController {
 
     @ApiOperation(value = "일기삭제")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteMessage(@PathVariable Long id) {
-        Long deletedId = messageService.deleteMessage(id);
+    public ResponseEntity<ApiResponse> deleteMessage(@PathVariable Long messageId) {
+        Long deletedId = messageService.deleteMessage(messageId);
 
         Map<String, Long> data = new HashMap<>();
         data.put("id", deletedId);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message(id + "번 ID 메세지 삭제")
+                .message(messageId + "번 ID 메세지 삭제")
                 .status(OK.value())
                 .data(data)
                 .build();
