@@ -29,8 +29,8 @@ const FloatingButton = () => {
     })
   ]
   const isDragged = useRecoilValue(isDraggedState)
-  const handleSelect = useHandleSelect(ref);
-  const handleClick = () => {
+  const [handleSelect, handleUnselect] = useHandleSelect(ref);
+  const handlePointerUpCapture = () => {
     if (isDragged) return
     setIsActive(isActive=>!isActive)
   }
@@ -68,10 +68,9 @@ const FloatingButton = () => {
     }} />
 
       <AiOutlineMenu {...{
-        onMouseDown: handleSelect,
-        onTouchStart: handleSelect,
-        onMouseUp: handleClick,
-        onTouchEnd: handleClick,
+        onPointerDown: handleSelect,
+        onPointerLeave: handleUnselect,
+        onPointerUpCapture: handlePointerUpCapture,
         css: [tw_button, css({ ["right"]: `0px`, rotate: isActive? `90deg`:`0deg`})]
       }} />
     </div>

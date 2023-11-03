@@ -1,29 +1,39 @@
 import { MutableRefObject } from "react"
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { dragStateState, dragTimeoutState, isDraggedState, selectedRefObjectState } from "../recoil/atoms";
-import mobileSizeState from "../recoil/mobileSizeState";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { dragTimeoutState, isDraggedState, selectedMessageIdState, selectedRefObjectState } from "../recoil/atoms";
+import messagesState from "../recoil/messagesState";
 
-const useHandleSelect = (ref: MutableRefObject<HTMLElement>) => {
-  const setDragStae = useSetRecoilState(dragStateState);
+const useHandleSelect = (ref: MutableRefObject<HTMLElement>, messageId?: number) => {
   const setDragTimeout = useSetRecoilState(dragTimeoutState);
-  const setIsDragged = useSetRecoilState(isDraggedState);
+  const [isDragged, setIsDragged] = useRecoilState(isDraggedState);
   const setSelectedRefObject = useSetRecoilState(selectedRefObjectState);
-  const mobileSize = useRecoilValue(mobileSizeState)
+  const setMessages = useSetRecoilState(messagesState)
+  const setSelectedMessageId = useSetRecoilState(selectedMessageIdState)
 
-  const handleSelect = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
-    const { pageX, pageY } = "targetTouches" in event ? event.targetTouches[0] : event;
-    const { offsetTop, offsetLeft } = ref.current
-    setDragStae({
-      prevTop: offsetTop / mobileSize.width,
-      prevLeft: offsetLeft / mobileSize.width,
-      startX: pageX / mobileSize.width,
-      startY: pageY / mobileSize.width,
-    })
+  const handleSelect = () => {
     setSelectedRefObject(ref)
     const dragTimeout = setTimeout(() => setIsDragged(true), 200);
     setDragTimeout(dragTimeout);
+    if (messageId) {
+      setSelectedMessageId(messageId);
+      setMessages(messages => (
+        [...messages]
+          .map(message => {
+            if (message.id === messageId) return { ...message, zindex: messages.length + 1 }
+            else return message
+          })
+          .sort((a, b) => a.zindex - b.zindex)
+          .map((message, zindex) => ({ ...message, zindex }))
+      ))
+    }
   }
-  return handleSelect
+
+  const handleUnselect = () => {
+    if (isDragged) return
+    setSelectedRefObject(null);
+  }
+
+  return [handleSelect, handleUnselect]
 }
 
 export default useHandleSelect

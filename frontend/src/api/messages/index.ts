@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Message_Position, Post_Req_Messages, Res_Message } from "./types";
 
 const BACK_SERVER_URL = import.meta.env.VITE_BACK_SERVER_URL
 const MESSAGES_API_URL = `${BACK_SERVER_URL}/api/v1/messages`
@@ -44,7 +45,7 @@ const messages_api = {
     }
   },
 
-  update: async (id: number, updated_position: Messages_Position) => {
+  update: async (id: number, updated_position: Message_Position) => {
     const accessToken = localStorage.getItem("accessToken")
     const headers = { Authorization: `Bearer ${accessToken}` };
     const url = `${MESSAGES_API_URL}/${id}`

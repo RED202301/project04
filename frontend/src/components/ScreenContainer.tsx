@@ -18,10 +18,8 @@ const ScreenContainer = ({ children }: PropsWithChildren) => {
   return (
     <section {...{
       css: tw`w-screen h-screen bg-orange-100`,
-      onMouseMove: handleDragMove,
-      onMouseUp: handleDragEnd,
-      onTouchMove: handleDragMove,
-      onTouchEnd: handleDragEnd,
+      onPointerMove: handleDragMove,
+      onPointerUp: handleDragEnd,
     }}>
       {children}
     </section>

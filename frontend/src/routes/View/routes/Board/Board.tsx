@@ -20,12 +20,15 @@ const Board = ({ userId }: { userId: number }) => {
   }, [])
 
   return <div {...{ css: tw`flex-1 flex flex-wrap` }}>
-    {messages.map(message => (
-      <PlaceableContainer key={message.id}>
-        {message.type === 1 && <Stickynote {...{ ...message, sizeRatio:.3 }} />}
-        {message.type === 2 && <Polaroid {...{ ...message, sizeRatio:.3 }} />}
+    {[...messages]
+      .sort((a,b)=>a.zindex -b.zindex)
+      .map(message => {
+      const {id, top, left, rotate, zindex} = message
+      return <PlaceableContainer {...{ key: id, top, left, rotate, zindex, messageId:id }}>
+        {message.type === 1 && <Stickynote {...{ ...message, sizeRatio: .3 }} />}
+        {message.type === 2 && <Polaroid {...{ ...message, sizeRatio: .3 }} />}
       </PlaceableContainer>
-    ))}
+    })}
     
   </div>
 };

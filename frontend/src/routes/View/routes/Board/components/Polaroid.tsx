@@ -3,6 +3,7 @@ import mobileSizeState from "../../../../../recoil/mobileSizeState";
 import tw, { css } from "twin.macro";
 import { useNavigate } from "react-router-dom";
 import { isDraggedState } from "../../../../../recoil/atoms";
+import { Res_Message } from "../../../../../api/messages/types";
 
 const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Message &{sizeRatio:number, isOverlayed?:boolean}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
@@ -11,10 +12,11 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
   // const buttonPadding = buttonInnerRadius / 8
   // const buttonRadius = buttonInnerRadius + buttonPadding * 2;
 
-  const innerWidth = mobileSize.width * sizeRatio
-  const padding = innerWidth / 8
-  // const width = innerWidth + padding * 2
+  const width = mobileSize.width * sizeRatio 
+  const innerWidth = width * 4 /5
+  const padding = width / 10
   const fontSize = innerWidth / 10;
+
 
   const tw_article = [
     isOverlayed? tw`z-30`:tw``,
@@ -48,7 +50,7 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
   ]
   const navigate = useNavigate()
   const isDragged = useRecoilValue(isDraggedState);
-  const handleClick = () => {
+  const handlePointerUpCapture = () => {
     if (isDragged) return;
     navigate(`./detail/${id}`)
   }
@@ -56,8 +58,7 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
   return (
     <article {...{
       css: tw_article,
-      onMouseUp: handleClick,
-      onTouchEnd: handleClick,
+      onPointerUpCapture:handlePointerUpCapture
     }}>
       <img {...{ src: sourceFileUrl, css: tw_photo }} />
       {content && <p {...{css:tw_p}}>{content}</p>}

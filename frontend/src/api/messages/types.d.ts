@@ -5,7 +5,7 @@ enum Type {
   Video,
 }
 
-interface Messages_Position {
+interface Message_Position {
   top: number,
   left: number,
   rotate: number,
@@ -13,7 +13,7 @@ interface Messages_Position {
 }
 
 
-interface Res_Message extends Messages_Position {
+interface Res_Message extends Message_Position {
   id: number,
   senderId: number,
   receiverId: number,
@@ -30,7 +30,7 @@ interface Res_Message extends Messages_Position {
   createdAt: string,
 }
 
-interface Post_Req_Messages extends Messages_Position {
+interface Post_Req_Messages extends Message_Position {
   receiverId: number,
 
   type: number,
@@ -41,6 +41,8 @@ interface Post_Req_Messages extends Messages_Position {
   thumbnailFile?: File,
 }
 
-interface Put_Req_Messages extends Messages_Position {
+interface Put_Req_Messages extends Message_Position {
   id: number,
 }
+
+export type { Message_Position, Res_Message, Post_Req_Messages, Put_Req_Messages }

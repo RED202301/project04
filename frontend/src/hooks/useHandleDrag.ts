@@ -1,27 +1,74 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-import { dragStateState, dragTimeoutState, isDraggedState, selectedRefObjectState } from "../recoil/atoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { dragStateState, dragTimeoutState, isDraggedState, selectedMessageIdState, selectedRefObjectState } from "../recoil/atoms";
 import mobileSizeState from "../recoil/mobileSizeState";
+import messagesState from "../recoil/messagesState";
+import messages_api from "../api/messages";
 
 const useHandleDrag = () => {
   const dragTimeout = useRecoilValue(dragTimeoutState);
-  const { prevTop, prevLeft, startX, startY } = useRecoilValue(dragStateState);
+  const [dragState, setDragState] = useRecoilState(dragStateState);
   const [selectedRefObject, setSelectedRefObject] = useRecoilState(selectedRefObjectState);
   const [isDragged, setIsDragged] = useRecoilState(isDraggedState);
   const mobileSize = useRecoilValue(mobileSizeState);
+  const setMessages = useSetRecoilState(messagesState);
+  const [selectedMessageId, setSelectedMessageId] = useRecoilState(selectedMessageIdState);
 
-  const handleDragMove = (event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) => {
+  const handleDragMove = (event: React.PointerEvent) => {
     if (!isDragged || !selectedRefObject) return;
-    const { pageX, pageY } = "targetTouches" in event ? event.targetTouches[0] : event;
-    const updatedTop = prevTop + (pageY / mobileSize.width - startY);
-    const updatedLeft = prevLeft + (pageX / mobileSize.width - startX);
+    const { pageX, pageY } = event;
+    const { offsetWidth, offsetHeight } = selectedRefObject.current
+    const [width, height] = [offsetWidth / mobileSize.width, offsetHeight / mobileSize.height]
+    let _top, _left;
 
-    selectedRefObject.current.style.top = `${updatedTop * mobileSize.width}px`
-    selectedRefObject.current.style.left = `${updatedLeft * mobileSize.width}px`
+    if (dragState) {
+      const { prevTop, prevLeft, startX, startY } = dragState;
+      _top = prevTop + (pageY / mobileSize.width - startY);
+      _left = prevLeft + (pageX / mobileSize.width - startX);
+    } else {
+      const { pageX, pageY } = event;
+      const { offsetTop, offsetLeft } = selectedRefObject.current
+      const prevTop = offsetTop / mobileSize.width
+      const prevLeft = offsetLeft / mobileSize.width
+      const startX = pageX / mobileSize.width
+      const startY = pageY / mobileSize.width
+      setDragState({ prevTop, prevLeft, startX, startY });
+
+      _top = prevTop + (pageY / mobileSize.width - startY);
+      _left = prevLeft + (pageX / mobileSize.width - startX);
+    }
+    const top = Math.max(Math.min(mobileSize.height / mobileSize.width - height * 2, _top), .15);
+    const left = Math.max(Math.min(mobileSize.width / mobileSize.width - width * 7 / 6, _left), .05);
+    selectedRefObject.current.style.top = `${top * mobileSize.width}px`
+    selectedRefObject.current.style.left = `${left * mobileSize.width}px`
+
   }
   const handleDragEnd = () => {
+    if (selectedRefObject && selectedMessageId) {
+      const updatedTop = selectedRefObject.current.offsetTop / mobileSize.width;
+      const updatedLeft = selectedRefObject.current.offsetLeft / mobileSize.width;
+      const updatedRotate = Math.random() * 20 - 10
+      selectedRefObject.current.style.rotate = `${updatedRotate}deg`;
+
+      setMessages(messages => {
+        return messages.map(message => {
+          if (message.id === selectedMessageId) {
+            const updatedMessage = { ...message, top: updatedTop, left: updatedLeft, rotate: updatedRotate }
+            const { id, top, left, rotate, zindex } = updatedMessage;
+            messages_api.update(id, { top, left, rotate, zindex });
+            return updatedMessage
+          } else {
+            const { id, top, left, rotate, zindex } = message;
+            messages_api.update(id, { top, left, rotate, zindex });
+            return message;
+          }
+        })
+      })
+      setSelectedMessageId(null);
+    }
     clearTimeout(dragTimeout);
     setIsDragged(false)
     setSelectedRefObject(null);
+    setDragState(null)
   }
 
   return { handleDragMove, handleDragEnd }

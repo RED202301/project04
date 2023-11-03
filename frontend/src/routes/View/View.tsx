@@ -8,7 +8,7 @@ import tw from "twin.macro";
 import FloatingButton from "./components/FloatingButton";
 import Detail from "./routes/Detail/Detail";
 import PolaroidForm from "./routes/Post/routes/PolaroidForm";
-import SticknoteForm from "./routes/Post/routes/StickyNoteForm";
+import SticknoteForm from "./routes/Post/routes/StickynoteForm";
 import FontStyles from "./styles/FontStyles";
 import ModalContainer from "./routes/Board/components/ModalContainer";
 

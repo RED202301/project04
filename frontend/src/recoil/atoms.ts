@@ -1,16 +1,21 @@
 import { atom } from "recoil"
 import { MutableRefObject } from "react"
 
-const dragStateState = atom({
+const dragStateState = atom<
+  { prevTop: number, prevLeft: number, startX: number, startY: number } | null
+>({
   key: "dragStateState",
-  default: { prevTop: 0, prevLeft: 0, startX: 0, startY: 0 }
+  default: null
+});
+const selectedMessageIdState = atom<number | null>({
+  key: "selectedMessageId",
+  default: null
 })
 
 const selectedRefObjectState = atom<MutableRefObject<HTMLElement> | null>({
   key: "selectedRefObjectState",
   default: null
 })
-
 const isDraggedState = atom({
   key: "isDraggedState",
   default: false
@@ -20,4 +25,4 @@ const dragTimeoutState = atom({
   default: 0
 })
 
-export { dragStateState, selectedRefObjectState, isDraggedState, dragTimeoutState };
+export { dragStateState, selectedRefObjectState, isDraggedState, dragTimeoutState, selectedMessageIdState };

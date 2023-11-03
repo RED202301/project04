@@ -2,7 +2,7 @@ import { useState, Fragment } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import tw, { css } from "twin.macro"
 import messages_api from "../../../../../api/messages";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import mobileSizeState from "../../../../../recoil/mobileSizeState";
 import {AiFillEdit} from "react-icons/ai"
 import messagesState from "../../../../../recoil/messagesState";
@@ -13,7 +13,7 @@ const PolaroidForm = () => {
   const [content, setContent] = useState("");
   const [file, setFile] = useState<File>()
   const mobileSize = useRecoilValue(mobileSizeState);
-  const setMessages = useSetRecoilState(messagesState)
+  const [messages, setMessages] = useRecoilState(messagesState)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -21,18 +21,20 @@ const PolaroidForm = () => {
   }
 
   const handleSubmit = async () => {
-    const message = await messages_api.create({
+    await messages_api.create({
       receiverId: parseInt(userId!),
       type: 2,
       rotate: Math.random() * 20 - 10,
       top: .5,
       left: .5,
-      zindex: 1,
+      zindex: messages.length,
       content,
       sourceFile: file,
       thumbnailFile: file,
     })
-    setMessages(messages=>[...messages, message])
+    
+    const updatedMessage = await messages_api.search(parseInt(userId!));
+    setMessages(updatedMessage)
     navigate(`../`)
   }
   
