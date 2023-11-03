@@ -3,6 +3,7 @@ import { AiOutlinePaperClip, AiOutlineMenu, AiOutlineShareAlt } from "react-icon
 import { css } from "@emotion/react";
 import { useRecoilValue } from "recoil";
 import mobileSizeState from "../../../recoil/mobileSizeState";
+import Profile from "./Profile";
 
 const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 
@@ -41,7 +42,8 @@ const Header = ({userId, username}:{userId:number, username:string}) => {
       </div>
       <div {...{ css: tw`` }}>{username || ""}님의 페이지</div>
       <div {...{css: css`margin: ${mobileSize.width * 0.03}px`}}>
-        <AiOutlineMenu />
+        {/* <AiOutlineMenu /> */}
+        <Profile/>
       </div>
       
     </header>
