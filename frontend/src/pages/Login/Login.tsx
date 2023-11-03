@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import kakaoImg from "/kakao_login_large_narrow.png";
 import tw from "twin.macro";
 import Logo from "/Logo.gif"
@@ -9,6 +9,21 @@ const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
 const Login: React.FC = () => {
   const REDIRECT_URI = `${front_base_URL}/oauth/redirect`; // redirect 주소
   const KAKAO_AUTH_URI = `${back_base_URL}/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}`;
+
+  useEffect(() => {
+    let vh = 0;
+    const setVh = () => {
+      vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setVh();
+
+    window.addEventListener('resize', setVh);
+    return () => {
+      window.removeEventListener('resize', setVh);
+    };
+  }, []);
 
   const handleLogin = () => 
   {
