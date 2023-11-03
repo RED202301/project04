@@ -63,11 +63,11 @@ const useHandleDrag = () => {
           }
         })
       })
-      setSelectedMessageId(null);
     }
     clearTimeout(dragTimeout);
     setIsDragged(false)
     setSelectedRefObject(null);
+    setSelectedMessageId(null);
     setDragState(null)
   }
 
