@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import Stickynote from "../Board/components/Stickynote"
 import messages_api from "../../../../api/messages"
 import Polaroid from "../Board/components/Polaroid"
+import { Res_Message } from "../../../../api/messages/types"
 
 const Detail = () => {
   const { messageId } = useParams()
