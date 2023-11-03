@@ -11,18 +11,24 @@ const App: React.FC = () => {
     <React.Fragment>
       <ResetStyles/>
       <GlobalStyles />
+
       <ScreenContainer>
         <MobileScreen>
+
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Login/>}/>
               <Route path="/oauth/redirect" element={<Auth/>}/>
               <Route path="/view/:userId/*" element={<View/>}/>
+              {/* <Route path="/article/*" element={<View/>}/> */}
               <Route path="/*" element={<NotFound/>}/>
+              
             </Routes>
           </BrowserRouter>
+
         </MobileScreen>
       </ScreenContainer>
+      
     </React.Fragment>
   )
 }
