@@ -90,6 +90,7 @@ app:
     tokenSecret: ${AUTHENTICATION_TOKEN_SECRET}
     #    tokenExpiry: 1800000
     tokenExpiry: 18000000000
+    #    tokenExpiry: 60000
     refreshTokenExpiry: 604800000
   oauth2:
     authorizedRedirectUris:

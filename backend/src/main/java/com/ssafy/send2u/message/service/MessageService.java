@@ -32,18 +32,11 @@ public class MessageService {
 
     @Transactional
     public List<MessageDto> getUserReceivedMessages(String userId) {
-        User user;
-
-        if (userId == null || userId.isEmpty()) {
-            // userId가 주어지지 않은 경우 현재 인증된 사용자 정보를 가져옴
-            org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
-                    .getAuthentication().getPrincipal();
-
-            user = userRepository.findByUserId(principal.getUsername());
-        } else {
-            // userId가 주어진 경우 해당 사용자 정보를 가져옴
-            user = userRepository.findByUserId(userId);
+        if (userId == null) {
+            throw new IllegalArgumentException("잘못된 요청입니다. userId가 주어지지 않았습니다.");
         }
+
+        User user = userRepository.findByUserId(userId);
 
         if (user == null) {
             // 유효하지 않은 사용자 ID인 경우 예외 처리
