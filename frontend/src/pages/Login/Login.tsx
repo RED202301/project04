@@ -37,6 +37,7 @@ const Login: React.FC = () => {
     minWidth: "200px",
     // maxHeight: window.innerHeight,
     // height: window.innerHeight, 
+    height: 'calc(var(--vh, 1vh) * 100)',
     minHeight: '500px',
     marginLeft: "auto", 
     marginRight: "auto",
