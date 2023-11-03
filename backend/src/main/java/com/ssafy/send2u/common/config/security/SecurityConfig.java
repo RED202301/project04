@@ -2,6 +2,7 @@ package com.ssafy.send2u.common.config.security;
 
 import com.ssafy.send2u.common.config.properties.AppProperties;
 import com.ssafy.send2u.common.config.properties.CorsProperties;
+import com.ssafy.send2u.common.oauth.entity.RoleType;
 import com.ssafy.send2u.common.oauth.exception.RestAuthenticationEntryPoint;
 import com.ssafy.send2u.common.oauth.filter.TokenAuthenticationFilter;
 import com.ssafy.send2u.common.oauth.handler.OAuth2AuthenticationFailureHandler;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -76,7 +78,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 /* 아래 주석된 부분은 인증관련 나중에 설정 잘 하기*/
-//                .antMatchers("/api/v1/users/**").hasAnyAuthority(RoleType.USER.getCode())
+                .antMatchers(HttpMethod.GET, "/api/v1/users/{userId}", "/api/v1/messages/search").permitAll()
+                .antMatchers("/api/v1/users/**", "/api/v1/messages/**", "/api/v1/secretMessages/**")
+                .hasAnyAuthority(RoleType.USER.getCode())
 //                .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
