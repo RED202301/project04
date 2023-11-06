@@ -1,6 +1,7 @@
 package com.ssafy.send2u.message.dto;
 
 import com.ssafy.send2u.message.entity.Message;
+import com.ssafy.send2u.util.AESUtil;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -57,8 +58,12 @@ public class MessageDto {
         this.zindex = message.getZindex();
         this.createdAt = message.getCreatedAt();
         this.type = message.getType();
-        this.receiverId = message.getReceiver().getUserId();
-        this.senderId = message.getSender().getUserId();
+        try {
+            this.receiverId = AESUtil.encrypt(message.getReceiver().getUserId());
+            this.senderId = AESUtil.encrypt(message.getSender().getUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.bgcolor = message.getBgcolor();
         this.content = message.getContent();
         this.thumbnailFileUrl = message.getThumbnailFileUrl();

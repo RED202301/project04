@@ -8,6 +8,7 @@ import com.ssafy.send2u.message.entity.Message;
 import com.ssafy.send2u.message.repository.MessageRepository;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
+import com.ssafy.send2u.util.AESUtil;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,9 +32,12 @@ public class MessageService {
     }
 
     @Transactional
-    public List<MessageDto> getUserReceivedMessages(String userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("잘못된 요청입니다. userId가 주어지지 않았습니다.");
+    public List<MessageDto> getUserReceivedMessages(String encryptedUserId) {
+        String userId;
+        try {
+            userId = AESUtil.decrypt(encryptedUserId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
         }
 
         User user = userRepository.findByUserId(userId);
@@ -58,7 +62,18 @@ public class MessageService {
 //        User sender = userRepository.findById(senderId)
 //                .orElseThrow(() -> new IllegalArgumentException("Invalid sender Id:" + senderId));
         User sender = userRepository.findByUserId(principal.getUsername());
-        User receiver = userRepository.findByUserId(messageDto.getReceiverId());
+
+        String receiverId;
+        try {
+            receiverId = AESUtil.decrypt(messageDto.getReceiverId());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
+        }
+
+        User receiver = userRepository.findByUserId(receiverId);
+        
+        System.out.println(receiver);
+        System.out.println("receiverddddddddddddddddddddddddddddddddddddddddd");
 
         String sourceFileURL = null;
         String thumbnailFileUrl = null;

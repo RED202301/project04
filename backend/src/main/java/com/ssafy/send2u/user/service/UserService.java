@@ -5,6 +5,7 @@ import com.ssafy.send2u.common.error.exception.OAuthException;
 import com.ssafy.send2u.user.dto.UserInfoDto;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
+import com.ssafy.send2u.util.AESUtil;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,14 +36,22 @@ public class UserService {
 
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setUserName(user.getUsername());
-        userInfoDto.setUserId(user.getUserId());
+
+        String encryptedUserId;
+        try {
+            encryptedUserId = AESUtil.encrypt(user.getUserId());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
+        }
+        userInfoDto.setUserId(encryptedUserId);
+
         userInfoDto.setUserProfileImageUrl(user.getProfileImageUrl());
         return userInfoDto;
     }
 
     @Transactional
     public void deleteUser(String userId) {
-
+        
         User user = userRepository.findByUserId(userId);
         unlinkKakaoUser(user);
 
