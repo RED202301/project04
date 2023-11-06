@@ -1,8 +1,15 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import tw from "twin.macro"
-import { Fragment } from "react"
+import { Fragment, useEffect } from "react"
 
 const Post = () => {
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (! window.localStorage.getItem('accessToken')){
+      alert('로그인 유저만 메세지를 작성할 수 있습니다.')
+      navigate(-1);
+    }
+  }, [])
   const tw_link = tw`w-[80%] h-[20%] bg-white z-10 flex justify-around items-center`
   return (
     <Fragment>
