@@ -3,6 +3,7 @@ import "intro.js/introjs.css";
 import { Steps } from "intro.js-react";
 import { tourOptions, tourSteps } from "./Tutorial";
 import {BsQuestionCircle} from "react-icons/bs"
+import tw from "twin.macro";
 
 const TutorialButton: React.FC = () => {
     const [stepsEnabled, setStepsEnabled] = useState(false);
@@ -28,7 +29,7 @@ const TutorialButton: React.FC = () => {
                 onExit={onExit}
                 options={tour.options}
             />
-        <ICON onClick={handleHelp}></ICON>
+        <ICON css={tw`text-black pl-3 pt-3`} onClick={handleHelp}></ICON>
         </div>
     )
 }
