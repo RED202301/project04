@@ -42,9 +42,9 @@ const PolaroidForm = () => {
   const buttonPadding = buttonInnerRadius / 8
   const buttonRadius = buttonInnerRadius + buttonPadding * 2;
 
-  const innerWidth = mobileSize.width * .6
-  const padding = innerWidth / 8
-  const width = innerWidth + padding * 2
+  const width = mobileSize.width * .6
+  const innerWidth = width * 4 /5
+  const padding = width / 10
   const fontSize = innerWidth / 10;
 
   const tw_article = [
@@ -70,7 +70,7 @@ const PolaroidForm = () => {
     tw`flex justify-center items-center`,
     css({
       width: `${innerWidth}px`,
-      height: `${innerWidth * 3 / 5}px`,
+      height: `${innerWidth * 9 / 16}px`,
       marginBottom: `${padding / 2}px`
     })
   ]
@@ -82,7 +82,7 @@ const PolaroidForm = () => {
     css({
       fontSize: `${fontSize}px`,
       width: `${innerWidth}px`,
-      height: `${innerWidth / 3}px`,
+      height: `${innerWidth / 4}px`,
     })
   ]
 
@@ -121,23 +121,24 @@ const PolaroidForm = () => {
 
   return (
     <Fragment>
-      <section {...{ css: tw_filepicker }}>
-        <label>
+      <label {...{ css: tw_filepicker }}>
           미디어 파일 업로드
           <input {...{
             type: "file",
             accept: `image/*`,
             css: tw`hidden`,
+            id: "filepicker",
             onChange: handleFileChange
           }} />
-        </label>
-      </section>
+      </label>
       <article {...{ css: tw_article }}>
-        {
-          file
-            ? <img {...{css:tw_photo, src:URL.createObjectURL(file)}} />
-            : <div {...{ css: tw_placeholder }}>미디어 파일 업로드</div>
-        }
+        <label htmlFor="filepicker">
+          {
+            file
+              ? <img {...{css:tw_photo, src:URL.createObjectURL(file)}} />
+              : <div {...{ css: tw_placeholder }}>미디어 파일 업로드</div>
+          }
+        </label>
         <textarea {...{
           css: tw_textarea,
           spellCheck: false,

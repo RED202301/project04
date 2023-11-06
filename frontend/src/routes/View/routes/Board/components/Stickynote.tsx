@@ -49,13 +49,14 @@ const Stickynote = ({ id, bgcolor, content, sizeRatio, isOverlayed}:Res_Message 
   const navigate = useNavigate()
   const isDragged = useRecoilValue(isDraggedState);
   const handlePointerUpCapture = () => {
-    if (isDragged) return;
+    if (isDragged || isOverlayed) return;
     navigate(`./detail/${id}`)
   }
   return (
     <article {...{
       css: tw_article,
-      onPointerUpCapture: handlePointerUpCapture,
+      onMouseUpCapture:handlePointerUpCapture,
+      onTouchEndCapture:handlePointerUpCapture,
     }}>
       <p {...{css:tw_p}}>{content}</p>
     </article>

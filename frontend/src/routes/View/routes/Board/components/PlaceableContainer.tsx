@@ -28,8 +28,12 @@ const PlaceableContainer = ({messageId, top, left, rotate, children}: PropsWithC
   return (
     <div {...{
       ref,
-      onPointerDown: handleSelect,
-      onPointerOut: handleUnselect,
+      onMouseDown: handleSelect,
+      onTouchStart: handleSelect,
+
+      onMouseLeave: handleUnselect,
+      onTouchCancel: handleUnselect,
+      
       css:tw_message_position
     }}>
       {children}

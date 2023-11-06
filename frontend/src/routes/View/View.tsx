@@ -48,6 +48,11 @@ const View = () => {
               <Mailbox />
             </ModalContainer>
           } />
+          <Route path="/secret/*" element={
+            <ModalContainer>
+              <Mailbox />
+            </ModalContainer>
+          } />
           <Route path="/post" element={
             <ModalContainer>
               <Post />
