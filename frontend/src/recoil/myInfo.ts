@@ -1,4 +1,6 @@
 import { atom } from "recoil";
+// import { recoilPersist } from "recoil-persist";
+// const { persistAtom } = recoilPersist();
 
 const myInfoState = atom<
   {
@@ -8,7 +10,8 @@ const myInfoState = atom<
   } | null
 >({
   key: "myInfoState",
-  default: null
+  default: null,
+  // effects_UNSTABLE: [persistAtom],
 })
 
 export default myInfoState

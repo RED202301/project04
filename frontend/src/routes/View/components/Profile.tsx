@@ -6,8 +6,7 @@ import { useRecoilState } from "recoil";
 import mobileSizeState from "../../../recoil/mobileSizeState"
 import Logout from "./Logout";
 import Signout from "./Signout";
-import zz from "/Logo.gif"
-
+import myInfoState from "../../../recoil/myInfo";
 
 
 
@@ -22,6 +21,7 @@ const Profile: React.FC = (props) => {
   const KAKAO_AUTH_URI = `${back_base_URL}/oauth2/authorization/kakao?redirect_uri=${REDIRECT_URI}`;
     // 로그인 유무 확인
   const isLogin = window.localStorage.getItem('accessToken'); // TODO: 로그인 상태를 확인하는 로직을 구현해야 합니다.
+  const [myInfo] = useRecoilState(myInfoState)
 
   useEffect(() => {
     if (!isLogin){
@@ -33,7 +33,8 @@ const Profile: React.FC = (props) => {
         const newURL = currentURL.split("?")[0]; // ?token 이후의 부분을 제거
         window.history.replaceState({}, document.title, newURL);
     }
-}
+} 
+// console.log(userProfileImageUrl)
   }, []);
 
   // 햄버거 메뉴 토글
@@ -46,7 +47,7 @@ const Profile: React.FC = (props) => {
           <div>
           {isLogin ? (
               <div onClick={toggleMenu} css={tw`w-7 sm:w-10 lg:w-11 lg:h-11`}>
-                        <img src={zz} alt="profile" css={tw`rounded-full w-[100%]`} />
+                        {myInfo&&<img src={myInfo.userProfileImageUrl} alt="profile" css={tw`rounded-full w-[100%]`} />}
                     </div>
                 ) : (
                     <Link to={KAKAO_AUTH_URI}>로그인</Link>
