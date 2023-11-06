@@ -44,7 +44,7 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
     `,
     css({
       width: `${innerWidth}px`,
-      height: `${innerWidth/3}px`,
+      height: `${innerWidth/4}px`,
       overflowY:"scroll"
     })
   ]
@@ -58,7 +58,8 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
   return (
     <article {...{
       css: tw_article,
-      onPointerUpCapture:handlePointerUpCapture
+      onMouseUpCapture:handlePointerUpCapture,
+      onTouchEndCapture:handlePointerUpCapture,
     }}>
       <img {...{ src: sourceFileUrl, css: tw_photo }} />
       {content && <p {...{css:tw_p}}>{content}</p>}
