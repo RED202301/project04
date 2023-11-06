@@ -2,7 +2,7 @@ import { useNavigate, useParams, Route, Routes } from "react-router-dom";
 import users_api from "../../api/users";
 import { Fragment, useEffect, useState } from "react";
 import Header from "./components/Header";
-import { Board, Mailbox, Post } from "./routes"
+import { Board, Messages, Post, SecretMessages } from "./routes"
 import tw from "twin.macro";
 // import Footer from "./components/Footer";
 import FloatingButton from "./components/FloatingButton";
@@ -14,7 +14,7 @@ import ModalContainer from "./routes/Board/components/ModalContainer";
 
 
 const View = () => {
-  const userId = parseInt(useParams()?.userId || "");
+  const userId = useParams()?.userId || "";
   const navigate = useNavigate();
   const [username, setUsername] = useState("")
   
@@ -29,7 +29,7 @@ const View = () => {
 
   useEffect(() => {
     handleNavigate()
-  }, [])
+  }, [userId])
   
   // const tw_main = tw`flex-1`
 
@@ -43,14 +43,14 @@ const View = () => {
         <FloatingButton />
         
         <Routes>
-          <Route path="/mailbox/*" element={
+          <Route path="/messages/*" element={
             <ModalContainer>
-              <Mailbox />
+              <Messages />
             </ModalContainer>
           } />
-          <Route path="/secret/*" element={
+          <Route path="/secretMessages/*" element={
             <ModalContainer>
-              <Mailbox />
+              <SecretMessages {...{userId}} />
             </ModalContainer>
           } />
           <Route path="/post" element={
@@ -75,9 +75,14 @@ const View = () => {
               <Detail />
             </ModalContainer>
           } />
-          <Route path="/mailbox/detail/:messageId" element={
+          <Route path="/messages/detail/:messageId" element={
             <ModalContainer {...{ isOverlayed: true }}>
               <Detail />
+            </ModalContainer>
+          } />
+          <Route path="/secretMessages/detail/:messageId" element={
+            <ModalContainer {...{ isOverlayed: true }}>
+              <Detail {...{isSecret:true}} />
             </ModalContainer>
           } />
         </Routes>
