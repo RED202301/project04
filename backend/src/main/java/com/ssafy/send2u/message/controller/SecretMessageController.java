@@ -47,8 +47,9 @@ public class SecretMessageController {
 
     @ApiOperation(value = "내비밀메시지조회")
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse> getUserReceivedMessages(@RequestParam(required = false) String receiverId) {
-        List<SecretMessageDto> list = secretMessageService.getUserReceivedSecretMessages(receiverId);
+    public ResponseEntity<ApiResponse> getUserReceivedMessages(
+            @RequestParam(required = false) String encryptedReceiverId) {
+        List<SecretMessageDto> list = secretMessageService.getUserReceivedSecretMessages(encryptedReceiverId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("받은 비밀메세지 리스트")
@@ -63,8 +64,8 @@ public class SecretMessageController {
     @ApiOperation(value = "받은 비밀메시지 수 조회")
     @GetMapping("/count")
     public ResponseEntity<ApiResponse> getUserReceivedSecretMessagesCount(
-            @RequestParam(required = false) String receiverId) {
-        int count = secretMessageService.getUserReceivedSecretMessagesCount(receiverId);
+            @RequestParam(required = false) String encryptedReceiverId) {
+        int count = secretMessageService.getUserReceivedSecretMessagesCount(encryptedReceiverId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("받은 메세지 수")
