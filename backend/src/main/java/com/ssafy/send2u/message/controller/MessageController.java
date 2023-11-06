@@ -52,8 +52,8 @@ public class MessageController {
     @ApiOperation(value = "내메시지조회")
     @GetMapping("/search")
     public ResponseEntity<ApiResponse> getUserReceivedMessages(
-            @RequestParam(required = false) String encryptedReceiverId) {
-        List<MessageDto> list = messageService.getUserReceivedMessages(encryptedReceiverId);
+            @RequestParam(required = false) String receiverId) {
+        List<MessageDto> list = messageService.getUserReceivedMessages(receiverId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("받은 메세지 리스트")
