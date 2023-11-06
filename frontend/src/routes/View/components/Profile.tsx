@@ -70,10 +70,10 @@ const Profile: React.FC = (props) => {
               <ul css={tw`mt-4`}>
                 {isLogin ? (
                     <>
-                    <li css={tw`p-[10px]`}>
+                    <li css={tw`p-[10px] text-black`}>
                       <Logout/>
                     </li>
-                    <li css={tw`p-[10px]`}>
+                    <li css={tw`p-[10px] text-black`}>
                       <Signout/>
                     </li>
                   </>
