@@ -104,6 +104,7 @@ const FloatingButton = () => {
             key: path,
             css: [tw_button],
             onClick: () => {
+              if(!isActive) return
               setIsActive(isActive => !isActive)
               navigate(path)
             },
@@ -134,8 +135,8 @@ const FloatingButton = () => {
         onMouseDown: handleSelect,
         onTouchStart: handleSelect,
         onPointerLeave: handleUnselect,
-        onMouseUpCapture:handlePointerUpCapture,
-        onTouchEndCapture:handlePointerUpCapture,
+        onPointerUpCapture:handlePointerUpCapture,
+        // onTouchEndCapture:handlePointerUpCapture,
 
         css: [tw_button,
           isActive ? tw`bg-gray-300`: tw`bg-white`,
