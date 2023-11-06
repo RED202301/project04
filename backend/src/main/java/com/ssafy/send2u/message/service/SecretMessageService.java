@@ -8,6 +8,7 @@ import com.ssafy.send2u.message.entity.SecretMessage;
 import com.ssafy.send2u.message.repository.SecretMessageRepository;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
+import com.ssafy.send2u.util.AESUtil;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +54,15 @@ public class SecretMessageService {
     }
 
     @Transactional
-    public List<SecretMessageDto> getUserReceivedSecretMessages(String userId) {
+    public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
+
+        String userId;
+        try {
+            userId = AESUtil.decrypt(encryptedReceiverId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
+        }
+
         User user = getUser(userId);
         List<SecretMessage> messages = secretMessageRepository.findByReceiver(user);
 
@@ -61,10 +70,17 @@ public class SecretMessageService {
     }
 
     @Transactional
-    public int getUserReceivedSecretMessagesCount(String userId) {
+    public int getUserReceivedSecretMessagesCount(String encryptedReceiverId) {
+
+        String userId;
+        try {
+            userId = AESUtil.decrypt(encryptedReceiverId);
+        } catch (Exception e) {
+
+            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
+        }
         User user = getUser(userId);
         List<SecretMessage> messages = secretMessageRepository.findByReceiver(user);
-
         return messages.size();
     }
 
@@ -77,7 +93,15 @@ public class SecretMessageService {
                 .getAuthentication().getPrincipal();
 
         User sender = userRepository.findByUserId(principal.getUsername());
-        User receiver = userRepository.findByUserId(secretMessageDto.getReceiverId());
+
+        String receiverId;
+        try {
+            receiverId = AESUtil.decrypt(secretMessageDto.getReceiverId());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
+        }
+
+        User receiver = userRepository.findByUserId(receiverId);
 
         String sourceFileURL = null;
         String thumbnailFileUrl = null;

@@ -18,11 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class MessageService {
@@ -76,9 +71,6 @@ public class MessageService {
         }
 
         User receiver = userRepository.findByUserId(receiverId);
-        
-        System.out.println(receiver);
-        System.out.println("receiverddddddddddddddddddddddddddddddddddddddddd");
 
         String sourceFileURL = null;
         String thumbnailFileUrl = null;
