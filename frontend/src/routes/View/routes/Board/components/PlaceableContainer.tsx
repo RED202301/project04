@@ -26,7 +26,8 @@ const PlaceableContainer = ({messageId, top, left, rotate, children}: PropsWithC
   ]
 
   return (
-    <div {...{
+    messageId
+    ?<div {...{
       ref,
       onMouseDown: handleSelect,
       onTouchStart: handleSelect,
@@ -38,7 +39,8 @@ const PlaceableContainer = ({messageId, top, left, rotate, children}: PropsWithC
       css:tw_message_position
     }}>
       {children}
-    </div>
+      </div>
+      : null
   );
 }
 
