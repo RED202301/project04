@@ -10,15 +10,12 @@ const Detail = () => {
   const { messageId } = useParams()
   const [message, setMessage] = useState<Res_Message>();
   const fetchMessage = async () => {
-    console.log(messageId)
     const message = await messages_api.fetch(parseInt(messageId!)) as Res_Message;
-    console.log(message)
     setMessage(message);
   }
   useEffect(() => {
     fetchMessage()
   }, [])
-  console.log(message)
   return (
     <Fragment>
       <div {...{ css: tw`w-full` }}></div>

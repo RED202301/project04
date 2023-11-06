@@ -48,7 +48,12 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
           css({ overflowY: 'scroll' })
         ]
       }}>
-        <div {...{ css: [tw_dimmed, tw_fullsize, tw_abs], onClick: () => navigate(-1) }}> 
+        <div {...{
+          css: [tw_dimmed, tw_fullsize, tw_abs],
+          onPointerUpCapture: () => {
+            navigate(-1)
+          },
+        }}> 
         </div>
         {children}
       </div>

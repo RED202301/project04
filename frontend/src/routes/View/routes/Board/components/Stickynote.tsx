@@ -55,8 +55,10 @@ const Stickynote = ({ id, bgcolor, content, sizeRatio, isOverlayed}:Res_Message 
   return (
     <article {...{
       css: tw_article,
-      onMouseUpCapture:handlePointerUpCapture,
-      onTouchEndCapture:handlePointerUpCapture,
+      
+      onPointerUpCapture:handlePointerUpCapture,
+      // onMouseUpCapture:handlePointerUpCapture,
+      // onTouchEndCapture:handlePointerUpCapture,
     }}>
       <p {...{css:tw_p}}>{content}</p>
     </article>

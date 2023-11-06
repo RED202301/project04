@@ -58,8 +58,9 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
   return (
     <article {...{
       css: tw_article,
-      onMouseUpCapture:handlePointerUpCapture,
-      onTouchEndCapture:handlePointerUpCapture,
+      onPointerUpCapture:handlePointerUpCapture,
+      // onMouseUpCapture:handlePointerUpCapture,
+      // onTouchEndCapture:handlePointerUpCapture,
     }}>
       <img {...{ src: sourceFileUrl, css: tw_photo }} />
       {content && <p {...{css:tw_p}}>{content}</p>}
