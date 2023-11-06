@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Stickynote from "./components/Stickynote";
 import Polaroid from "./components/Polaroid";
 import PlaceableContainer from "./components/PlaceableContainer";
+import TutorialButton from "../../components/TutorialButton";
 
 const Board = ({ userId }: { userId: number }) => {
 
@@ -29,6 +30,7 @@ const Board = ({ userId }: { userId: number }) => {
         {message.type === 2 && <Polaroid {...{ ...message, sizeRatio: .3 }} />}
       </PlaceableContainer>
     })}
+    <TutorialButton/>
     
   </div>
 };

@@ -32,7 +32,7 @@ return (
     {/* <GlobalStyles></GlobalStyles> */}
     <div css={tw``}></div>  
     <div>
-    <h2 css={tw`flex justify-center`}>로그인 리다이렉트 페이지</h2>
+    {/* <h2 css={tw`flex justify-center`}>로그인 리다이렉트 페이지</h2> */}
       <Link to="/" css={tw`flex justify-center`}>돌아가기</Link>
     </div>
     <div className="">

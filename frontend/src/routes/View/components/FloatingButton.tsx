@@ -45,7 +45,7 @@ const FloatingButton = () => {
   }
 
   return (
-    <div {...{
+    <div id="floating-button" {...{
       ref, css: [tw`absolute`, css({
         height: `${buttonRadius * 1}px`,
       })],
@@ -56,6 +56,7 @@ const FloatingButton = () => {
     }}>
       {Object.keys(path_icon_dict).map(
         (path, index) => {
+          const ID = `ID${index}`
           const Icon = path_icon_dict[path]
           const Yoffsets = [-1, -1, 1, 1]
           const Xoffsets = [-1, 1, -1, 1]
@@ -100,7 +101,7 @@ const FloatingButton = () => {
 
             })
           ]
-          return <div {...{
+          return <div id= {ID} {...{
             key: path,
             css: [tw_button],
             onClick: () => {
