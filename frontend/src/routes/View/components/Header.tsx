@@ -33,7 +33,7 @@ const Header = ({userId, username}:{userId:number, username:string}) => {
           `
       ]
     }}>
-      <div  {...{ css: css`margin: ${mobileSize.width * 0.03}px`, onClick: share }}>
+      <div id="share"  {...{ css: css`margin: ${mobileSize.width * 0.03}px`, onClick: share }}>
         {isMobile
           ?<AiOutlineShareAlt />
           : <AiOutlinePaperClip />
