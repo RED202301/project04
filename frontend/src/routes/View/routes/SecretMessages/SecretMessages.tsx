@@ -8,7 +8,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import myInfoState from "../../../../recoil/myInfo";
 import secretMessagesState from "../../../../recoil/secretMessagesState";
 
-const SecretMessages = ({userId}:{userId:number}) => {
+const SecretMessages = ({userId}:{userId:string}) => {
   const myInfo = useRecoilValue(myInfoState);
   const [secretMessages, setSecretMessages] = useRecoilState(secretMessagesState);
   const fetchSecretMessages = async () => {

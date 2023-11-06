@@ -15,8 +15,8 @@ interface Message_Position {
 
 interface Res_Message extends Message_Position {
   id: number,
-  senderId: number,
-  receiverId: number,
+  senderId: string,
+  receiverId: string,
   senderName: string,
   receiverName: string,
 
@@ -31,7 +31,7 @@ interface Res_Message extends Message_Position {
 }
 
 interface Post_Req_Messages extends Message_Position {
-  receiverId: number,
+  receiverId: string,
 
   type: number,
 

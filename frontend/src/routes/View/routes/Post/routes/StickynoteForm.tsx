@@ -25,7 +25,7 @@ const SticknoteForm = () => {
   }
   const handleSubmit = async () => {
     const message = {
-      receiverId: parseInt(userId!),
+      receiverId: userId!,
       type:1,
       rotate: Math.random()*20-10,
       top: .5,
@@ -37,7 +37,7 @@ const SticknoteForm = () => {
     if (isSecret) await secretMessages_api.create(message)
     else await messages_api.create(message)
     
-    const updatedMessage = await messages_api.search(parseInt(userId!));
+    const updatedMessage = await messages_api.search(userId!);
     setMessages(updatedMessage)
     navigate(`../`)
   }

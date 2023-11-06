@@ -5,7 +5,8 @@ const BACK_SERVER_URL = import.meta.env.VITE_BACK_SERVER_URL
 const MESSAGES_API_URL = `${BACK_SERVER_URL}/api/v1/messages`
 
 const messages_api = {
-  search: async (receiverId: number) => {
+  search: async (receiverId: string) => {
+    console.log(receiverId)
     const accessToken = localStorage.getItem("accessToken")
     const headers = { Authorization: `Bearer ${accessToken}` };
     const params = { receiverId };

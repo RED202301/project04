@@ -15,8 +15,8 @@ interface SecretMessage_Position {
 
 interface Res_SecretMessage extends SecretMessage_Position {
   id: number,
-  senderId: number,
-  receiverId: number,
+  senderId: string,
+  receiverId: string,
   senderName: string,
   receiverName: string,
 
@@ -31,7 +31,7 @@ interface Res_SecretMessage extends SecretMessage_Position {
 }
 
 interface Post_Req_SecretMessages extends SecretMessage_Position {
-  receiverId: number,
+  receiverId: string,
 
   type: number,
 

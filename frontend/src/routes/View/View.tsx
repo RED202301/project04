@@ -14,7 +14,7 @@ import ModalContainer from "./routes/Board/components/ModalContainer";
 
 
 const View = () => {
-  const userId = parseInt(useParams()?.userId || "");
+  const userId = useParams()?.userId || "";
   const navigate = useNavigate();
   const [username, setUsername] = useState("")
   
@@ -29,7 +29,7 @@ const View = () => {
 
   useEffect(() => {
     handleNavigate()
-  }, [])
+  }, [userId])
   
   // const tw_main = tw`flex-1`
 

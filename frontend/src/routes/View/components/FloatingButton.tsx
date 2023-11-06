@@ -3,10 +3,11 @@ import {AiOutlineInbox, AiOutlineMail, AiOutlineHome, AiOutlineEdit, AiOutlineMe
 import { useNavigate } from "react-router-dom";
 import tw, { css } from "twin.macro";
 import useHandleSelect from "../../../hooks/useHandleSelect";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { isDraggedState } from "../../../recoil/atoms";
 import mobileSizeState from "../../../recoil/mobileSizeState";
 import myInfoState from "../../../recoil/myInfo";
+import isActiveFloatingState from "../../../recoil/isActiveFloatingState";
 
 const FloatingButton = () => {
   const ref = useRef() as MutableRefObject<HTMLDivElement>;
@@ -15,10 +16,10 @@ const FloatingButton = () => {
   const navigate = useNavigate();
 
   const buttonRadius = mobileSize.width * .06;
-  const buttonPadding = buttonRadius/5;
-  const buttonInnerRadius = buttonRadius*4/5;
+  const buttonPadding = buttonRadius / 5;
+  const buttonInnerRadius = buttonRadius * 4 / 5;
   
-  const [isActive, setIsActive] = useState(false);
+  const [isActiveFloating, setIsActiveFloating] = useRecoilState(isActiveFloatingState)
   const tw_button = [
     tw`absolute rounded-full`,
     css({
@@ -37,7 +38,7 @@ const FloatingButton = () => {
   const [handleSelect, handleUnselect] = useHandleSelect(ref);
   const handlePointerUpCapture = () => {
     if (isDragged) return
-    setIsActive(isActive=>!isActive)
+    setIsActiveFloating(isActiveFloating=>!isActiveFloating)
   }
   const path_icon_dict = {
     "./post": AiOutlineEdit,
@@ -63,7 +64,7 @@ const FloatingButton = () => {
           const Xoffsets = [-1, 1, -1, 1]
           const Yorigins = [`bottom`, `bottom`, `top`, `top`]
           const Xorigins = [`right`,`left`,`right`,`left`]
-          const unit = (isActive? 2: 1)
+          const unit = (isActiveFloating? 2: 1)
           const tw_button = [
             tw`absolute bg-white`,
             css({
@@ -80,7 +81,7 @@ const FloatingButton = () => {
               backgroundColor: `rgba(255, 255, 255, .5)`,
               backdropFilter: `blur(2px)`,
               
-              borderRadius: isActive
+              borderRadius: isActiveFloating
               ?`
               ${index===0?buttonRadius*unit:0}px
               ${index===1?buttonRadius*unit:0}px
@@ -93,10 +94,10 @@ const FloatingButton = () => {
               ${buttonRadius*unit}px
               ${buttonRadius*unit}px
               `,
-              top: isActive
+              top: isActiveFloating
                 ? `${buttonRadius * Yoffsets[index]}px`
                 : `${buttonInnerRadius/2}px`,
-              left: isActive
+              left: isActiveFloating
                 ? `${buttonRadius * Xoffsets[index]}px`
                 : `${buttonInnerRadius/2}px`,
 
@@ -106,8 +107,8 @@ const FloatingButton = () => {
             key: path,
             css: [tw_button],
             onClick: () => {
-              if(!isActive) return
-              setIsActive(isActive => !isActive)
+              if(!isActiveFloating) return
+              setIsActiveFloating(isActiveFloating => !isActiveFloating)
               navigate(path)
             },
           }}>
@@ -122,10 +123,10 @@ const FloatingButton = () => {
                 bottom .3s ease-in-out,
                 right .3s ease-in-out
                 `,
-                [Yorigins[index]]: isActive
+                [Yorigins[index]]: isActiveFloating
                   ? `${buttonInnerRadius / 2}px`
                   : `0px`,
-                [Xorigins[index]]: isActive
+                [Xorigins[index]]: isActiveFloating
                   ? `${buttonInnerRadius / 2}px`
                   : `0px`,
               })
@@ -141,11 +142,11 @@ const FloatingButton = () => {
         // onTouchEndCapture:handlePointerUpCapture,
 
         css: [tw_button,
-          isActive ? tw`bg-gray-300`: tw`bg-white`,
+          isActiveFloating ? tw`bg-gray-300`: tw`bg-white`,
           css({
           top:`${buttonInnerRadius/2}px`,
           left:`${buttonInnerRadius/2}px`,
-          rotate: isActive ? `90deg` : `0deg`
+          rotate: isActiveFloating ? `90deg` : `0deg`
         })]
       }} />
     </div>
