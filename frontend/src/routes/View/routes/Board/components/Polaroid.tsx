@@ -20,7 +20,7 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
 
   const tw_article = [
     isOverlayed? tw`z-30`:tw``,
-    tw`bg-white`,
+    tw`bg-white text-black`,
     css({
       width: `${innerWidth}px`,
       padding: `${padding}px`,

@@ -26,21 +26,21 @@ const Header = ({userId, username}:{userId:string, username:string}) => {
   return (
     <header {...{
       css: [
-        tw`h-[4rem] flex justify-between items-center text-[2rem] bg-white`,
+        tw`h-[4rem] flex justify-between items-center text-[2rem] bg-white text-black`,
         css`
           height: ${mobileSize.width * 0.12}px;
           font-size: ${mobileSize.width * 0.04}px;
           `
       ]
     }}>
-      <div id="share"  {...{ css: css`margin: ${mobileSize.width * 0.03}px`, onClick: share }}>
+      <div id="share"  {...{ css: css` margin: ${mobileSize.width * 0.03}px`, onClick: share }}>
         {isMobile
           ?<AiOutlineShareAlt />
           : <AiOutlinePaperClip />
         }
         
       </div>
-      <div {...{ css: tw`` }}>{username || ""}님의 페이지</div>
+      <div {...{ css: tw`text-black` }}>{username || ""}님의 페이지</div>
       <div {...{css: css`margin: ${mobileSize.width * 0.03}px`}}>
         {/* <AiOutlineMenu /> */}
         <Profile/>
