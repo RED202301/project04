@@ -6,6 +6,7 @@ import useHandleSelect from "../../../hooks/useHandleSelect";
 import { useRecoilValue } from "recoil";
 import { isDraggedState } from "../../../recoil/atoms";
 import mobileSizeState from "../../../recoil/mobileSizeState";
+import myInfoState from "../../../recoil/myInfo";
 
 const FloatingButton = () => {
   const ref = useRef() as MutableRefObject<HTMLDivElement>;
@@ -31,6 +32,7 @@ const FloatingButton = () => {
       padding: `${buttonPadding}px`,
     })
   ]
+  const myInfo = useRecoilValue(myInfoState)
   const isDragged = useRecoilValue(isDraggedState)
   const [handleSelect, handleUnselect] = useHandleSelect(ref);
   const handlePointerUpCapture = () => {
@@ -39,9 +41,9 @@ const FloatingButton = () => {
   }
   const path_icon_dict = {
     "./post": AiOutlineEdit,
-    "./secret": AiOutlineMail, 
-    "./": AiOutlineHome,
-    "./mailbox": AiOutlineInbox,
+    "./secretMessages": AiOutlineMail, 
+    [`/view/${myInfo?.userId}`]: AiOutlineHome,
+    "./messages": AiOutlineInbox,
   }
 
   return (

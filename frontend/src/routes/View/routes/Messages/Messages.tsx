@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import { useRecoilValue } from "recoil";
-import tw, { css } from "twin.macro"
+import tw from "twin.macro"
 import messagesState from "../../../../recoil/messagesState";
 import Stickynote from "../Board/components/Stickynote";
 import Polaroid from "../Board/components/Polaroid";
 
-const Mailbox = () => {
+const Messages = () => {
   const messages = useRecoilValue(messagesState)
 
   // const tw_main = [
@@ -32,4 +32,4 @@ const Mailbox = () => {
   </Fragment>
 }
 
-export default Mailbox
+export default Messages
