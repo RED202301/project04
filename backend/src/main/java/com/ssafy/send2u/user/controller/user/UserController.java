@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 import com.ssafy.send2u.common.response.ApiResponse;
 import com.ssafy.send2u.user.dto.UserInfoDto;
 import com.ssafy.send2u.user.service.UserService;
+import com.ssafy.send2u.util.AESUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,8 +38,15 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse> getUserName(@PathVariable String userId) {
+    @GetMapping("/{encryptedUserId}")
+    public ResponseEntity<ApiResponse> getUserName(@PathVariable String encryptedUserId) {
+        String userId;
+        try {
+            userId = AESUtil.decrypt(encryptedUserId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
+        }
+
         UserInfoDto user = userService.getUser(userId);
 
         ApiResponse apiResponse = ApiResponse.builder()
@@ -54,7 +62,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> deleteUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
-
+        
         userService.deleteUser(principal.getUsername());
 
         ApiResponse apiResponse = ApiResponse.builder()

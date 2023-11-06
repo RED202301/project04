@@ -78,7 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 /* 아래 주석된 부분은 인증관련 나중에 설정 잘 하기*/
-                .antMatchers(HttpMethod.GET, "/api/v1/users/{userId}", "/api/v1/messages/search").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/users/{encryptedUserId}", "/api/v1/messages/search").permitAll()
                 .antMatchers("/api/v1/users/**", "/api/v1/messages/**", "/api/v1/secretMessages/**")
                 .hasAnyAuthority(RoleType.USER.getCode())
 //                .anyRequest().authenticated()
