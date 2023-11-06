@@ -8,7 +8,7 @@ import Polaroid from "./components/Polaroid";
 import PlaceableContainer from "./components/PlaceableContainer";
 import TutorialButton from "../../components/TutorialButton";
 
-const Board = ({ userId }: { userId: number }) => {
+const Board = ({ userId }: { userId: string }) => {
 
   const [messages, setMessages] = useRecoilState(messagesState);
   const fetchMessages = async () => {
@@ -18,7 +18,7 @@ const Board = ({ userId }: { userId: number }) => {
 
   useEffect(() => {
     fetchMessages();
-  }, [])
+  }, [userId])
 
   return <div {...{ css: tw`flex-1 flex flex-wrap` }}>
     {[...messages]

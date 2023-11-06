@@ -4,7 +4,7 @@ import { atom } from "recoil";
 
 const myInfoState = atom<
   {
-    userId: number,
+    userId: string,
     userName: string,
     userProfileImageUrl: string
   } | null

@@ -7,7 +7,7 @@ import Profile from "./Profile";
 
 const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 
-const Header = ({userId, username}:{userId:number, username:string}) => {
+const Header = ({userId, username}:{userId:string, username:string}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
   const isMobile = (/iphone|ipad|ipod|android/i.test(navigator.userAgent.toLowerCase()));
   const share = () => {

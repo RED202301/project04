@@ -5,7 +5,7 @@ enum Type {
   Video,
 }
 
-interface Message_Position {
+interface SecretMessage_Position {
   top: number,
   left: number,
   rotate: number,
@@ -13,7 +13,7 @@ interface Message_Position {
 }
 
 
-interface Res_Message extends Message_Position {
+interface Res_SecretMessage extends SecretMessage_Position {
   id: number,
   senderId: string,
   receiverId: string,
@@ -30,7 +30,7 @@ interface Res_Message extends Message_Position {
   createdAt: string,
 }
 
-interface Post_Req_Messages extends Message_Position {
+interface Post_Req_SecretMessages extends SecretMessage_Position {
   receiverId: string,
 
   type: number,
@@ -41,8 +41,8 @@ interface Post_Req_Messages extends Message_Position {
   thumbnailFile?: File,
 }
 
-interface Put_Req_Messages extends Message_Position {
+interface Put_Req_SecretMessages extends SecretMessage_Position {
   id: number,
 }
 
-export type { Message_Position, Res_Message, Post_Req_Messages, Put_Req_Messages }
+export type { SecretMessage_Position, Res_SecretMessage, Post_Req_SecretMessages, Put_Req_SecretMessages }

@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import mobileSizeState from "../../../../../recoil/mobileSizeState";
 import {AiFillEdit} from "react-icons/ai"
 import messagesState from "../../../../../recoil/messagesState";
+import secretMessages_api from "../../../../../api/secretMessages";
 
 const PolaroidForm = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ const PolaroidForm = () => {
   const [file, setFile] = useState<File>()
   const mobileSize = useRecoilValue(mobileSizeState);
   const [messages, setMessages] = useRecoilState(messagesState)
+  const [isSecret, setIsSecret] = useState(false)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
@@ -21,8 +23,8 @@ const PolaroidForm = () => {
   }
 
   const handleSubmit = async () => {
-    await messages_api.create({
-      receiverId: parseInt(userId!),
+    const message = {
+      receiverId: userId!,
       type: 2,
       rotate: Math.random() * 20 - 10,
       top: .5,
@@ -31,9 +33,11 @@ const PolaroidForm = () => {
       content,
       sourceFile: file,
       thumbnailFile: file,
-    })
+    }
+    if (isSecret) await secretMessages_api.create(message)
+    else await messages_api.create(message)
     
-    const updatedMessage = await messages_api.search(parseInt(userId!));
+    const updatedMessage = await messages_api.search(userId!);
     setMessages(updatedMessage)
     navigate(`../`)
   }
@@ -148,7 +152,7 @@ const PolaroidForm = () => {
       <section {...{ css: tw_submit }}>
         <div {...{ css: tw`flex justify-around items-center`, }}>
           <label htmlFor="isSecretCheck">비밀편지로 보내기</label>
-          <input type="checkbox" id="isSecretCheck" />
+          <input type="checkbox" id="isSecretCheck" checked={isSecret} onChange={(e)=>setIsSecret(e.target.checked)} />
         </div>
         <AiFillEdit {...{ css: [tw_button], onClick: handleSubmit }} />
       </section>
