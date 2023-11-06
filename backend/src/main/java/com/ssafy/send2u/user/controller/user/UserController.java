@@ -38,16 +38,16 @@ public class UserController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/{encryptedUserId}")
-    public ResponseEntity<ApiResponse> getUserName(@PathVariable String encryptedUserId) {
-        String userId;
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse> getUserName(@PathVariable String userId) {
+        String UserId;
         try {
-            userId = AESUtil.decrypt(encryptedUserId);
+            UserId = AESUtil.decrypt(userId);
         } catch (Exception e) {
             throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
         }
 
-        UserInfoDto user = userService.getUser(userId);
+        UserInfoDto user = userService.getUser(UserId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("회원 이름")
@@ -62,7 +62,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> deleteUser() {
         org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
-        
+
         userService.deleteUser(principal.getUsername());
 
         ApiResponse apiResponse = ApiResponse.builder()
