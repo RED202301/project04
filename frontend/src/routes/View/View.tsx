@@ -28,7 +28,6 @@ const View = () => {
   }
 
   useEffect(() => {
-    console.log(userId)
     handleNavigate()
   }, [userId])
   
