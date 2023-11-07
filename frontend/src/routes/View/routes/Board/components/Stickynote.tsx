@@ -10,6 +10,7 @@ const Stickynote = ({ id, bgcolor, content, sizeRatio, isOverlayed}:Res_Message 
   
   const mobileSize = useRecoilValue(mobileSizeState)
   const bgcolors = [tw`bg-yellow-200`, tw`bg-red-200`, tw`bg-blue-200`, tw`bg-green-200`]
+  const textcolor = [tw`text-black`]
 
   // const buttonInnerRadius = mobileSize.width * .08;
   // const buttonPadding = buttonInnerRadius / 8
@@ -24,6 +25,7 @@ const Stickynote = ({ id, bgcolor, content, sizeRatio, isOverlayed}:Res_Message 
   const tw_article = [
     isOverlayed? tw`z-30`:tw``,
     bgcolors[bgcolor],
+    textcolor,
     css({
       width: `${innerWidth}px`,
       height: `${innerWidth}px`,
@@ -49,13 +51,16 @@ const Stickynote = ({ id, bgcolor, content, sizeRatio, isOverlayed}:Res_Message 
   const navigate = useNavigate()
   const isDragged = useRecoilValue(isDraggedState);
   const handlePointerUpCapture = () => {
-    if (isDragged) return;
+    if (isDragged || isOverlayed) return;
     navigate(`./detail/${id}`)
   }
   return (
     <article {...{
       css: tw_article,
-      onPointerUpCapture: handlePointerUpCapture,
+      
+      onPointerUpCapture:handlePointerUpCapture,
+      // onMouseUpCapture:handlePointerUpCapture,
+      // onTouchEndCapture:handlePointerUpCapture,
     }}>
       <p {...{css:tw_p}}>{content}</p>
     </article>

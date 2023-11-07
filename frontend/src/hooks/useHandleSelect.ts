@@ -31,6 +31,7 @@ const useHandleSelect = (ref: MutableRefObject<HTMLElement>, messageId?: number)
   const handleUnselect = () => {
     if (isDragged) return
     setSelectedRefObject(null);
+    setSelectedMessageId(null);
   }
 
   return [handleSelect, handleUnselect]

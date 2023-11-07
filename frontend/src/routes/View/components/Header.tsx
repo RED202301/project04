@@ -3,10 +3,11 @@ import { AiOutlinePaperClip, AiOutlineMenu, AiOutlineShareAlt } from "react-icon
 import { css } from "@emotion/react";
 import { useRecoilValue } from "recoil";
 import mobileSizeState from "../../../recoil/mobileSizeState";
+import Profile from "./Profile";
 
 const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 
-const Header = ({userId, username}:{userId:number, username:string}) => {
+const Header = ({userId, username}:{userId:string, username:string}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
   const isMobile = (/iphone|ipad|ipod|android/i.test(navigator.userAgent.toLowerCase()));
   const share = () => {
@@ -25,23 +26,24 @@ const Header = ({userId, username}:{userId:number, username:string}) => {
   return (
     <header {...{
       css: [
-        tw`h-[4rem] flex justify-between items-center text-[2rem] bg-white`,
+        tw`h-[4rem] flex justify-between items-center text-[2rem] bg-white text-black`,
         css`
           height: ${mobileSize.width * 0.12}px;
           font-size: ${mobileSize.width * 0.04}px;
           `
       ]
     }}>
-      <div  {...{ css: css`margin: ${mobileSize.width * 0.03}px`, onClick: share }}>
+      <div id="share"  {...{ css: css` margin: ${mobileSize.width * 0.03}px`, onClick: share }}>
         {isMobile
           ?<AiOutlineShareAlt />
           : <AiOutlinePaperClip />
         }
         
       </div>
-      <div {...{ css: tw`` }}>{username || ""}님의 페이지</div>
+      <div {...{ css: tw`text-black` }}>{username || ""}님의 페이지</div>
       <div {...{css: css`margin: ${mobileSize.width * 0.03}px`}}>
-        <AiOutlineMenu />
+        {/* <AiOutlineMenu /> */}
+        <Profile/>
       </div>
       
     </header>

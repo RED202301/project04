@@ -9,8 +9,23 @@ import MainArticle from "./routes/Article/MainArticle";
 import CreateArticle from "./routes/Article/CreateArticle";
 import Article from "./routes/Article/Article";
 import UpdateArticle from "./routes/Article/UpdateArticle";
+import users_api from "./api/users";
+import { useSetRecoilState } from "recoil";
+import myInfoState from "./recoil/myInfo";
+import {useEffect} from "react"
 
 const App: React.FC = () => {
+  const setMyInfo = useSetRecoilState(myInfoState);
+  const fetch_myInfo = async () => {
+    const myInfo = await users_api.getUserByToken()
+    if (myInfo) setMyInfo(myInfo);
+  }
+
+  useEffect(() => {
+    fetch_myInfo()
+  }, [])
+
+
   return (
     <React.Fragment>
       <ResetStyles/>

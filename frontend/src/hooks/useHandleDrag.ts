@@ -13,9 +13,9 @@ const useHandleDrag = () => {
   const setMessages = useSetRecoilState(messagesState);
   const [selectedMessageId, setSelectedMessageId] = useRecoilState(selectedMessageIdState);
 
-  const handleDragMove = (event: React.PointerEvent) => {
+  const handleDragMove = (event: React.TouchEvent | React.MouseEvent) => {
     if (!isDragged || !selectedRefObject) return;
-    const { pageX, pageY } = event;
+    const { pageX, pageY } = "touches" in event ? event.touches[0] : event
     const { offsetWidth, offsetHeight } = selectedRefObject.current
     const [width, height] = [offsetWidth / mobileSize.width, offsetHeight / mobileSize.height]
     let _top, _left;
@@ -25,7 +25,6 @@ const useHandleDrag = () => {
       _top = prevTop + (pageY / mobileSize.width - startY);
       _left = prevLeft + (pageX / mobileSize.width - startX);
     } else {
-      const { pageX, pageY } = event;
       const { offsetTop, offsetLeft } = selectedRefObject.current
       const prevTop = offsetTop / mobileSize.width
       const prevLeft = offsetLeft / mobileSize.width
@@ -63,11 +62,11 @@ const useHandleDrag = () => {
           }
         })
       })
-      setSelectedMessageId(null);
     }
     clearTimeout(dragTimeout);
     setIsDragged(false)
     setSelectedRefObject(null);
+    setSelectedMessageId(null);
     setDragState(null)
   }
 
