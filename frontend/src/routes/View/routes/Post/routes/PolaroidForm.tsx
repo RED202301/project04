@@ -211,7 +211,7 @@ const PolaroidForm = () => {
       </article>
       <section {...{ css: tw_submit }}>
         <div {...{ css: tw`flex justify-around items-center`, }}>
-          <label htmlFor="isSecretCheck">비밀편지로 보내기</label>
+          <label htmlFor="isSecretCheck">비밀편지 예약전송</label>
           <input type="checkbox" id="isSecretCheck" checked={isSecret} onChange={(e)=>setIsSecret(e.target.checked)} />
         </div>
         <AiFillEdit {...{ css: [tw_button], onClick: handleSubmit }} />

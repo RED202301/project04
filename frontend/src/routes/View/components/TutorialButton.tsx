@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "intro.js/introjs.css";
 import { Steps } from "intro.js-react";
 import { tourOptions, tourSteps } from "./Tutorial";
@@ -22,7 +22,7 @@ const TutorialButton: React.FC = () => {
         setIsActiveFloating(true)
       };
     const ICON = BsQuestionCircle
-    const [isActiveFloating, setIsActiveFloating] = useRecoilState(isActiveFloatingState)
+    const [, setIsActiveFloating] = useRecoilState(isActiveFloatingState)
 
     return(
         <div>
@@ -33,7 +33,7 @@ const TutorialButton: React.FC = () => {
                 onExit={onExit}
                 options={tour.options}
             />
-        <ICON css={tw`text-black pl-3 pt-3`} onClick={handleHelp}></ICON>
+        <ICON css={tw`absolute text-black pl-3 pt-3`} onClick={handleHelp}></ICON>
         </div>
     )
 }

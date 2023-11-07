@@ -46,11 +46,10 @@ const SticknoteForm = () => {
   const buttonPadding = buttonInnerRadius / 8
   const buttonRadius = buttonInnerRadius + buttonPadding * 2;
 
-  const innerWidth = mobileSize.width * .6
-  const padding = innerWidth / 8
-  const width = innerWidth + padding * 2
+  const width = mobileSize.width * .6
+  const innerWidth = width * 4 /5
+  const padding = width / 10
   const fontSize = innerWidth / 10;
-
 
 
   const tw_article = [
@@ -97,6 +96,7 @@ const SticknoteForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
+      fontSize: `${fontSize}px`,
       width: `${width}px`
     })
   ]
@@ -138,7 +138,7 @@ const SticknoteForm = () => {
       </article>
       <section {...{ css: tw_submit }}>
         <div {...{ css: tw`flex justify-around items-center`, }}>
-          <label htmlFor="isSecretCheck">비밀편지로 보내기</label>
+          <label htmlFor="isSecretCheck">비밀편지 예약전송</label>
           <input type="checkbox" id="isSecretCheck" checked={isSecret} onChange={(e)=>setIsSecret(e.target.checked)} />
         </div>
         <AiFillEdit {...{ css: [tw_button], onClick: handleSubmit }} />
