@@ -69,7 +69,7 @@ const SticknoteForm = () => {
     tw`w-full h-full`,
     tw`bg-transparent focus:bg-[rgba(1, 1, 1, .1)]`,
     tw`border-none outline-none resize-none`,
-    tw`font-[omyuPretty]`,
+    tw`font-[omyuPretty] text-black`,
     css({fontSize: `${fontSize}px`})
   ]
 
