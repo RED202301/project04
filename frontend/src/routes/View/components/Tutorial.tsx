@@ -1,15 +1,17 @@
+import './Tutorial.css';
+
 export const tourOptions = {
     nextLabel: "다음",
-    prevLabel: "이전",
+    prevLabel: "이전", 
     doneLabel: "끝",
     disableInteraction: true,
-    buttonClass: "text-black p-2 m-1",
+    buttonClass: "p-2 m-1",
+    tooltipClass: "custom-tooltip-theme",
   };
   
   export const tourSteps = [
     {
       title: "목록 버튼",
-      
       element: "#floating-button",
       intro:
       (
