@@ -55,7 +55,7 @@ public class SecretMessageService {
         if (now.isBefore(targetDateTime)) {
             return messages.stream().map(msg -> {
                 SecretMessageDto dto = new SecretMessageDto(msg);
-                dto.setContent("앙 11월 17일 16시 45분 공개 기모링~");
+                dto.setContent("11월 17일 16시 45분 공개");
                 dto.setThumbnailFileUrl("https://send2u.s3.ap-northeast-2.amazonaws.com/thumbnail/dummyImage.png");
                 dto.setSourceFileUrl("https://send2u.s3.ap-northeast-2.amazonaws.com/thumbnail/dummyImage.png");
                 return dto;
