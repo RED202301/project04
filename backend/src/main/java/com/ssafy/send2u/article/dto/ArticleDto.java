@@ -1,34 +1,41 @@
 package com.ssafy.send2u.article.dto;
 
 //import com.ssafy.send2u.article.domain.UploadFile;
+
 import com.ssafy.send2u.article.entity.Article;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-
+@ToString
 public class ArticleDto {
     private Long articleId;
-    private String longText;
-    private LocalDateTime date;
-    private String articleTitle;
-    @ApiModelProperty(hidden = true)
-    private String senderId;
-    @ApiModelProperty(hidden = true)
-    private String articleFileUrl;
-    private String articleSender;
-    public ArticleDto() {
 
-    }
+    private String longText;
+
+    private LocalDateTime date;
+
+    private String articleTitle;
+
+    private String articleWriter;
 
     public ArticleDto(Article article) {
+        this.articleId = article.getArticleId();
         this.articleTitle = article.getArticleTitle();
         this.longText = article.getLongText();
-        this.date = LocalDateTime.now();
-        this.articleFileUrl = article.getArticleFileUrl();
-        this.senderId = article.getArticleSender().getUserId();
-        this.articleSender = article.getArticleSender().getUsername();
+        this.date = article.getDate();
+        this.articleWriter = article.getArticleWriter().getUsername();
     }
+
+    @Data
+    public static class Request {
+        private String longText;
+        private String articleTitle;
+    }
+
 }

@@ -1,8 +1,10 @@
 package com.ssafy.send2u.user.entity.user;
 
+import com.ssafy.send2u.article.entity.Article;
 import com.ssafy.send2u.common.oauth.entity.ProviderType;
 import com.ssafy.send2u.common.oauth.entity.RoleType;
 import com.ssafy.send2u.message.entity.Message;
+import com.ssafy.send2u.message.entity.SecretMessage;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -83,6 +85,15 @@ public class User {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private List<Message> receiveMessage;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<SecretMessage> sendSecretMessage;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private List<SecretMessage> receiveSecretMessage;
+
+    @OneToMany(mappedBy = "articleWriter", cascade = CascadeType.ALL)
+    private List<Article> articles;
 
     public User(
             @NotNull @Size(max = 64) String userId,
