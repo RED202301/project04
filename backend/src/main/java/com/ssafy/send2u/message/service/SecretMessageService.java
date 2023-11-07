@@ -140,8 +140,8 @@ public class SecretMessageService {
 
         User currentUser = userRepository.findByUserId(principal.getUsername());
 
-        // 본인이 적은 글인지 확인
-        if (!secretMessage.getSender().equals(currentUser)) {
+        // 본인이 적은 글, 방주인만지울수있음
+        if (!secretMessage.getReceiver().equals(currentUser) && !secretMessage.getSender().equals(currentUser)) {
             throw new NoAuthorizationException(ErrorCode.NO_Authorization);
         }
 
