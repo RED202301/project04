@@ -1,29 +1,43 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { stateAtom } from "./recoil/stateAtom";
-import Login from "./pages/Login/Login";
-import PrivateRoute from "./components/PrivateRoute";
-import NotFound from "./pages/Login/NotFound";
-import LoginRedirect from "./pages/Login/LoginRedirect";
-import Rolling from "./pages/Rolling";
-import RollingCreate from "./pages/RollingCreate";
-import RollingDetail from "./pages/RollingDetail";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import GlobalStyles from "./styles/global";
+import { ResetStyles } from "./styles";
+import ScreenContainer from "./components/ScreenContainer";
+import MobileScreen from "./components/MobileScreen";
+import { Auth, Login, NotFound, View } from "./routes";
+import users_api from "./api/users";
+import { useSetRecoilState } from "recoil";
+import myInfoState from "./recoil/myInfo";
+import {useEffect} from "react"
 
 const App: React.FC = () => {
-  const state = useRecoilValue(stateAtom).id
+  const setMyInfo = useSetRecoilState(myInfoState);
+  const fetch_myInfo = async () => {
+    const myInfo = await users_api.getUserByToken()
+    if (myInfo) setMyInfo(myInfo);
+  }
+
+  useEffect(() => {
+    fetch_myInfo()
+  }, [])
+
+
   return (
     <React.Fragment>
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/oauth/redirect" element={<LoginRedirect />} />
-        <Route path="/rolling" element={<PrivateRoute state={state} authenticated={1} component={[<Rolling key="Rolling-component"/>]}/>}/>
-        <Route path="/rollingcreate" element={<PrivateRoute state={state} authenticated={1} component={[<RollingCreate key="Rollingcreate-component"/>]}/>}/>
-        <Route path="/rollingdetail" element={<PrivateRoute state={state} authenticated={1} component={[<RollingDetail key="Rollingdetail-component"/>]}/>}/>
-        <Route path="/*" element={<NotFound key="notfound"/>} />
-      </Routes>
-      </Router>
+      <ResetStyles/>
+      <GlobalStyles />
+      <ScreenContainer>
+        <MobileScreen>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Login/>}/>
+              <Route path="/oauth/redirect" element={<Auth/>}/>
+              <Route path="/view/:userId/*" element={<View/>}/>
+              <Route path="/*" element={<NotFound/>}/>
+            </Routes>
+          </BrowserRouter>
+        </MobileScreen>
+      </ScreenContainer>
     </React.Fragment>
   )
 }
