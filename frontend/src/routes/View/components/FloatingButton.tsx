@@ -21,7 +21,7 @@ const FloatingButton = () => {
   
   const [isActiveFloating, setIsActiveFloating] = useRecoilState(isActiveFloatingState)
   const tw_button = [
-    tw`absolute rounded-full`,
+    tw`absolute rounded-full text-black`,
     css({
       width: `${buttonInnerRadius}px`,
       height: `${buttonInnerRadius}px`,
@@ -53,8 +53,10 @@ const FloatingButton = () => {
         height: `${buttonRadius * 1}px`,
       })],
       style: {
-        top: `${mobileSize.height - buttonRadius * 3}px`,
-        left: `${mobileSize.width - buttonRadius}px`,
+        // top: `${mobileSize.height - buttonRadius * 3}px`,
+        top: `${mobileSize.height - buttonRadius * 4}px`,
+        // left: `${mobileSize.width - buttonRadius}px`,
+        left: `${mobileSize.width - buttonRadius * 4}px`,
       }
     }}>
       {Object.keys(path_icon_dict).map(
@@ -67,7 +69,7 @@ const FloatingButton = () => {
           const Xorigins = [`right`,`left`,`right`,`left`]
           const unit = (isActiveFloating? 2: 1)
           const tw_button = [
-            tw`absolute bg-white`,
+            tw`absolute bg-white text-black`,
             css({
               width: `${buttonRadius*unit}px`,
               height: `${buttonRadius*unit}px`,

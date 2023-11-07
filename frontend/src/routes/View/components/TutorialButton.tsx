@@ -3,6 +3,8 @@ import "intro.js/introjs.css";
 import { Steps } from "intro.js-react";
 import { tourOptions, tourSteps } from "./Tutorial";
 import {BsQuestionCircle} from "react-icons/bs"
+import { useRecoilState } from "recoil";
+import isActiveFloatingState from "../../../recoil/isActiveFloatingState";
 import tw from "twin.macro";
 
 const TutorialButton: React.FC = () => {
@@ -17,8 +19,10 @@ const TutorialButton: React.FC = () => {
       };
     const handleHelp = () => {
         setStepsEnabled((prev) => !prev);
+        setIsActiveFloating(true)
       };
     const ICON = BsQuestionCircle
+    const [isActiveFloating, setIsActiveFloating] = useRecoilState(isActiveFloatingState)
 
     return(
         <div>
