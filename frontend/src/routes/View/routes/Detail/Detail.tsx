@@ -9,6 +9,7 @@ import myInfoState from "../../../../recoil/myInfo"
 import mobileSizeState from "../../../../recoil/mobileSizeState"
 import secretMessagesState from "../../../../recoil/secretMessagesState"
 import messagesState from "../../../../recoil/messagesState"
+import secretMessages_api from "../../../../api/secretMessages"
 
 const Detail = ({isSecret}:{isSecret?:boolean}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
@@ -34,8 +35,11 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
   }
 
   const handleRemove = () => {
-    messages_api.remove(message.id);
-    window.location.reload()
+    if (confirm("삭제하면 복구할 수 없어요! 삭제하시겠습니까?")) {
+      if (isSecret) secretMessages_api.remove(message.id)
+      else messages_api.remove(message.id);
+      window.location.reload()
+    }
   }
 
   return (
@@ -47,13 +51,13 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
           <div>{trimDate(message?.createdAt)}</div>
           <div>{trimTime(message?.createdAt)}</div>
         </div>
-        {myInfo?.userId === message?.senderId || myInfo?.userId === message?.receiverId ? <div {...{onClick:handleRemove}}>삭제</div>: <div></div>}
+        {myInfo?.userId === message?.senderId || myInfo?.userId === message?.receiverId ? <div {...{onClick:handleRemove, css: fontSize}}>삭제</div>: <div></div>}
       </div>
       {message?.type === 1 && <Stickynote {...{ ...message!, sizeRatio: .6, isOverlayed: true }} />}
       {message?.type === 2 && <Polaroid {...{ ...message!, sizeRatio: .6, isOverlayed: true }} />}
       
       <div {...{ css: tw`z-30 w-[60%] flex justify-end text-white` }}>
-        <div>From.
+        <div {...{css: fontSize}}>From.
           <span {...{onClick:()=>navigate(`/view/${message?.senderId}`)}}>
             {message?.senderName}
           </span>
