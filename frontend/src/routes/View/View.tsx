@@ -28,6 +28,7 @@ const View = () => {
   }
 
   useEffect(() => {
+    window.scrollY = 0
     handleNavigate()
   }, [userId])
   
