@@ -39,7 +39,7 @@ public class SecretMessageService {
     @Transactional
     public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 7, 12, 35);
+        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 17, 16, 45);
 
         String userId;
 
