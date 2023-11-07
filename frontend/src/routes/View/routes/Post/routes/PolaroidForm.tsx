@@ -17,12 +17,34 @@ const PolaroidForm = () => {
   const [messages, setMessages] = useRecoilState(messagesState)
   const [isSecret, setIsSecret] = useState(false)
 
+
+  
+  const readImageFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file)
+    
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result as string
+      img.onload = () => {
+        console.log(img.width, img.height)
+      }
+    }
+  }
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
+    readImageFile(file)
+    if (file.type.startsWith("video")) {file}
     if (file) setFile(file)
   }
 
   const handleSubmit = async () => {
+    if (!file) {
+      alert("미디어 파일을 업로드 해주세요.")
+      return
+    }
+    
     const message = {
       receiverId: userId!,
       type: 2,
@@ -34,6 +56,7 @@ const PolaroidForm = () => {
       sourceFile: file,
       thumbnailFile: file,
     }
+
     if (isSecret) await secretMessages_api.create(message)
     else await messages_api.create(message)
     
@@ -73,8 +96,9 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .1)]`,
     tw`flex justify-center items-center`,
     css({
+      fontSize: `${fontSize}px`,
       width: `${innerWidth}px`,
-      height: `${innerWidth * 9 / 16}px`,
+      height: `${innerWidth * 10 / 16}px`,
       marginBottom: `${padding / 2}px`
     })
   ]
@@ -96,6 +120,7 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
+      fontSize: `${fontSize}px`,
       width: `${width}px`,
       height: `${buttonRadius * 1.5}px`
     })
@@ -107,6 +132,7 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
+      fontSize: `${fontSize}px`,
       width: `${width}px`
     })
   ]
