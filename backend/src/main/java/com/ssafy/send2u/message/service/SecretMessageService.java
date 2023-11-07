@@ -12,7 +12,6 @@ import com.ssafy.send2u.util.AESUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -40,13 +39,10 @@ public class SecretMessageService {
     @Transactional
     public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 17, 16, 45);
-
-        if (now.isBefore(targetDateTime)) {
-            return new ArrayList<>(); // 현재 시간이 목표 시간 이전이면 빈 리스트를 반환
-        }
+        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 7, 12, 35);
 
         String userId;
+
         try {
             userId = AESUtil.decrypt(encryptedReceiverId);
         } catch (Exception e) {
@@ -56,7 +52,18 @@ public class SecretMessageService {
         User user = userRepository.findByUserId(userId);
         List<SecretMessage> messages = secretMessageRepository.findByReceiver(user);
 
-        return messages.stream().map(SecretMessageDto::new).collect(Collectors.toList());
+        if (now.isBefore(targetDateTime)) {
+            return messages.stream().map(msg -> {
+                SecretMessageDto dto = new SecretMessageDto(msg);
+                dto.setContent("앙 11월 17일 16시 45분 공개 기모링~");
+                dto.setThumbnailFileUrl("https://send2u.s3.ap-northeast-2.amazonaws.com/thumbnail/dummyImage.png");
+                dto.setSourceFileUrl("https://send2u.s3.ap-northeast-2.amazonaws.com/thumbnail/dummyImage.png");
+                return dto;
+            }).collect(Collectors.toList());
+        } else {
+            // 현재 시간이 목표 시간 이후이면 그대로 반환
+            return messages.stream().map(SecretMessageDto::new).collect(Collectors.toList());
+        }
     }
 
     @Transactional
