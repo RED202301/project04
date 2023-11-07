@@ -7,7 +7,7 @@ import mobileSizeState from "../../../recoil/mobileSizeState"
 import Logout from "./Logout";
 import Signout from "./Signout";
 import myInfoState from "../../../recoil/myInfo";
-
+import insta from "/insta.gif";
 
 
 const Profile: React.FC = (props) => {
@@ -61,7 +61,7 @@ const Profile: React.FC = (props) => {
                 tw`fixed inset-0 flex items-center justify-end z-40 bg-black bg-opacity-50 ml-auto mr-auto`,
             ]} style={{width: width}}
             >
-            <div css={tw`bg-white p-4 shadow-md ml-auto h-full`}>
+            <div css={tw`bg-white p-4 shadow-md ml-auto h-full w-[80px]`}>
               <div css={tw`flex justify-end`}>
                 <div onClick={toggleMenu} css={tw`mt-2 w-7 sm:w-10 lg:w-11 lg:h-11`}>
                   <img src={Close} alt="Close" css={tw`w-[100%]`} />
@@ -75,6 +75,12 @@ const Profile: React.FC = (props) => {
                     </li>
                     <li css={tw`p-[10px] text-black`}>
                       <Signout/>
+                    </li>
+                    <hr/>
+                    <li css={tw``}>
+                    <a href='https://www.instagram.com/send2u__' css={tw`flex justify-center m-0 p-0`}>
+                      <img {...{src:insta, css:tw`w-[50%]`,alt:"인스타" }}/>
+                    </a>
                     </li>
                   </>
                 ) : (

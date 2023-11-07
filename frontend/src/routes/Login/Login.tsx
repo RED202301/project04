@@ -5,6 +5,7 @@ import Logo from "/Logo.gif"
 import { useRecoilValue } from "recoil";
 import myInfoState from "../../recoil/myInfo";
 import { useNavigate } from "react-router-dom";
+import insta from "/insta.gif";
 
 const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
@@ -25,8 +26,11 @@ const Login = () => {
       <a href={KAKAO_AUTH_URI} css={tw`flex justify-center`}>
         <img {...{src:kakaoImg, css:tw`w-[90%]`,alt:"카카오 로그인" }}/>
       </a>
-      <p css={tw`mt-2 text-gray-800 w-[90%] text-[.1%]`}>
-        시작할 경우, Send2U의 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.
+      <p css={tw`mt-2 text-gray-800 w-[90%] text-xs flex-wrap justify-center items-center pb-10`}>
+        시작할 경우, Send2U의 서비스 이용약관과 개인정보 보호정책에 동의하게 됩니다.      
+        <a href='https://www.instagram.com/send2u__' css={tw`flex justify-center`}>
+          <img {...{src:insta, css:tw`w-[10%]`,alt:"인스타" }}/>
+        </a>
       </p>
     </div>
   );
