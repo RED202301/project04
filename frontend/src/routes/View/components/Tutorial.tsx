@@ -4,6 +4,7 @@ export const tourOptions = {
     doneLabel: "끝",
     disableInteraction: true,
     buttonClass: "text-black p-2 m-1",
+    color: '#4a4a4a',
   };
   
   export const tourSteps = [
