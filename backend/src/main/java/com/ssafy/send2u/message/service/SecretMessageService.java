@@ -40,7 +40,7 @@ public class SecretMessageService {
     @Transactional
     public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 7, 11, 50);
+        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 17, 16, 45);
 
         if (now.isBefore(targetDateTime)) {
             return new ArrayList<>(); // 현재 시간이 목표 시간 이전이면 빈 리스트를 반환
