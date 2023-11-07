@@ -36,10 +36,10 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
     return `${hour}시 ${minute}분`
   }
 
-  const handleRemove = () => {
+  const handleRemove = async () => {
     if (confirm("삭제하면 복구할 수 없어요! 삭제하시겠습니까?")) {
-      if (isSecret) secretMessages_api.remove(message.id)
-      else messages_api.remove(message.id);
+      if (isSecret) await secretMessages_api.remove(message.id)
+      else await messages_api.remove(message.id);
       window.location.reload()
     }
   }
