@@ -1,6 +1,7 @@
 // import React from 'react'
 // import ReactDOM from 'react-dom/client'
 import { createRoot } from 'react-dom/client'
+import GlobalStyles from './styles/GlobalStyles'
 import App from './App.tsx'
 import './index.css'
 import { RecoilRoot } from "recoil";
@@ -15,6 +16,7 @@ const root = createRoot(container!)
 root.render(
   // <React.StrictMode>
   <RecoilRoot>
+    <GlobalStyles />
     <App />
   </RecoilRoot>
   // </React.StrictMode>,
