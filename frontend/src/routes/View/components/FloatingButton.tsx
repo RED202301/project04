@@ -54,7 +54,7 @@ const FloatingButton = () => {
       })],
       style: {
         // top: `${mobileSize.height - buttonRadius * 3}px`,
-        top: `${mobileSize.height - buttonRadius * 4}px`,
+        top: `${mobileSize.height - buttonRadius * 6}px`,
         // left: `${mobileSize.width - buttonRadius}px`,
         left: `${mobileSize.width - buttonRadius * 4}px`,
       }
