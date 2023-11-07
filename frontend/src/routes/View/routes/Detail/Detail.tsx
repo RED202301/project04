@@ -1,4 +1,4 @@
-import { Fragment} from "react"
+import { useEffect, Fragment} from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import Stickynote from "../Board/components/Stickynote"
 import messages_api from "../../../../api/messages"
@@ -18,7 +18,9 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
   const messages = useRecoilValue(isSecret ? secretMessagesState : messagesState)
   const message = messages.filter(({ id }) => id === parseInt(messageId))[0]
   const navigate = useNavigate()
-  if(!message) navigate("../")
+  useEffect(() => {
+    if(!message) navigate("../")
+  })
 
   const fontSize = css({ fontSize: `${mobileSize.width * .05}px` })
   const trimDate = (createdAt) => {
