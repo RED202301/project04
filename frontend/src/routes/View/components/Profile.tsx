@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Close from "/close.png";
 import tw from "twin.macro";
@@ -10,7 +10,7 @@ import myInfoState from "../../../recoil/myInfo";
 import insta from "/insta.gif";
 
 
-const Profile: React.FC = (props) => {
+const Profile: React.FC = () => {
     // 모달 오픈
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     // 넓이 관련
@@ -50,7 +50,7 @@ const Profile: React.FC = (props) => {
                         {myInfo&&<img src={myInfo.userProfileImageUrl} alt="profile" css={tw`rounded-full w-[100%]`} />}
                     </div>
                 ) : (
-                    <Link to={KAKAO_AUTH_URI}>로그인</Link>
+                    <a href={KAKAO_AUTH_URI}>로그인</a>
                     )}
           </div>
 
