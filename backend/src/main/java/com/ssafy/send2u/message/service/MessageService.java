@@ -134,13 +134,8 @@ public class MessageService {
 
         User currentUser = userRepository.findByUserId(principal.getUsername());
 
-        // 본인이 적은 글인지 확인
-        if (!message.getSender().equals(currentUser)) {
-            throw new NoAuthorizationException(ErrorCode.NO_Authorization);
-        }
-
-        // 방주인인지 확인
-        if (!message.getReceiver().equals(currentUser)) {
+        // 본인이 적은 글, 방주인 아니면 오류남
+        if (!message.getReceiver().equals(currentUser) && !message.getSender().equals(currentUser)) {
             throw new NoAuthorizationException(ErrorCode.NO_Authorization);
         }
 
