@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import { AiOutlinePaperClip, AiOutlineMenu, AiOutlineShareAlt } from "react-icons/ai"
+import { AiOutlinePaperClip, AiOutlineShareAlt } from "react-icons/ai"
 import { css } from "@emotion/react";
 import { useRecoilValue } from "recoil";
 import mobileSizeState from "../../../recoil/mobileSizeState";
