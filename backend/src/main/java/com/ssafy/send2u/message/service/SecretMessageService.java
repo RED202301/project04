@@ -10,6 +10,9 @@ import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
 import com.ssafy.send2u.util.AESUtil;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
@@ -34,27 +37,14 @@ public class SecretMessageService {
         return list;
     }
 
-    public User getUser(String userId) {
-        User user;
-
-        if (userId == null || userId.isEmpty()) {
-            org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext()
-                    .getAuthentication().getPrincipal();
-
-            user = userRepository.findByUserId(principal.getUsername());
-        } else {
-            user = userRepository.findByUserId(userId);
-        }
-
-        if (user == null) {
-            throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
-        }
-
-        return user;
-    }
-
     @Transactional
     public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 7, 11, 45);
+
+        if (now.isBefore(targetDateTime)) {
+            return new ArrayList<>(); // 현재 시간이 목표 시간 이전이면 빈 리스트를 반환
+        }
 
         String userId;
         try {
@@ -63,7 +53,7 @@ public class SecretMessageService {
             throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
         }
 
-        User user = getUser(userId);
+        User user = userRepository.findByUserId(userId);
         List<SecretMessage> messages = secretMessageRepository.findByReceiver(user);
 
         return messages.stream().map(SecretMessageDto::new).collect(Collectors.toList());
@@ -79,7 +69,8 @@ public class SecretMessageService {
 
             throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
         }
-        User user = getUser(userId);
+
+        User user = userRepository.findByUserId(userId);
         List<SecretMessage> messages = secretMessageRepository.findByReceiver(user);
         return messages.size();
     }
