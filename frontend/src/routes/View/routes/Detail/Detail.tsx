@@ -53,7 +53,11 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
       {message?.type === 2 && <Polaroid {...{ ...message!, sizeRatio: .6, isOverlayed: true }} />}
       
       <div {...{ css: tw`z-30 w-[60%] flex justify-end text-white` }}>
-        <div>From. {message?.senderName}</div>
+        <div>From.
+          <span {...{onClick:()=>navigate(`/view/${message?.senderId}`)}}>
+            {message?.senderName}
+          </span>
+        </div>
       </div>
       <div {...{ css: tw`w-full` }}></div>
       <div {...{ css: tw`w-full` }}></div>

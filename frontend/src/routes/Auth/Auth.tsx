@@ -16,29 +16,31 @@ const Auth: React.FC = () => {
     if (token) localStorage.setItem("accessToken", token);
     const userInfo = await users_api.getUserByToken();
     if (userInfo) setMyInfo(userInfo)
-    navigate(-1)
+    navigate("/")
   }
+
   useEffect(() => {
     handleNavigate()
   })
-return (
-  <div css={twStyles} style={{    
-  maxWidth: "500px",
-  minWidth: "200px",
-  marginLeft: "auto", 
-  marginRight: "auto",
-  backgroundColor:"#59B379",
-  }}>
-    {/* <GlobalStyles></GlobalStyles> */}
-    <div css={tw``}></div>  
-    <div>
-    {/* <h2 css={tw`flex justify-center`}>로그인 리다이렉트 페이지</h2> */}
-      <Link to="/" css={tw`flex justify-center`}>돌아가기</Link>
+
+  return (
+    <div css={twStyles} style={{
+      maxWidth: "500px",
+      minWidth: "200px",
+      marginLeft: "auto",
+      marginRight: "auto",
+      backgroundColor: "#59B379",
+    }}>
+      {/* <GlobalStyles></GlobalStyles> */}
+      <div css={tw``}></div>
+      <div>
+        {/* <h2 css={tw`flex justify-center`}>로그인 리다이렉트 페이지</h2> */}
+        <Link to="/" css={tw`flex justify-center`}>돌아가기</Link>
+      </div>
+      <div className="">
+      </div>
     </div>
-    <div className="">
-    </div>
-  </div>
-);
+  );
 };
 
 export default Auth;
