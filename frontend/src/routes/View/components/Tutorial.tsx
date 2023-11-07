@@ -1,4 +1,4 @@
-import './Tutorial.css';
+// import './Tutorial.css';
 
 export const tourOptions = {
     nextLabel: "다음",
