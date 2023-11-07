@@ -6,14 +6,18 @@ function UpdateArticle() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const navigate = useNavigate();
-
+  const accessToken = localStorage.getItem('accessToken')
   useEffect(() => {
     // 상세 정보를 가져오는 API 요청
-    fetch(`http://localhost:8080/articles/${id}`)
+    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`)
       .then((response) => response.json())
+      
       .then((data) => {
-        setTitle(data.articleTitle);
-        setContent(data.longText);
+        console.log(data)
+        setTitle(data.data.articleTitle);
+        setContent(data.data.longText);
+        console.log(data.data.articleTitle);
+        console.log(data.data.longText);
       })
       .catch((error) => {
         console.error("요청 실패: " + error);
@@ -24,22 +28,23 @@ function UpdateArticle() {
     event.preventDefault();
 
     const data = {
-      articleId: id,
+  
       articleTitle: title,
       longText: content,
     };
 
-    fetch(`http://localhost:8080/articles/${id}`, {
+    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`
       },
       body: JSON.stringify(data),
     })
       .then((response) => {
         if (response.status === 200) {
           console.log("게시물이 수정되었습니다.");
-          navigate("/");
+          navigate("/article");
         } else {
           console.error("게시물 수정에 실패했습니다.");
         }
@@ -50,59 +55,64 @@ function UpdateArticle() {
   };
 
   return (
-    <div className="container">
-      <div className="py-5 text-center">
-        <h2>상품 수정 폼</h2>
+    <div className="maintable" style={{fontFamily:'omyuPretty'}}>
+      <div style={{display:'flex', justifyContent:'center', marginTop:'5%'}}>
+        <h2>수정하겠습니다!!</h2>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{height:'75%'}}>
         <div>
-          <label htmlFor="articleId">게시글 ID</label>
+          <p htmlFor="articleId">게시글 ID</p>
           <input
             type="text"
             id="articleId"
             name="articleId"
             className="form-control"
+            style={{border:'none', backgroundColor:'#083C0D', color:'white'}}
             value={id}
             readOnly
           />
         </div>
-        <div>
-          <label htmlFor="articleTitle">게시글 명</label>
+        <div >
+          <p htmlFor="articleTitle" >제목</p>
           <input
             type="text"
             id="articleTitle"
             name="articleTitle"
             className="form-control"
             value={title}
+            style={{color:'white', width: '100%',marginTop:'2%', boxSizing:'border-box',border:'2px solid white' ,backgroundColor:'#083C0D' }}
+
             onChange={(e) => setTitle(e.target.value)}
             disabled={false} // 수정 가능하도록 변경
           />
         </div>
-        <div>
-          <label htmlFor="longText">내용</label>
+        <div style={{height:'80%'}}>
+          <p htmlFor="longText" style={{marginTop:'3%'}}>내용</p>
           <textarea
             id="longText"
             name="longText"
             className="form-control"
-            style={{ height: "400px" }}
+            style={{color:'white', width: '100%', height: '100%',marginTop:'2%', boxSizing:'border-box',border:'2px solid white' ,backgroundColor:'#083C0D' }}
+
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
         </div>
         <div className="mainrow">
-          <div className="row">
+          <div className="updaterow">
             <div className="col">
-              <button className="w-100 btn btn-primary btn-lg" type="submit">
+              <button  onClick={handleSubmit} style={{color:'white', width: '100px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}>
+                
                 저장
               </button>
             </div>
             <div className="col">
               <button
-                className="w-100 btn btn-secondary btn-lg"
+               style={{width: '100px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}
                 type="button"
                 // 여기에 취소 버튼 클릭 시 동작할 로직을 추가할 수 있습니다.
               >
-                <a href={"/article"}>취소</a>
+                <a href={"/article"} style={{color:'white'}}>취소</a>
               </button>
             </div>
           </div>

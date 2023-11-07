@@ -1,33 +1,66 @@
 import React, { useState, useEffect } from "react";
-import {Outlet, useParams } from "react-router-dom";
+import {Outlet, useParams, useNavigate } from "react-router-dom";
 
 function Article() {
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 1을 더해주고, 항상 두 자릿수를 유지하기 위해 slice(-2)를 사용
+    const day = ("0" + date.getDate()).slice(-2);
+    return `${year}.${month}.${day}`;
+  }
   const {id} = useParams();
+  const navigate = useNavigate();
+  const [article, setArticle] = useState({
+    articleTitle: "",
+    articleWriter: "",
+    date: "",
+    longText: ""
+  });
+  const accessToken = localStorage.getItem("accessToken")
   
-  const [article, setArticle] = useState({});
 
   useEffect(() => {
-    fetch(`http://localhost:8080/articles/${id}`)
+    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`)
       .then((response) => response.json())
       .then((data) => {
-        setArticle(data);
+        setArticle(data.data);
       })
       .catch((error) => {
         console.error("요청 실패: " + error);
       });
   }, [id]);
 
-  return (
-    <div style={{ width: '100%', padding: '5%', boxSizing: 'border-box' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '5%' }}>게시글 상세</h2>
+  const handleDelete = () => {
+    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`, {
+      method: 'DELETE',
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+    .then(response => {
+      if(response.ok) {
+        alert("게시글이 삭제되었습니다.");
+        navigate("/article");
+      } else {
+        throw new Error("게시글 삭제에 실패했습니다.");
+      }
+    })
+    .catch(error => console.error("요청 실패: " + error));
+  }
 
-      <div style={{ marginBottom: '2%' }}>
+  return (
+    <div style={{display:'flex', justifyContent:'center', width:'100%', height:'100%'}}>
+    <div className="maintable" style={{fontFamily:"omyuPretty"}}>
+      <h2 style={{ textAlign: 'center', marginTop:'5%',marginBottom: '5%' }}>건의사항 상세</h2>
+
+      <div style={{ marginBottom: '2%'}}>
         <label htmlFor="articleId">게시글 ID</label>
         <input
           type="text"
           id="articleId"
           name="articleId"
-          style={{ width: '100%', marginTop:'2%' }}
+          style={{ width: '100%', marginTop:'2%', backgroundColor:'#083C0D', boxSizing:'border-box', border:'none', color:'white' }}
           value={id}
           readOnly
         />
@@ -35,12 +68,12 @@ function Article() {
   
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ width: '40%' }}>
-          <label htmlFor="articleName">게시글 명</label>
+          <label htmlFor="articleName">제목</label>
           <input
             type="text"
             id="articleName"
             name="articleName"
-            style={{ width: '100%', marginTop:'2%' }}
+            style={{color:'white', width: '100%', marginTop:'2%', backgroundColor:'#083C0D', border:'2px solid white' }}
             value={article.articleTitle}
             readOnly
           />
@@ -52,8 +85,8 @@ function Article() {
             type="text"
             id="articleSender"
             name="articleSender"
-            style={{ width: '100%', marginTop:'2%' }}
-            value={article.articleSender}
+            style={{color:'white', width: '100%', marginTop:'2%', border:'none', backgroundColor:'#083C0D',boxSizing:'border-box' }}
+            value={article.articleWriter}
             readOnly
           />
         </div>
@@ -64,32 +97,36 @@ function Article() {
             type="text"
             id="date"
             name="date"
-            style={{ width: '100%', marginTop:'2%' }}
-            value={article.date}
+            style={{color:'white', width: '100%', marginTop:'2%', border:'none', backgroundColor:'#083C0D',boxSizing:'border-box' }}
+            value={formatDate(article.date)}
             readOnly
           />
         </div>
       </div>
 
-      <div style={{ marginTop: '2%' }}>
-        <label htmlFor="longText">내용</label>
+      <div style={{ marginTop: '2%', height:'55%' }}>
+        <label htmlFor="longText">건의 사항</label>
         <textarea
           id="longText"
           name="longText"
-          style={{ width: '100%', height: '400px',marginTop:'2%' }}
+          style={{color:'white', width: '100%', height: '100%',marginTop:'2%', boxSizing:'border-box',border:'2px solid white' ,backgroundColor:'#083C0D' }}
           value={article.longText}
           readOnly
         />
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2%' }}>
-        <button style={{ width: '45%', marginTop:'2%' }}>
-          <a href={`/article/Update/${article.articleId}`}>게시글 수정</a>
+      
+          <a href={`/article`} style={{ marginLeft:'5%', color:'white', marginTop:'15%', width:'120px', height:'15px', backgroundColor:'#083C0D' }}>목록으로</a>
+    
+        <button className="yellowchalk">
+          <a href={`/article/Update/${article.articleId}`} style={{ color:'white'}}>수정하기</a>
         </button>
-        <button style={{ width: '45%',marginTop:'2%' }}>
-          <a href={`/article`}>목록으로</a>
+
+        <button className="eraser" onClick={handleDelete}><span style={{fontSize:'15px'}}>삭제</span>
         </button>
       </div>
+    </div>
     </div>
   );
 }

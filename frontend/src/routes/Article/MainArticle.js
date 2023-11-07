@@ -5,58 +5,70 @@ import { Link } from "react-router-dom";
 
 function MainArticle() {
   const [articles, setArticles] = useState([]); // articles 상태 변수를 정의하여 게시글 목록을 저장
-
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2); // 월은 0부터 시작하므로 1을 더해주고, 항상 두 자릿수를 유지하기 위해 slice(-2)를 사용
+    const day = ("0" + date.getDate()).slice(-2);
+    return `${year}.${month}.${day}`;
+  }
   useEffect(() => {
-    // 홈페이지가 로드될 때 GET 요청을 보냅니다.
-    fetch("http://localhost:8080/articles")
-      .then((response) => response.json())
-      .then((data) => {
-        setArticles(data); // 게시글 목록을 상태 변수에 설정
-      })
-      .catch((error) => {
-        console.error("요청 실패: " + error, articles);
-
-      });
+    const accessToken = localStorage.getItem('accessToken');
+    fetch("http://192.168.30.218:8080/api/v1/articles/my", {
+      method: 'GET',
+      headers: {
+        "Authorization": `Bearer ${accessToken}`
+      }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setArticles(data.data);
+    })
+    .catch((error) => {
+      console.error("요청 실패: " + error);
+    });
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 로드될 때만 실행
-   console.log(articles)
+  //  console.log(articles)
   return (
-    <div className="container">
-<div style={{width:'100%', height:'130px',backgroundSize:'cover'}}>
+    <div className="container" style={{fontFamily:"omyuPretty"}}>
 
-      <div  className="py-5 text-center">
+    <div style={{width:'100%', height:'80%'}}>
+
+      <div  className="py-5 text-center" style={{marginTop:'5%', display:'flex',justifyContent:"center"}}>
         <h2>문의게시글</h2>
         
       </div>
 
 
-      <div className='maintable'>
+      <div className='maintables'>
         <table className="table">
           <thead>
-            <tr>
-              <th style={{ width: '10%' }}>ID</th>
-              <th style={{ width: '20%' }}>제목</th>
-              <th style={{ width: '10%' }}>작성자</th>
-              <th style={{ width: '10%' }}>날짜</th>
+            <tr style={{width:'100%', display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr',textAlign:'center'}}>
+              <p >ID</p>
+              <p >제목</p>
+              <p >작성자</p>
+              <p >날짜</p>
             </tr>
           </thead>
-          <tbody>
-          {articles.map((article) => (
-        <tr className="rowborder" key={article.articleId}>
+          <div>
+           {articles.length > 0 && articles.map((data) => {
+         console.log(data)
+         return <tr className="rowborder" key={data.articleId}>
           <td className='rowpadding'>
-            <Link to={`/article/${article.articleId}`}>
-              {article.articleId}
+            <Link to={`/article/${data.articleId}`} style={{color:'white'}}>
+              {data.articleId}
             </Link>
           </td>
         <td className='rowpadding'>
-          <Link to={`/article/${article.articleId}`}>
-            {article.articleTitle}
+          <Link to={`/article/${data.articleId}`} style={{color:'white'}}>
+            {data.articleTitle}
           </Link>
         </td>
-        <td className='rowpadding'>{article.articlesender}</td>
-        <td className='rowpadding'>{article.date}</td>
+        <td className='rowpadding'>{data.articleWriter}</td>
+        <td className='rowpadding'>{formatDate(data.date)}</td>
         </tr>
-      ))}
-          </tbody>
+} )} 
+          </div>
 
         </table>
       </div>

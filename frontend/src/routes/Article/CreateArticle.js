@@ -4,91 +4,96 @@ import { useNavigate } from "react-router-dom";
 function CreateArticle() {
   const [articleTitle, setArticleTitle] = useState("");
   const [longText, setLongText] = useState("");
-  const [file, setFile] = useState(null);
+  const accessToken = localStorage.getItem('accessToken')
   const navigate = useNavigate();
-
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    const formData = new FormData();
-    formData.append('articleTitle', articleTitle);
-    formData.append('longText', longText);
-    formData.append('articleFileUrl', file);
-
-    fetch("http://localhost:8080/articles/add", {
+  
+    const data = {
+      articleTitle: articleTitle,
+      longText: longText,
+    };
+  
+    fetch("http://192.168.30.218:8080/api/v1/articles", {
       method: "POST",
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(data),
     })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log("게시물이 추가되었습니다.");
-          navigate("/article");
-          
-        } else {
-          console.error("게시물 추가에 실패했습니다.");
-        }
-      })
-      .catch((error) => {
-        console.error("요청 실패: " + error);
-      });
-  };
 
+    .then((response) => {
+      if (response.ok) {
+        console.log("게시물이 추가되었습니다.");
+        navigate("/article");
+      } else {
+        console.error("게시물 추가에 실패했습니다.");
+      }
+    })
+    .catch((error) => {
+      console.error("요청 실패: " + error);
+    });
+  };
+  
+  
+  
   // const handleFileChange = (event) => {
   //   setFile(event.target.files[0]);
   // };
   return (
-    <div className="container">
-      <div className="py-5 text-center" style={{display:'flex', justifyContent:'center'}}>
-        <h2>게시글 등록</h2>
+    <div className="maintable">
+      <div className="py-5 text-center" style={{marginTop:'5%', display:'flex', justifyContent:'center'}}>
+        <h2>건의합니다!!</h2>
       </div>
         
-      <form onSubmit={handleSubmit}>
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <p htmlFor="articleName" style={{marginTop:'2%'}}>게시글 명</p>
+      <form onSubmit={handleSubmit} style={{height:'75%'}}>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <p htmlFor="articleName" style={{marginTop:'2%'}}>제목</p>
           <input
             type="text"
             id="articleName"
             name="articleName"
             className="form-control"
-            placeholder="이름을 입력하세요"
+            placeholder="제목을 입력하세요"
             value={articleTitle}
-            style={{marginTop:'2%'}}
+            style={{ color:'white', width: '100%',marginTop:'2%', boxSizing:'border-box',border:'2px solid white' ,backgroundColor:'#083C0D' }}
             onChange={(e) => setArticleTitle(e.target.value)}
           />
         </div>
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <p htmlFor="longText" style={{marginTop:'2%'}}>내용</p>
-          <input
+        <div style={{ width:'100%', height:'100%', display: 'flex', flexDirection: 'column'}}>
+          <p htmlFor="longText" style={{marginTop:'2%'}}>건의사항</p>
+          <textarea
             type="text"
             id="longText"
             name="longText"
             className="form-control"
-            style={{ height: "400px", marginTop:'2%'}}
-            placeholder="내용을 입력하세요"
+            style={{resize: 'none' ,color:'white',alignItems:'flex-start', width: '100%', height: '100%',marginTop:'2%', boxSizing:'border-box',border:'2px solid white' ,backgroundColor:'#083C0D' }}
+            placeholder="건의사항을 입력하세요"
             value={longText}
             onChange={(e) => setLongText(e.target.value)}
           />
         </div>
-        <div className="mainrow" style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="mainrow">
         <div className="row">
-          <div className="col" style={{ display: 'flex', justifyContent: 'center' }}>
-            <button className="btn btn-primary btn-lg" type="submit">
-              <p style={{fontSize:'10px', width:'50px'}}>게시글 등록</p>
-            </button>
-          </div>
-          <div className="col" style={{ display: 'flex', justifyContent: 'center' }}>
-            <button
-              className="btn btn-secondary btn-lg"
+   
+            <div className="" type="submit" style={{width: '120px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}>
+              <p style={{fontSize:'10px', color:'white'}} onClick={handleSubmit}>건의사항 등록</p>
+            </div>
+       
+            <div
+              className=""
               type="button"
+              style={{ width: '120px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}
               onClick={() => {
                 window.location.href = "/article"; // 취소 버튼을 눌렀을 때 홈페이지로 이동
               }}
             >
-              <p style={{fontSize:'10px', width:"20px"}}>취소</p>
-            </button>
+              <p style={{fontSize:'10px', color:'white'}}>취소</p>
+            </div>
           </div>
         </div>
-      </div>
+  
     </form>
   </div>
 );
