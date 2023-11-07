@@ -139,6 +139,11 @@ public class MessageService {
             throw new NoAuthorizationException(ErrorCode.NO_Authorization);
         }
 
+        // 방주인인지 확인
+        if (!message.getReceiver().equals(currentUser)) {
+            throw new NoAuthorizationException(ErrorCode.NO_Authorization);
+        }
+
         // 파일이 있는 경우 S3에서도 삭제
         if (message.getSourceFileUrl() != null) {
             awsService.fileDelete(message.getSourceFileUrl());
