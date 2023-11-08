@@ -68,7 +68,7 @@ const Polaroid = ({ id, sourceFileUrl, thumbnailFileUrl, content, sizeRatio, isO
   const navigate = useNavigate()
   const isDragged = useRecoilValue(isDraggedState);
   const handlePointerUpCapture = () => {
-    if (isDragged) return;
+    if (isDragged || isOverlayed) return;
     navigate(`./detail/${id}`)
   }
 
