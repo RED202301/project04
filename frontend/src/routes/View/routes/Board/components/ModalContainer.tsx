@@ -1,11 +1,8 @@
 import { PropsWithChildren} from "react"
 import { useNavigate } from "react-router-dom"
-import { useRecoilValue } from "recoil"
 import tw, { css } from "twin.macro"
-import mobileSizeState from "../../../../../recoil/mobileSizeState"
 
 const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:boolean}) => {
-  const mobileSize = useRecoilValue(mobileSizeState)
   const navigate = useNavigate()
   // const tw_header = [
   //   isOverlayed ? tw`z-20`:tw`z-10`,
@@ -20,7 +17,8 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
   ]
   const tw_container = [
     isOverlayed ? tw`z-10`:tw``,
-    tw`flex flex-wrap justify-around items-center`,
+    // tw`flex flex-col flex-wrap justify-around items-center`,
+    tw`flex flex-col justify-around items-center`,
   ]
   const tw_dimmed = [
     ...tw_container,
@@ -35,15 +33,7 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
       <div {...{
         css: [
           tw_container,
-          tw`w-full`,
-          css`height: ${mobileSize.height - mobileSize.width * .12}px`,
-          css`
-            white-space:pre-wrap;
-            ::-webkit-scrollbar { display: none; }
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          `,
-          css({ overflowY: 'scroll' })
+          tw`w-full h-screen`,
         ]
       }}>
         <div {...{
