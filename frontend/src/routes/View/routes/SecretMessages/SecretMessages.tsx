@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import tw from "twin.macro"
+import tw, { css } from "twin.macro"
 import Stickynote from "../Board/components/Stickynote";
 import Polaroid from "../Board/components/Polaroid";
 import { useEffect } from "react"
@@ -7,6 +7,7 @@ import secretMessages_api from "../../../../api/secretMessages";
 import { useRecoilState, useRecoilValue } from "recoil";
 import myInfoState from "../../../../recoil/myInfo";
 import secretMessagesState from "../../../../recoil/secretMessagesState";
+import mobileSizeState from "../../../../recoil/mobileSizeState";
 
 const SecretMessages = ({userId}:{userId:string}) => {
   const myInfo = useRecoilValue(myInfoState);
@@ -23,12 +24,36 @@ const SecretMessages = ({userId}:{userId:string}) => {
     fetchSecretMessages()
   }, [])
 
+  const mobileSize = useRecoilValue(mobileSizeState);
+  const tw_header = [
+    tw`text-center flex items-center z-10 text-white`,
+    css`
+    height: ${mobileSize.width * 0.12}px;
+    font-size: ${mobileSize.width * 0.04}px;
+    `
+  ]
+  const tw_container = [
+    tw`flex-1 flex flex-wrap justify-around items-center`,
+    css`
+            white-space:pre-wrap;
+            ::-webkit-scrollbar { display: none; }
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          `,
+    css({ overflowY: 'scroll' })
+
+  ]
+
+
   return <Fragment>
-    <p css={tw`absolute left-[center] top-0 text-white text-2xl bg-[rgba(0,0,0,0.5)] w-[100%] text-center z-20`}>예약 편지 모아보기</p>
+    <div {...{ css: tw_header }}>예약 편지 모아보기</div>
+    <div {...{ css: tw_container }}>
+      
     {secretMessages.map(message => {
       if(message.type === 1) return <div {...{css:tw`m-1 z-10`, key:message.id}}><Stickynote {...{...message, sizeRatio:.3 }} /></div>
       if(message.type === 2) return <div {...{css:tw`m-1 z-10`, key:message.id}}><Polaroid {...{...message, sizeRatio:.3 }} /></div>
     })}
+    </div>
     
   </Fragment>
 }
