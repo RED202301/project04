@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import kakaoImg from "/kakao_login_large_narrow.png";
 import tw from "twin.macro";
 import Logo from "/Logo.gif"
@@ -6,6 +6,7 @@ import { useRecoilValue } from "recoil";
 import myInfoState from "../../recoil/myInfo";
 import { useNavigate } from "react-router-dom";
 import insta from "/insta.gif";
+import Door from "../View/components/Door";
 
 const front_base_URL = import.meta.env.VITE_FRONT_SERVER_URL;
 const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
@@ -19,6 +20,12 @@ const Login = () => {
   useEffect(() => {
     if(myInfo) navigate(`./view/${myInfo.userId}`) 
   }, [myInfo])
+
+  const [open, setOpen] = useState(false)
+
+  const handle = () => {
+    setOpen(open => !open)
+  }
     
   return (
     <div css={tw`flex flex-col h-full justify-around items-center bg-[#59B379]`}>
@@ -27,7 +34,7 @@ const Login = () => {
         <img {...{src:kakaoImg, css:tw`w-[90%]`,alt:"카카오 로그인" }}/>
       </a>
       <div css={tw`mt-2 text-gray-800 w-[90%] text-xs flex-wrap justify-center items-center pb-10`}>
-        <p css={tw`flex justify-center ml-5 mr-5`}>
+        <p onClick={handle} css={tw`flex justify-center ml-5 mr-5 underline`}>
           '수능생 응원 롤링페이퍼' SEND2U
           </p>
           <p css={tw`flex justify-center ml-5 mr-5`}>
@@ -40,7 +47,10 @@ const Login = () => {
           <img {...{src:insta, css:tw`w-[10%]`,alt:"인스타" }}/>
         </a>
       </div>
-    </div>
+      {open === true && (
+        <Door handle={handle}></Door>
+      )}
+      </div>
   );
 };
 
