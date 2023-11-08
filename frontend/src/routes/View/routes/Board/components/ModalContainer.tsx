@@ -7,17 +7,16 @@ import mobileSizeState from "../../../../../recoil/mobileSizeState"
 const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:boolean}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
   const navigate = useNavigate()
-  const tw_header = [
-    isOverlayed ? tw`z-20`:tw`z-10`,
-    tw`bg-white w-full`,
-    tw`bg-[rgba(1, 1, 1, .5)]`,
-    css`height: ${mobileSize.width * 0.12}px;`
-  ]
+  // const tw_header = [
+  //   isOverlayed ? tw`z-20`:tw`z-10`,
+  //   tw`bg-white w-full`,
+  //   tw`bg-[rgba(1, 1, 1, .5)]`,
+  // ]
   const tw_fullsize = [
-    tw`w-full`,
-    css({
-      height:`${mobileSize.height - mobileSize.width * .12}px`
-    })
+    tw`w-full h-screen`,
+    // css({
+    //   height:`${mobileSize.height - mobileSize.width * .12}px`
+    // })
   ]
   const tw_container = [
     isOverlayed ? tw`z-10`:tw``,
@@ -33,7 +32,6 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
   const tw_abs = tw`absolute`
   return (
     <div {...{ css: [tw_container, tw_fullsize, tw_abs] }}>
-      <div {...{ css: tw_header }}></div>
       <div {...{
         css: [
           tw_container,

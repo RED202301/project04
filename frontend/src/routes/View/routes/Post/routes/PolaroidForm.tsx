@@ -8,40 +8,21 @@ import {AiFillEdit} from "react-icons/ai"
 import messagesState from "../../../../../recoil/messagesState";
 import secretMessages_api from "../../../../../api/secretMessages";
 
+
+const min_ratio = 10 / 16
+const max_ratio = 16 / 10
+
 const PolaroidForm = () => {
   const navigate = useNavigate()
   const { userId } = useParams();
   const [content, setContent] = useState("");
-  const [file, setFile] = useState<File>()
+  const [file, setFile] = useState<{src:File, width:number, height:number }>()
+  
   const mobileSize = useRecoilValue(mobileSizeState);
   const [messages, setMessages] = useRecoilState(messagesState)
   const [isSecret, setIsSecret] = useState(false)
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files[0];
-    if (file) setFile(file)
-  }
-
-  const handleSubmit = async () => {
-    const message = {
-      receiverId: userId!,
-      type: 2,
-      rotate: Math.random() * 20 - 10,
-      top: .5,
-      left: .5,
-      zindex: messages.length,
-      content,
-      sourceFile: file,
-      thumbnailFile: file,
-    }
-    if (isSecret) await secretMessages_api.create(message)
-    else await messages_api.create(message)
-    
-    const updatedMessage = await messages_api.search(userId!);
-    setMessages(updatedMessage)
-    navigate(`../`)
-  }
   
+
   const buttonInnerRadius = mobileSize.width * .08;
   const buttonPadding = buttonInnerRadius / 8
   const buttonRadius = buttonInnerRadius + buttonPadding * 2;
@@ -50,6 +31,70 @@ const PolaroidForm = () => {
   const innerWidth = width * 4 /5
   const padding = width / 10
   const fontSize = innerWidth / 10;
+
+  const readImageFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file)
+    
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result as string
+      img.onload = () => {
+        const ratio = img.height/img.width;
+        if (ratio < min_ratio) {
+          const width = innerWidth
+          const height = width * ratio;
+          setFile({src:file, width, height})
+        }
+        else if (ratio < max_ratio) {
+          const width = innerWidth
+          const height = width * ratio;
+          setFile({src:file, width, height})
+        }
+        else if (max_ratio < ratio) {
+          const height = innerWidth * max_ratio
+          const width = height / ratio;
+          setFile({src:file, width, height})
+        }
+        // setFile({src:file, width:img.width, height: img.height})
+      }
+    }
+    
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files && event.target.files[0];
+    if(file) readImageFile(file)
+  }
+
+  const handleSubmit = async () => {
+    if (!file) {
+      alert("미디어 파일을 업로드 해주세요.")
+      return
+    }
+    
+    const message = {
+      receiverId: userId!,
+      type: 2,
+      rotate: Math.random() * 20 - 10,
+      top: .5,
+      left: .5,
+      zindex: messages.length,
+      content,
+      sourceFile: file.src,
+      thumbnailFile: file.src,
+    }
+
+    if (isSecret) await secretMessages_api.create(message)
+    else await messages_api.create(message)
+    
+    const updatedMessage = await messages_api.search(userId!);
+    setMessages(updatedMessage)
+    navigate(`../`)
+  }
+  
+
+
 
   const tw_article = [
     tw`z-10`,
@@ -62,10 +107,20 @@ const PolaroidForm = () => {
     })
   ]
 
+  const tw_photo_container = [
+    tw`flex justify-center items-center`,
+    tw`bg-gray-900`,
+    css({
+      maxWidth: `${innerWidth}px`,
+      minHeight: `${innerWidth * min_ratio}px`,
+      maxHeight: `${innerWidth * max_ratio}px`,
+      marginBottom: `${padding / 2}px`
+    })
+  ]
   const tw_photo = [
     css({
-      width: `${innerWidth}px`,
-      marginBottom: `${padding / 2}px`
+      width: `${file?.width}px`,
+      height: `${file?.height}px`,
     })
   ]
 
@@ -73,8 +128,9 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .1)]`,
     tw`flex justify-center items-center`,
     css({
+      fontSize: `${fontSize}px`,
       width: `${innerWidth}px`,
-      height: `${innerWidth * 9 / 16}px`,
+      height: `${innerWidth * 10 / 16}px`,
       marginBottom: `${padding / 2}px`
     })
   ]
@@ -82,7 +138,7 @@ const PolaroidForm = () => {
   const tw_textarea = [
     tw`bg-transparent focus:bg-[rgba(1, 1, 1, .1)]`,
     tw`border-none outline-none resize-none`,
-    tw`font-[omyuPretty]`,
+    tw`font-[omyuPretty] text-black`,
     css({
       fontSize: `${fontSize}px`,
       width: `${innerWidth}px`,
@@ -96,6 +152,7 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
+      fontSize: `${fontSize}px`,
       width: `${width}px`,
       height: `${buttonRadius * 1.5}px`
     })
@@ -107,6 +164,7 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
+      fontSize: `${fontSize}px`,
       width: `${width}px`
     })
   ]
@@ -139,7 +197,9 @@ const PolaroidForm = () => {
         <label htmlFor="filepicker">
           {
             file
-              ? <img {...{css:tw_photo, src:URL.createObjectURL(file)}} />
+              ? <div {...{ css: tw_photo_container }}>
+                < img {...{ css: tw_photo, src: URL.createObjectURL(file.src) }} />
+              </div>
               : <div {...{ css: tw_placeholder }}>미디어 파일 업로드</div>
           }
         </label>
@@ -151,7 +211,7 @@ const PolaroidForm = () => {
       </article>
       <section {...{ css: tw_submit }}>
         <div {...{ css: tw`flex justify-around items-center`, }}>
-          <label htmlFor="isSecretCheck">비밀편지로 보내기</label>
+          <label htmlFor="isSecretCheck">비밀편지 예약전송</label>
           <input type="checkbox" id="isSecretCheck" checked={isSecret} onChange={(e)=>setIsSecret(e.target.checked)} />
         </div>
         <AiFillEdit {...{ css: [tw_button], onClick: handleSubmit }} />

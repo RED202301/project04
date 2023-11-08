@@ -28,6 +28,7 @@ const View = () => {
   }
 
   useEffect(() => {
+    window.scrollY = 0
     handleNavigate()
   }, [userId])
   
@@ -36,7 +37,12 @@ const View = () => {
   return (
     <Fragment>
       <FontStyles />
-      <section {...{ css: tw`w-full h-full flex flex-col bg-yellow-100 font-[omyuPretty]` }}>
+      {/* <section {...{ css: tw`w-full h-full flex flex-col bg-yellow-100 font-[omyuPretty]` }}> */}
+      {/* <section {...{ css: tw`w-full h-full flex flex-col font-[omyuPretty] bg-[#e8c292] bg-[url("https://transparenttextures.com/patterns/black-felt.png")]` }}> */}
+      {/* <section {...{ css: tw`w-full h-full flex flex-col font-[omyuPretty] bg-[#005244] bg-[url("https://transparenttextures.com/patterns/grid-me.png")]` }}> */}
+      <section {...{ css: tw`w-full h-full flex flex-col font-[omyuPretty] bg-[#d6efff] bg-[url("https://transparenttextures.com/patterns/inspiration-geometry.png")]` }}>
+      {/* <section {...{ css: tw`w-full h-full flex flex-col font-[omyuPretty] bg-[#ffffff] bg-[url("https://transparenttextures.com/patterns/lined-paper.png")]` }}> */}
+      {/* <section {...{ css: tw`w-full h-full flex flex-col font-[omyuPretty] bg-[#ffffff] bg-[url("https://transparenttextures.com/patterns/lined-paper-2.png")]` }}> */}
         <Header {...{ userId, username }} />
         <Board {...{ userId }} />
         

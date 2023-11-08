@@ -1,5 +1,5 @@
 import tw from "twin.macro";
-import { AiOutlinePaperClip, AiOutlineMenu, AiOutlineShareAlt } from "react-icons/ai"
+import { AiOutlinePaperClip, AiOutlineShareAlt } from "react-icons/ai"
 import { css } from "@emotion/react";
 import { useRecoilValue } from "recoil";
 import mobileSizeState from "../../../recoil/mobileSizeState";
@@ -15,10 +15,10 @@ const Header = ({userId, username}:{userId:string, username:string}) => {
       navigator.share({
         title: "[Send2U]",
         text: `${username}님에게 글을 남겨주세요.`,
-        url: `${front_base_URL}/board/${userId}}`
+        url: `${front_base_URL}/view/${userId}`
       })
     } else {
-      navigator.clipboard.writeText(`${front_base_URL}/board/${userId}}`) 
+      navigator.clipboard.writeText(`${front_base_URL}/view/${userId}`) 
       alert("현재 링크가 클립보드에 저장되었습니다!")
     }
   }

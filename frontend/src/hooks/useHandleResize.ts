@@ -16,7 +16,6 @@ const useHandleResize = () => {
     else {
       width = W_ratio / H_ratio * height;
     }
-    console.log(width, height);
     setMobileSize(() => ({ width, height }));
   };
   return handleResize;
