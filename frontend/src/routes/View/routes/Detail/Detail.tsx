@@ -56,7 +56,7 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
         {myInfo?.userId === message?.senderId || myInfo?.userId === message?.receiverId ? <div {...{onClick:handleRemove, css: fontSize}}>삭제</div>: <div></div>}
       </div>
       {message?.type === 1 && <Stickynote {...{ ...message!, sizeRatio: .6, isOverlayed: true }} />}
-      {message?.type === 2 && <Polaroid {...{ ...message!, sizeRatio: .6, isOverlayed: true }} />}
+      {(message?.type === 2 || message?.type === 3)  && <Polaroid {...{ ...message!, sizeRatio: .6, isOverlayed: true }} />}
       
       <div {...{ css: tw`z-30 w-[60%] flex justify-end text-white` }}>
         <div {...{css: fontSize}}>From.

@@ -22,8 +22,8 @@ const Post = () => {
         <div>마음이 담긴 메모</div>
       </Link>
       <Link {...{ to: "../polaroid", css: [tw_link, fontSize] }}>
-        <div>사진</div>
-        <div>추억이 담긴 사진</div>
+        <div>사진/영상</div>
+        <div>추억이 담긴 사진/영상</div>
       </Link>
       
     </Fragment>

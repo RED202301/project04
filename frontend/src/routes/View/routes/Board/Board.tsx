@@ -13,6 +13,7 @@ const Board = ({ userId }: { userId: string }) => {
   const [messages, setMessages] = useRecoilState(messagesState);
   const fetchMessages = async () => {
     const messages = await messages_api.search(userId);
+    console.log(messages)
     setMessages(messages);
   }
 
@@ -27,7 +28,7 @@ const Board = ({ userId }: { userId: string }) => {
       const {id, top, left, rotate, zindex} = message
       return <PlaceableContainer {...{ key: id, top, left, rotate, zindex, messageId:id }}>
         {message.type === 1 && <Stickynote {...{ ...message, sizeRatio: .3 }} />}
-        {message.type === 2 && <Polaroid {...{ ...message, sizeRatio: .3 }} />}
+        {(message.type === 2 || message.type === 3) && <Polaroid {...{ ...message, sizeRatio: .3 }} />}
       </PlaceableContainer>
     })}
     <TutorialButton/>
