@@ -34,12 +34,12 @@ export const tourOptions = {
       position: "top"
     },
     {
-        title: "목록-비밀편지 모아보기",
+        title: "목록-예약편지 보기",
         element: "#ID1",
         intro:
         (
           <span style={{color: 'black'}}>
-            클릭 시 비밀편지를 <br /> 모아볼 수 있습니다.
+            클릭 시 예약편지를 <br /> 모아볼 수 있습니다.
           </span>
         ),
         position: "top-left-aligned"
@@ -50,7 +50,7 @@ export const tourOptions = {
         intro:
         (
           <span style={{color: 'black'}}>
-            클릭 시 페이지로 <br /> 이동할 수 있습니다.
+            클릭 시 마이페이지로 <br /> 이동할 수 있습니다.
           </span>
         ),
         position: "top"
