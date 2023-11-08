@@ -6,8 +6,11 @@ import com.ssafy.send2u.common.oauth.entity.UserPrincipal;
 import com.ssafy.send2u.common.oauth.exception.OAuthProviderMissMatchException;
 import com.ssafy.send2u.common.oauth.info.OAuth2UserInfo;
 import com.ssafy.send2u.common.oauth.info.OAuth2UserInfoFactory;
+import com.ssafy.send2u.message.entity.Message;
+import com.ssafy.send2u.message.repository.MessageRepository;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -18,14 +21,13 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final MessageRepository messageRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -74,8 +76,22 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 now,
                 now
         );
+        User user1 = userRepository.saveAndFlush(user);
 
-        return userRepository.saveAndFlush(user);
+        Message message = new Message();
+        message.setContent("좌측 상단에 물음표를 눌러서 사용방법을 알아보세용!");
+        message.setReceiver(user);
+        message.setLeft(0.34014f);
+        message.setTop(0.716084f);
+        message.setRotate(2.04852f);
+        message.setZindex(1L);
+        message.setType(1L);
+        message.setBgcolor(1L);
+        message.setSender(userRepository.findByUserId("1111111111"));
+
+        messageRepository.save(message);
+
+        return user1;
     }
 
     private User updateUser(User user, OAuth2UserInfo userInfo) {
