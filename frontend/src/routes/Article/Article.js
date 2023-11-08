@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {Outlet, useParams, useNavigate } from "react-router-dom";
 
 function Article() {
+  const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
   function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -21,7 +22,7 @@ function Article() {
   
 
   useEffect(() => {
-    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`)
+    fetch(`${back_base_URL}/api/v1/articles/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setArticle(data.data);
@@ -32,7 +33,7 @@ function Article() {
   }, [id]);
 
   const handleDelete = () => {
-    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`, {
+    fetch(`${back_base_URL}/api/v1/articles/${id}`, {
       method: 'DELETE',
       headers: {
         "Authorization": `Bearer ${accessToken}`

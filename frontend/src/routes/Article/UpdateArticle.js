@@ -8,8 +8,10 @@ function UpdateArticle() {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken')
   useEffect(() => {
+    const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
+
     // 상세 정보를 가져오는 API 요청
-    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`)
+    fetch(`${back_base_URL}/api/v1/articles/${id}`)
       .then((response) => response.json())
       
       .then((data) => {
@@ -26,14 +28,18 @@ function UpdateArticle() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    // title이랑 content값이 null 일때 alert
+    if (!title || !content) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
     const data = {
   
       articleTitle: title,
       longText: content,
     };
 
-    fetch(`http://192.168.30.218:8080/api/v1/articles/${id}`, {
+    fetch(`${ba}}/api/v1/articles/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

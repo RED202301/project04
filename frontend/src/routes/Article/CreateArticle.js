@@ -2,19 +2,27 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function CreateArticle() {
+  const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
+
   const [articleTitle, setArticleTitle] = useState("");
   const [longText, setLongText] = useState("");
   const accessToken = localStorage.getItem('accessToken')
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
-  
+
+    if (!articleTitle || !longText) {
+      alert('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
+
+    
     const data = {
       articleTitle: articleTitle,
       longText: longText,
     };
   
-    fetch("http://192.168.30.218:8080/api/v1/articles", {
+    fetch(`${back_base_URL}/api/v1/articles`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +88,7 @@ function CreateArticle() {
             <div className="" type="submit" style={{width: '120px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}>
               <p style={{fontSize:'10px', color:'white'}} onClick={handleSubmit}>건의사항 등록</p>
             </div>
-       
+
             <div
               className=""
               type="button"
