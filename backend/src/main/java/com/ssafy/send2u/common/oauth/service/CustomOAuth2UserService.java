@@ -7,7 +7,9 @@ import com.ssafy.send2u.common.oauth.exception.OAuthProviderMissMatchException;
 import com.ssafy.send2u.common.oauth.info.OAuth2UserInfo;
 import com.ssafy.send2u.common.oauth.info.OAuth2UserInfoFactory;
 import com.ssafy.send2u.message.entity.Message;
+import com.ssafy.send2u.message.entity.SecretMessage;
 import com.ssafy.send2u.message.repository.MessageRepository;
+import com.ssafy.send2u.message.repository.SecretMessageRepository;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
+    private final SecretMessageRepository secretMessageRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -88,8 +91,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         message.setType(1L);
         message.setBgcolor(1L);
         message.setSender(userRepository.findByUserId("1111111111"));
-
         messageRepository.save(message);
+
+        SecretMessage secretMessage = new SecretMessage();
+        secretMessage.setContent("고생했어요. 당신의 앞날을 응원합니다.");
+        secretMessage.setReceiver(user);
+        secretMessage.setSender(userRepository.findByUserId("1111111111"));
+        secretMessage.setBgcolor(1L);
+        secretMessage.setType(1L);
+        secretMessageRepository.save(secretMessage);
 
         return user1;
     }
