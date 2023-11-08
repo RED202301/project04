@@ -9,7 +9,7 @@ import {useState, useEffect} from "react"
 const min_ratio = 10 / 16
 const max_ratio = 16 / 10
 
-const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Message &{sizeRatio:number, isOverlayed?:boolean}) => {
+const Polaroid = ({ id, sourceFileUrl, thumbnailFileUrl, content, sizeRatio, isOverlayed, type}:Res_Message &{sizeRatio:number, isOverlayed?:boolean}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
 
   // const buttonInnerRadius = mobileSize.width * .08;
@@ -45,6 +45,7 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
     })
   ]
   const tw_photo = [
+    tw`select-none`,
     css({
       width: `${image?.width}px`,
       height: `${image?.height}px`,
@@ -67,13 +68,13 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
   const navigate = useNavigate()
   const isDragged = useRecoilValue(isDraggedState);
   const handlePointerUpCapture = () => {
-    if (isDragged) return;
+    if (isDragged || isOverlayed) return;
     navigate(`./detail/${id}`)
   }
 
   useEffect(() => {
     const img = new Image()
-    img.src = sourceFileUrl
+    img.src = thumbnailFileUrl
     img.onload = () => {
       const ratio = img.height/img.width;
       if (ratio < min_ratio) {
@@ -103,7 +104,14 @@ const Polaroid = ({ id, sourceFileUrl, content, sizeRatio, isOverlayed}:Res_Mess
         // onTouchEndCapture:handlePointerUpCapture,
       }}>
         <div {...{ css: tw_photo_container }}>
-          < img {...{ css: tw_photo, src: sourceFileUrl }} />
+          {isOverlayed
+            ? (type === 3
+              ? < video {...{ css: tw_photo, src: sourceFileUrl, autoPlay:true, controls:true, }} />
+              : < img {...{ css: tw_photo, src: sourceFileUrl }} />
+            )
+            : < img {...{ css: tw_photo, src: thumbnailFileUrl }} />
+          }
+          
         </div>
         {content && <p {...{ css: tw_p }}>{content}</p>}
       </article>

@@ -12,12 +12,31 @@ import secretMessages_api from "../../../../../api/secretMessages";
 const min_ratio = 10 / 16
 const max_ratio = 16 / 10
 
+  //base64 > 파일 변환
+const dataURLtoFile = (dataurl: string, fileName: string): File => {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)?.[1];
+  const bstr = atob(arr[1]);
+  const n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  for (let i = 0; i < n; i++) {
+    u8arr[i] = bstr.charCodeAt(i);
+  }
+
+  return new File([u8arr], fileName, { type: mime });
+}
+
+
+
 const PolaroidForm = () => {
   const navigate = useNavigate()
   const { userId } = useParams();
   const [content, setContent] = useState("");
-  const [file, setFile] = useState<{src:File, width:number, height:number }>()
-  
+  const [file, setFile] = useState<File>()
+  const [thumnail, setThumnail] = useState<{ src: File|null, width: number, height: number }>({src:null, width:0, height:0})
+  const [mediaType, setMediaType] = useState<2 | 3>();
+
   const mobileSize = useRecoilValue(mobileSizeState);
   const [messages, setMessages] = useRecoilState(messagesState)
   const [isSecret, setIsSecret] = useState(false)
@@ -28,44 +47,60 @@ const PolaroidForm = () => {
   const buttonRadius = buttonInnerRadius + buttonPadding * 2;
 
   const width = mobileSize.width * .6
-  const innerWidth = width * 4 /5
+  const innerWidth = width * 4 / 5
   const padding = width / 10
   const fontSize = innerWidth / 10;
 
-  const readImageFile = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file)
-    
-    reader.onload = (e) => {
-      const img = new Image();
-      img.src = e.target.result as string
-      img.onload = () => {
-        const ratio = img.height/img.width;
-        if (ratio < min_ratio) {
-          const width = innerWidth
-          const height = width * ratio;
-          setFile({src:file, width, height})
-        }
-        else if (ratio < max_ratio) {
-          const width = innerWidth
-          const height = width * ratio;
-          setFile({src:file, width, height})
-        }
-        else if (max_ratio < ratio) {
-          const height = innerWidth * max_ratio
-          const width = height / ratio;
-          setFile({src:file, width, height})
-        }
-        // setFile({src:file, width:img.width, height: img.height})
-      }
-    }
-    
-  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
-    if(file) readImageFile(file)
+    if (file) {
+      setFile(file)
+      setMediaType(file.type.startsWith("video") ? 3 : 2);
+      if (file.type.startsWith("video")) {
+        const videoElement = document.createElement("video")
+        videoElement.src = URL.createObjectURL(file)
+        videoElement.currentTime = 2
+        videoElement.onloadeddata = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = videoElement.videoWidth
+          canvas.height = videoElement.videoHeight
+          const ctx = canvas.getContext("2d")
+          ctx.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight)
+          const thumnail = dataURLtoFile(canvas.toDataURL(), 'thumbnail.png')
+          const ratio = videoElement.videoHeight / videoElement.videoWidth;
+          if (ratio < max_ratio) {
+            const width = innerWidth
+            const height = width * ratio;
+            setThumnail({ src: thumnail, width, height })
+          }
+          else if (max_ratio <= ratio) {
+            const height = innerWidth * max_ratio
+            const width = height / ratio;
+            setThumnail({ src: thumnail, width, height })
+          }
+        }
+      } else {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+          const ratio = img.height / img.width;
+          if (ratio < max_ratio) {
+            const width = innerWidth
+            const height = width * ratio;
+            setThumnail({ src: file, width, height })
+          }
+          else if (max_ratio <= ratio) {
+            const height = innerWidth * max_ratio
+            const width = height / ratio;
+            setThumnail({ src: file, width, height })
+          }
+        
+        }
+      }
+    }
   }
+
 
   const handleSubmit = async () => {
     if (!file) {
@@ -75,14 +110,14 @@ const PolaroidForm = () => {
     
     const message = {
       receiverId: userId!,
-      type: 2,
+      type: mediaType,
       rotate: Math.random() * 20 - 10,
-      top: .5,
-      left: .5,
+      top: .35,
+      left: .35,
       zindex: messages.length,
       content,
-      sourceFile: file.src,
-      thumbnailFile: file.src,
+      sourceFile: file,
+      thumbnailFile: thumnail.src,
     }
 
     if (isSecret) await secretMessages_api.create(message)
@@ -92,8 +127,6 @@ const PolaroidForm = () => {
     setMessages(updatedMessage)
     navigate(`../`)
   }
-  
-
 
 
   const tw_article = [
@@ -119,8 +152,8 @@ const PolaroidForm = () => {
   ]
   const tw_photo = [
     css({
-      width: `${file?.width}px`,
-      height: `${file?.height}px`,
+      width: `${thumnail?.width}px`,
+      height: `${thumnail?.height}px`,
     })
   ]
 
@@ -184,21 +217,21 @@ const PolaroidForm = () => {
   return (
     <Fragment>
       <label {...{ css: tw_filepicker }}>
-          미디어 파일 업로드
-          <input {...{
-            type: "file",
-            accept: `image/*`,
-            css: tw`hidden`,
-            id: "filepicker",
-            onChange: handleFileChange
-          }} />
+        미디어 파일 업로드
+        <input {...{
+          type: "file",
+          accept: `image/*, video/*`,
+          css: tw`hidden`,
+          id: "filepicker",
+          onChange: handleFileChange
+        }} />
       </label>
       <article {...{ css: tw_article }}>
         <label htmlFor="filepicker">
           {
-            file
+            thumnail.src
               ? <div {...{ css: tw_photo_container }}>
-                < img {...{ css: tw_photo, src: URL.createObjectURL(file.src) }} />
+                < img {...{ css: tw_photo, src: URL.createObjectURL(thumnail.src) }} />
               </div>
               : <div {...{ css: tw_placeholder }}>미디어 파일 업로드</div>
           }
@@ -212,12 +245,11 @@ const PolaroidForm = () => {
       <section {...{ css: tw_submit }}>
         <div {...{ css: tw`flex justify-around items-center`, }}>
           <label htmlFor="isSecretCheck">비밀편지 예약전송</label>
-          <input type="checkbox" id="isSecretCheck" checked={isSecret} onChange={(e)=>setIsSecret(e.target.checked)} />
+          <input type="checkbox" id="isSecretCheck" checked={isSecret} onChange={(e) => setIsSecret(e.target.checked)} />
         </div>
         <AiFillEdit {...{ css: [tw_button], onClick: handleSubmit }} />
       </section>
     </Fragment>
   );
 };
-
 export default PolaroidForm;
