@@ -51,7 +51,7 @@ const SecretMessages = ({userId}:{userId:string}) => {
       
     {secretMessages.map(message => {
       if(message.type === 1) return <div {...{css:tw`m-1 z-10`, key:message.id}}><Stickynote {...{...message, sizeRatio:.3 }} /></div>
-      if(message.type === 2) return <div {...{css:tw`m-1 z-10`, key:message.id}}><Polaroid {...{...message, sizeRatio:.3 }} /></div>
+      if(message.type === 2 || message.type === 3) return <div {...{css:tw`m-1 z-10`, key:message.id}}><Polaroid {...{...message, sizeRatio:.3 }} /></div>
     })}
     </div>
     
