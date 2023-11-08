@@ -7,8 +7,8 @@ function UpdateArticle() {
   const [content, setContent] = useState("");
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('accessToken')
+  const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
   useEffect(() => {
-    const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
 
     // 상세 정보를 가져오는 API 요청
     fetch(`${back_base_URL}/api/v1/articles/${id}`)
@@ -39,7 +39,7 @@ function UpdateArticle() {
       longText: content,
     };
 
-    fetch(`${ba}}/api/v1/articles/${id}`, {
+    fetch(`${back_base_URL}/api/v1/articles/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -107,19 +107,19 @@ function UpdateArticle() {
         <div className="mainrow">
           <div className="updaterow">
             <div className="col">
-              <button  onClick={handleSubmit} style={{color:'white', width: '100px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}>
+              <p  onClick={handleSubmit} style={{cursor:'pointer',  color:'white', width: '100px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}>
                 
                 저장
-              </button>
+              </p>
             </div>
             <div className="col">
-              <button
+              <p
                style={{width: '100px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}
                 type="button"
                 // 여기에 취소 버튼 클릭 시 동작할 로직을 추가할 수 있습니다.
               >
                 <a href={"/article"} style={{color:'white'}}>취소</a>
-              </button>
+              </p>
             </div>
           </div>
         </div>

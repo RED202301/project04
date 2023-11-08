@@ -56,7 +56,7 @@ function Article() {
       <h2 style={{ textAlign: 'center', marginTop:'5%',marginBottom: '5%' }}>건의사항 상세</h2>
 
       <div style={{ marginBottom: '2%'}}>
-        <label htmlFor="articleId">게시글 ID</label>
+        {/* <label htmlFor="articleId">게시글 ID</label> */}
         <input
           type="text"
           id="articleId"
