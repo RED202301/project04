@@ -97,8 +97,8 @@ function MainArticle() {
           </div>
         </div>
         <div style={{display:'flex', justifyContent:'center', marginTop:'-20%'}}>
-        <button style={{backgroundColor:'#083C0D', color: 'white'}} onClick={goToPreviousPage} disabled={currentPage === 1}>이전</button>
-            <button style={{backgroundColor:'#083C0D', color:'white'}} onClick={goToNextPage} disabled={currentPage === Math.ceil(articles.length / articlesPerPage)}>다음</button>
+        <button className="hover" style={{backgroundColor:'#083C0D', color: 'white'}} onClick={goToPreviousPage} disabled={currentPage === 1}>이전</button>
+            <button className="hover" style={{backgroundColor:'#083C0D', color:'white'}} onClick={goToNextPage} disabled={currentPage === Math.ceil(articles.length / articlesPerPage)}>다음</button>
           </div>
       </div>
     </div>
