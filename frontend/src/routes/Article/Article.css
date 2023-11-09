@@ -138,18 +138,19 @@
   width:25%;
 }
 .row {
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  width: 30%;
-  /* justify-content: center; */
+  display:flex;
+  /* grid-template-columns: 1fr 1fr; */
+  width: 100%;
+  justify-content: center;
+  /* align-items: center; */
 
 }
 
 .updaterow {
-  margin-top:10%;
+  margin-top:15%;
   display:grid;
   grid-template-columns: 1fr 1fr;
-  width: 30%;
+  width: 100%;
   /* justify-content: center; */
 
 }
