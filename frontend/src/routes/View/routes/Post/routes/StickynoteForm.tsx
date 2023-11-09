@@ -46,7 +46,7 @@ const SticknoteForm = () => {
   const buttonPadding = buttonInnerRadius / 8
   const buttonRadius = buttonInnerRadius + buttonPadding * 2;
 
-  const width = mobileSize.width * .6
+  const width = mobileSize.width * .8
   const innerWidth = width * 4 /5
   const padding = width / 10
   const fontSize = innerWidth / 10;
