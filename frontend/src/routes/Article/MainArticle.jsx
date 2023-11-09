@@ -62,13 +62,13 @@ function MainArticle() {
           <table className="table">
             <thead>
               <tr style={{width:'100%', display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr',textAlign:'center'}}>
-                <p >ID</p>
-                <p >제목</p>
-                <p >작성자</p>
-                <p >날짜</p>
+                <td >ID</td>
+                <td >제목</td>
+                <td >작성자</td>
+                <td >날짜</td>
               </tr>
             </thead>
-            <div style={{marginTop:'5%'}}>
+            <tbody style={{marginTop:'5%'}}>
             {currentArticles.length > 0 && currentArticles.map((data) => {
               const displayTitle = data.articleTitle.length > 10 ? `${data.articleTitle.substring(0, 10)}...` : data.articleTitle;
               return (
@@ -88,7 +88,7 @@ function MainArticle() {
                   </tr>
                 )
               })}
-            </div>
+            </tbody>
           </table>
         </div>
         <div style={{display:'flex', justifyContent:'flex-end'}}>
