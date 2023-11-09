@@ -18,4 +18,6 @@ public abstract class OAuth2UserInfo {
     public abstract String getName();
 
     public abstract String getImageUrl();
+
+    public abstract String setImageUrl();
 }

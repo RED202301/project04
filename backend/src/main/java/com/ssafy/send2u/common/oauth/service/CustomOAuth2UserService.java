@@ -12,7 +12,6 @@ import com.ssafy.send2u.message.repository.MessageRepository;
 import com.ssafy.send2u.message.repository.SecretMessageRepository;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -22,6 +21,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +54,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
         User savedUser = userRepository.findByUserId(userInfo.getId());
+        userInfo.setImageUrl();
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {

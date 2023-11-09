@@ -35,4 +35,24 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
         return (String) properties.get("thumbnail_image");
     }
+
+    @Override
+    public String setImageUrl() {
+
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+
+        if (properties == null) {
+            return null;
+        }
+
+        String http =  (String) properties.get("thumbnail_image");
+        String https = http.replaceFirst("^http:/", "https:/");
+
+        properties.replace("thumbnail_image",(Object) https);
+
+        return https;
+
+    }
+
+
 }
