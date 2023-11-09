@@ -19,8 +19,8 @@ const Polaroid = ({ id, sourceFileUrl, thumbnailFileUrl, content, sizeRatio, isO
 
 
   const width = mobileSize.width * sizeRatio 
-  const innerWidth = width * 4 /5
-  const padding = width / 10
+  const innerWidth = width * 9 / 10
+  const padding = width / 20
   const fontSize = innerWidth / 10;
 
 

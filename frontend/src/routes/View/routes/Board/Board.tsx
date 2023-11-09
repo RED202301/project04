@@ -13,7 +13,6 @@ const Board = ({ userId }: { userId: string }) => {
   const [messages, setMessages] = useRecoilState(messagesState);
   const fetchMessages = async () => {
     const messages = await messages_api.search(userId);
-    console.log(messages)
     setMessages(messages);
   }
 
