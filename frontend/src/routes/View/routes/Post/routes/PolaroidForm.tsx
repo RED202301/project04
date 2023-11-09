@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react"
+import { useEffect, useState, Fragment } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 import tw, { css } from "twin.macro"
 import messages_api from "../../../../../api/messages";
@@ -7,26 +7,16 @@ import mobileSizeState from "../../../../../recoil/mobileSizeState";
 import {AiFillEdit} from "react-icons/ai"
 import messagesState from "../../../../../recoil/messagesState";
 import secretMessages_api from "../../../../../api/secretMessages";
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 
+const ffmpeg = createFFmpeg({ log: false});
+
+const init= async () => {
+  await ffmpeg.load();
+};
 
 const min_ratio = 10 / 16
 const max_ratio = 16 / 10
-
-  //base64 > 파일 변환
-const dataURLtoFile = (dataurl: string, fileName: string): File => {
-  const arr = dataurl.split(',');
-  const mime = arr[0].match(/:(.*?);/)?.[1];
-  const bstr = atob(arr[1]);
-  const n = bstr.length;
-  const u8arr = new Uint8Array(n);
-
-  for (let i = 0; i < n; i++) {
-    u8arr[i] = bstr.charCodeAt(i);
-  }
-
-  return new File([u8arr], fileName, { type: mime });
-}
-
 
 
 const PolaroidForm = () => {
@@ -40,6 +30,8 @@ const PolaroidForm = () => {
   const mobileSize = useRecoilValue(mobileSizeState);
   const [messages, setMessages] = useRecoilState(messagesState)
   const [isSecret, setIsSecret] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   
 
   const buttonInnerRadius = mobileSize.width * .08;
@@ -51,34 +43,41 @@ const PolaroidForm = () => {
   const padding = width / 10
   const fontSize = innerWidth / 10;
 
+  useEffect(() => {
+    init();
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
       setFile(file)
+      setIsLoading(true);
       setMediaType(file.type.startsWith("video") ? 3 : 2);
       if (file.type.startsWith("video")) {
         const videoElement = document.createElement("video")
         videoElement.src = URL.createObjectURL(file)
         videoElement.currentTime = 2
         videoElement.onloadeddata = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = videoElement.videoWidth
-          canvas.height = videoElement.videoHeight
-          const ctx = canvas.getContext("2d")
-          ctx.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight)
-          const thumnail = dataURLtoFile(canvas.toDataURL(), 'thumbnail.png')
-          const ratio = videoElement.videoHeight / videoElement.videoWidth;
-          if (ratio < max_ratio) {
-            const width = innerWidth
-            const height = width * ratio;
-            setThumnail({ src: thumnail, width, height })
-          }
-          else if (max_ratio <= ratio) {
-            const height = innerWidth * max_ratio
-            const width = height / ratio;
-            setThumnail({ src: thumnail, width, height })
-          }
+          (async () => {
+            await ffmpeg.FS('writeFile', 'thumnail', await fetchFile(file));
+            await ffmpeg.run('-i', 'thumnail', '-t', '2.0', '-ss', '2.0', '-f', 'gif', 'output.gif');
+            const data = ffmpeg.FS('readFile', 'output.gif');
+            
+            const thumnail = new File([new Blob([data.buffer], { type: 'image/gif' })], "thumnail.gif")
+            const ratio = videoElement.videoHeight / videoElement.videoWidth;
+            if (ratio < max_ratio) {
+              const width = innerWidth
+              const height = width * ratio;
+              await setThumnail({ src: thumnail, width, height })
+            }
+            else if (max_ratio <= ratio) {
+              const height = innerWidth * max_ratio
+              const width = height / ratio;
+              await setThumnail({ src: thumnail, width, height })
+            }
+            setIsLoading(false);
+          })();
+          
         }
       } else {
         const img = new Image();
@@ -96,6 +95,7 @@ const PolaroidForm = () => {
             setThumnail({ src: file, width, height })
           }
         
+          setIsLoading(false);
         }
       }
     }
@@ -107,6 +107,7 @@ const PolaroidForm = () => {
       alert("미디어 파일을 업로드 해주세요.")
       return
     }
+    if(isSending) return
     
     const message = {
       receiverId: userId!,
@@ -119,10 +120,10 @@ const PolaroidForm = () => {
       sourceFile: file,
       thumbnailFile: thumnail.src,
     }
-
+    setIsSending(true);
     if (isSecret) await secretMessages_api.create(message)
     else await messages_api.create(message)
-    
+    setIsSending(false);
     const updatedMessage = await messages_api.search(userId!);
     setMessages(updatedMessage)
     navigate(`../`)
@@ -229,10 +230,12 @@ const PolaroidForm = () => {
       <article {...{ css: tw_article }}>
         <label htmlFor="filepicker">
           {
-            thumnail.src
-              ? <div {...{ css: tw_photo_container }}>
+            file
+              ? !isLoading
+                ?<div {...{ css: tw_photo_container }}>
                 < img {...{ css: tw_photo, src: URL.createObjectURL(thumnail.src) }} />
-              </div>
+                </div>
+                : <div {...{ css: tw_placeholder }}>불러오는 중</div>
               : <div {...{ css: tw_placeholder }}>미디어 파일 업로드</div>
           }
         </label>
