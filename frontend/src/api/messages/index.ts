@@ -37,7 +37,6 @@ const messages_api = {
     const url = `${MESSAGES_API_URL}`
     try {
       const response = await axios.post(url, new_message, { headers })
-      console.log(response)
       return response.data.data as Res_Message;
     } catch (error) {
       console.log(error)
