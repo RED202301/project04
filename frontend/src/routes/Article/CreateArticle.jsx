@@ -50,7 +50,7 @@ function CreateArticle() {
   //   setFile(event.target.files[0]);
   // };
   return (
-    <div className="maintable">
+    <div className="maintable" style={{fontFamily:'omyuPretty'}}>
       <div className="py-5 text-center" style={{marginTop:'5%', display:'flex', justifyContent:'center'}}>
         <h2>건의합니다!!</h2>
       </div>
@@ -83,21 +83,36 @@ function CreateArticle() {
           />
         </div>
         <div className="mainrow">
-        <div className="row">
-   
-            <div className="" type="submit" style={{width: '120px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}>
-              <p style={{fontSize:'10px', color:'white'}} onClick={handleSubmit}>건의사항 등록</p>
+        <div className="updaterow" style={{marginTop:'8.5%'}}>
+        <div className="col" style={{display:'flex', justifyContent:'center'}}>
+
+            <div className="" type="submit" 
+            style={{display:'flex',
+            cursor:'pointer', 
+            justifyContent:'center', 
+            width: '30%',
+             height:'10%', 
+             backgroundColor:'#083C0D' }}>
+              <p style={{color:'white'}} onClick={handleSubmit}>등록</p>
             </div>
+        </div>
+        <div className="col" style={{display:'flex', justifyContent:'center'}}>
 
             <div
               className=""
               type="button"
-              style={{ width: '120px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}
+              style={{display:'flex', 
+              justifyContent:'center',
+              cursor:'pointer', 
+              width: '30%', 
+              height:'10%', 
+              backgroundColor:'#083C0D' }}
               onClick={() => {
                 window.location.href = "/article"; // 취소 버튼을 눌렀을 때 홈페이지로 이동
               }}
             >
-              <p style={{fontSize:'10px', color:'white'}}>취소</p>
+              <p style={{ color:'white'}}>취소</p>
+            </div>
             </div>
           </div>
         </div>
