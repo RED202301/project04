@@ -106,15 +106,28 @@ function UpdateArticle() {
         </div>
         <div className="mainrow">
           <div className="updaterow">
-            <div className="col">
-              <p  onClick={handleSubmit} style={{cursor:'pointer',  color:'white', width: '100px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}>
+            <div className="col" style={{display:'flex', justifyContent:'center'}}>
+              <p  onClick={handleSubmit} 
+              style={{display:'flex', 
+              justifyContent:'center',
+              cursor:'pointer',  
+              color:'white', 
+              width: '30%', 
+              height:'10%',
+              marginTop:'10%', 
+              backgroundColor:'#083C0D' }}>
                 
                 저장
               </p>
             </div>
-            <div className="col">
+            <div className="col" style={{display:'flex', justifyContent:'center'}}>
               <p
-               style={{width: '100px', height:'15px',marginTop:'10%', backgroundColor:'#083C0D' }}
+               style={{display:'flex', 
+               justifyContent:'center', 
+               width: '30%',
+                height:'10%',
+                marginTop:'10%', 
+                backgroundColor:'#083C0D' }}
                 type="button"
                 // 여기에 취소 버튼 클릭 시 동작할 로직을 추가할 수 있습니다.
               >
