@@ -34,7 +34,7 @@ public class SecretMessageController {
 
     @ApiOperation(value = "비밀메시지전체조회")
     @GetMapping()
-    public ResponseEntity<ApiResponse> getAllSecretMessages() {
+    public ResponseEntity<ApiResponse> getAllSecretMessages() throws Exception {
         List<SecretMessageDto> list = secretMessageService.getAllSecretMessages();
 
         ApiResponse apiResponse = ApiResponse.builder()

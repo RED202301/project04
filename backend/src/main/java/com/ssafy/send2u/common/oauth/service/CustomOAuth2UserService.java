@@ -12,6 +12,8 @@ import com.ssafy.send2u.message.repository.MessageRepository;
 import com.ssafy.send2u.message.repository.SecretMessageRepository;
 import com.ssafy.send2u.user.entity.user.User;
 import com.ssafy.send2u.user.repository.user.UserRepository;
+import com.ssafy.send2u.util.AESUtil;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -97,7 +99,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         messageRepository.save(message);
 
         SecretMessage secretMessage = new SecretMessage();
-        secretMessage.setContent("고생했어요. 당신의 앞날을 응원합니다.");
+
+        String encryptedMessage;
+        try {
+            encryptedMessage = AESUtil.encrypt("고생했어요. 당신의 앞날을 응원합니다.");
+        } catch (Exception e) {
+            throw new IllegalArgumentException("메시지 내용 암호화에 실패했습니다.");
+        }
+        secretMessage.setContent(encryptedMessage);
         secretMessage.setReceiver(user);
         secretMessage.setSender(userRepository.findByUserId("1111111111"));
         secretMessage.setBgcolor(1L);
