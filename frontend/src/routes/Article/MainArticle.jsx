@@ -56,7 +56,7 @@ function MainArticle() {
     <div className="container" style={{fontFamily:"omyuPretty"}}>
       <div style={{width:'100%', height:'80%'}}>
         <div className="py-5 text-center" style={{marginTop:'5%', display:'flex',justifyContent:"center"}}>
-          <h2>문의게시글</h2>
+          <h2 sytle={{color:'black'}}>문의게시글</h2>
         </div>
         <div className='maintables'>
           <table className="table">
