@@ -45,6 +45,10 @@ const Post = () => {
           <div css={tw`flex`}><Camera css={tw`mr-2`} />추억이 담긴 사진/영상</div>
         </Link>
         <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </Fragment>
   );
