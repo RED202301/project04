@@ -28,29 +28,9 @@ public class SecretMessageService {
     private final AwsService awsService;
 
     @Transactional
-    public List<SecretMessageDto> getAllSecretMessages() throws Exception {
-        List<SecretMessage> list = secretMessageRepository.findAll();
-//        List<SecretMessageDto> list = secretMessageRepository.findAll()
-//                .stream()
-//                .map(SecretMessageDto::new)
-//                .collect(Collectors.toList());
-        for (SecretMessage message : list) {
-            if (message.getContent() == null) {
-                continue;
-            }
-            String encryptedContent = AESUtil.encrypt(message.getContent());
-            message.setContent(encryptedContent);
-            secretMessageRepository.save(message);
-        }
-
-        return null;
-
-    }
-
-    @Transactional
     public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 9, 16, 45);
+        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 16, 16, 45);
 
         String userId;
 
