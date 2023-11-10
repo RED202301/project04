@@ -115,6 +115,7 @@ const SticknoteForm = () => {
 
   return (
     <Fragment>
+      <div></div>
       <section {...{ css: tw_colorpicker }}>
         {bgcolors.map((tw_bg_color, i) => (
           <label {...{
@@ -143,6 +144,7 @@ const SticknoteForm = () => {
         </div>
         <AiFillEdit {...{ css: [tw_button], onClick: handleSubmit }} />
       </section>
+      <div></div>
     </Fragment>
   );
 }

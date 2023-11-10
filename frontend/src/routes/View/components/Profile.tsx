@@ -61,7 +61,7 @@ const Profile: React.FC = () => {
                 tw`fixed inset-0 flex items-center justify-end z-40 bg-black bg-opacity-50 ml-auto mr-auto`,
             ]} style={{width: width}}
             >
-            <div css={tw`bg-white p-4 shadow-md ml-auto h-full w-[80px]`}>
+            <div css={tw`bg-white p-4 shadow-md ml-auto h-full w-[90px]`}>
               <div css={tw`flex justify-end`}>
                 <div onClick={toggleMenu} css={tw`mt-2 w-7 sm:w-10 lg:w-11 lg:h-11`}>
                   <img src={Close} alt="Close" css={tw`w-[100%]`} />
@@ -76,7 +76,13 @@ const Profile: React.FC = () => {
                     <li css={tw`p-[10px] text-black`}>
                       <Signout/>
                     </li>
-                    <hr/>
+                    <hr css={tw`mb-0`}/>
+                    <li css={tw`p-[10px]`}>
+                    <Link to='/article' css={tw`text-black hover:text-black`}>
+                      건의함
+                    </Link>
+                    </li>
+                    <hr css={tw`mt-0`}/>
                     <li css={tw``}>
                     <a href='https://www.instagram.com/send2u__' css={tw`flex justify-center m-0 p-0`}>
                       <img {...{src:insta, css:tw`w-[50%]`,alt:"인스타" }}/>
