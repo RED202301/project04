@@ -7,7 +7,7 @@ function MainArticle() {
 
   const [articles, setArticles] = useState([]); 
   const [currentPage, setCurrentPage] = useState(1); 
-  const articlesPerPage = 15; 
+  const articlesPerPage = 12; 
 
   function formatDate(dateString) {
     const date = new Date(dateString);
