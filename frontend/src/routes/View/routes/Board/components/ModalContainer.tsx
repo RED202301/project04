@@ -1,6 +1,8 @@
 import { PropsWithChildren} from "react"
 import { useNavigate } from "react-router-dom"
+import { useRecoilValue } from "recoil"
 import tw, { css } from "twin.macro"
+import mobileSizeState from "../../../../../recoil/mobileSizeState"
 
 const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:boolean}) => {
   const navigate = useNavigate()
@@ -9,11 +11,16 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
   //   tw`bg-white w-full`,
   //   tw`bg-[rgba(1, 1, 1, .5)]`,
   // ]
+
+  const mobileSize = useRecoilValue(mobileSizeState)
+  const tw_mobilesize = [
+    css({width: `${mobileSize.width}px`, height:`${mobileSize.height}px`})
+  ]
   const tw_fullsize = [
-    tw`w-full h-screen`,
-    // css({
-    //   height:`${mobileSize.height - mobileSize.width * .12}px`
-    // })
+    tw`w-full`,
+    css({
+      height:`${window.innerHeight * 2}px`
+    })
   ]
   const tw_container = [
     isOverlayed ? tw`z-10`:tw``,
@@ -21,7 +28,7 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
     tw`flex flex-col justify-center items-center`,
   ]
   const tw_dimmed = [
-    ...tw_container,
+    isOverlayed ? tw`z-10`:tw``,
     tw`bg-[rgba(1, 1, 1, .5)]`,
     css({
       backdropFilter:`blur(2px)`
@@ -29,11 +36,12 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
   ]
   const tw_abs = tw`absolute`
   return (
-    <div {...{ css: [tw_container, tw_fullsize, tw_abs] }}>
+    <div {...{ css: [tw_container, tw_mobilesize, tw_abs] }}>
       <div {...{
         css: [
           tw_container,
-          tw`w-full h-screen`,
+          // tw`w-full h-screen`,
+          tw_mobilesize,
         ]
       }}>
         <div {...{
