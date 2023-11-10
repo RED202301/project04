@@ -100,7 +100,7 @@ const SticknoteForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
-      fontSize: `${fontSize}px`,
+      fontSize: `${fontSize*4/5}px`,
       width: `${width}px`
     })
   ]
@@ -134,6 +134,9 @@ const SticknoteForm = () => {
           </label>
         ))}
       </section>
+
+      <br />
+
       <article {...{ css: tw_article }}>
         <textarea {...{
           css: tw_textarea,
@@ -141,6 +144,9 @@ const SticknoteForm = () => {
           value: content, onChange: handleContentChange
         }}></textarea>
       </article>
+      
+      <br />
+      
       <section {...{ css: tw_submit }}>
         <div {...{ css: tw`flex justify-around items-center`, }}>
           <label htmlFor="isSecretCheck">비밀편지 예약전송</label>
