@@ -22,26 +22,29 @@ const Post = () => {
     font-size: ${mobileSize.width * 0.04}px;
     `
   ]
-  const tw_link = [tw`w-[80%] h-[20%] bg-white z-10 flex justify-around items-center rounded-md text-black hover:text-black mr-6 ml-6 mb-28`, 
-                   css`
-                   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset
-                   `
-                  ]
+  const tw_link = [
+    tw`w-[80%] h-[20%] bg-white z-10 flex justify-around items-center rounded-md text-black hover:text-black`,
+    css`
+      box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset
+    `
+  ];
   const tw_container = [
-    tw`flex-1 flex flex-wrap justify-center content-center items-center`,
+    tw`w-full flex-1 flex flex-col flex-wrap justify-around items-center`,
   ]
   const Memo = BsPencilFill
   const Camera = BsCameraFill
   return (
     <Fragment>
-      <div {...{css:tw_header}}>메세지 작성</div>
+      <div {...{ css: tw_header }}>메세지 작성</div>
       <div {...{ css: tw_container }}>
-      <Link {...{ to: "../stickynote", css: [tw_link, fontSize] }}>
-        <div css={tw`flex`}><Memo css={tw`mr-2`}/>마음이 담긴 메모</div>
-      </Link>
-      <Link {...{ to: "../polaroid", css: [tw_link, fontSize] }}>
-        <div css={tw`flex`}><Camera css={tw`mr-2`}/>추억이 담긴 사진/영상</div>
-      </Link>
+        <div></div>
+        <Link {...{ to: "../stickynote", css: [tw_link, fontSize] }}>
+          <div css={tw`flex`}><Memo css={tw`mr-2`} />마음이 담긴 메모</div>
+        </Link>
+        <Link {...{ to: "../polaroid", css: [tw_link, fontSize] }}>
+          <div css={tw`flex`}><Camera css={tw`mr-2`} />추억이 담긴 사진/영상</div>
+        </Link>
+        <div></div>
       </div>
     </Fragment>
   );
