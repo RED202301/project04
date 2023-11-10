@@ -46,8 +46,6 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
 
   return (
     <Fragment>
-      <div {...{ css: tw`w-full` }}></div>
-      <div {...{ css: tw`w-full` }}></div>
       <div {...{ css: tw`z-30 w-[60%] flex justify-between items-center text-white` }}>
         <div {...{ css: [tw`z-30 flex flex-col items-center`, fontSize] }}>
           <div>{trimDate(message?.createdAt)}</div>
@@ -65,8 +63,6 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
           </span>
         </div>
       </div>
-      <div {...{ css: tw`w-full` }}></div>
-      <div {...{ css: tw`w-full` }}></div>
     </Fragment>
   )
 }
