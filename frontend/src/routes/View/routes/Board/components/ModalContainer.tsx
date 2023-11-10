@@ -11,13 +11,6 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
   // ]
   const tw_fullsize = [
     tw`w-full h-screen`,
-    css`
-    white-space:pre-wrap;
-    ::-webkit-scrollbar { display: none; }
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  `,
-css({ overflowY: 'scroll' })
     // css({
     //   height:`${mobileSize.height - mobileSize.width * .12}px`
     // })
@@ -25,7 +18,7 @@ css({ overflowY: 'scroll' })
   const tw_container = [
     isOverlayed ? tw`z-10`:tw``,
     // tw`flex flex-col flex-wrap justify-around items-center`,
-    tw`flex flex-col justify-around items-center`,
+    tw`flex flex-col justify-center items-center`,
   ]
   const tw_dimmed = [
     ...tw_container,

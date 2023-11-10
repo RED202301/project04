@@ -10,6 +10,7 @@ import mobileSizeState from "../../../../recoil/mobileSizeState"
 import secretMessagesState from "../../../../recoil/secretMessagesState"
 import messagesState from "../../../../recoil/messagesState"
 import secretMessages_api from "../../../../api/secretMessages"
+import {BiTrash} from "react-icons/bi"
 
 const Detail = ({isSecret}:{isSecret?:boolean}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
@@ -46,17 +47,17 @@ const Detail = ({isSecret}:{isSecret?:boolean}) => {
 
   return (
     <Fragment>
-      <div {...{ css: tw`z-30 w-[60%] flex justify-between items-center text-white` }}>
+      <div {...{ css: tw`z-30 w-[75%] flex justify-between items-center text-white` }}>
         <div {...{ css: [tw`z-30 flex flex-col items-center`, fontSize] }}>
-          <div>{trimDate(message?.createdAt)}</div>
-          <div>{trimTime(message?.createdAt)}</div>
+          <div>{trimDate(message?.createdAt)} {trimTime(message?.createdAt)}</div>
         </div>
-        {myInfo?.userId === message?.senderId || myInfo?.userId === message?.receiverId ? <div {...{onClick:handleRemove, css: fontSize}}>삭제</div>: <div></div>}
+        {myInfo?.userId === message?.senderId || myInfo?.userId === message?.receiverId ? <div {...{onClick:handleRemove, css: [fontSize, tw`flex items-center`]}}><BiTrash/></div>: <div></div>}
       </div>
+      <br />
       {message?.type === 1 && <Stickynote {...{ ...message!, sizeRatio: .8, isOverlayed: true }} />}
       {(message?.type === 2 || message?.type === 3)  && <Polaroid {...{ ...message!, sizeRatio: .8, isOverlayed: true }} />}
-      
-      <div {...{ css: tw`z-30 w-[60%] flex justify-end text-white` }}>
+      <br />
+      <div {...{ css: tw`z-30 w-[75%] flex justify-end text-white` }}>
         <div {...{css: fontSize}}>From.
           <span {...{onClick:()=>navigate(`/view/${message?.senderId}`)}}>
             {message?.senderName}

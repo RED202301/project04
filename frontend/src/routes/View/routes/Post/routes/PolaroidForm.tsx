@@ -187,7 +187,7 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
-      fontSize: `${fontSize*2/3}px`,
+      fontSize: `${fontSize*4/5}px`,
       width: `${width}px`,
       height: `${buttonRadius}px`
     })
@@ -199,7 +199,7 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
-      fontSize: `${fontSize*2/3}px`,
+      fontSize: `${fontSize*4/5}px`,
       width: `${width}px`
     })
   ]
@@ -229,6 +229,9 @@ const PolaroidForm = () => {
           onChange: handleFileChange
         }} />
       </label>
+
+      <br />
+      
       <article {...{ css: tw_article }}>
         <label htmlFor="filepicker">
           {
@@ -245,6 +248,10 @@ const PolaroidForm = () => {
           value: content, onChange: (e) => setContent(e.target.value)
         }}></textarea>
       </article>
+
+      <br />
+      
+
       <section {...{ css: tw_submit }}>
         <div {...{ css: tw`flex justify-around items-center`, }}>
           <label htmlFor="isSecretCheck">비밀편지 예약전송</label>
