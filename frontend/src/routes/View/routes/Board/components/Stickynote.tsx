@@ -36,7 +36,7 @@ const Stickynote = ({ id, bgcolor, content, sizeRatio, isOverlayed}:Res_Message 
 
   const tw_p = [
     css`
-    white-space:pre-wrap;
+    white-space:pre;
     ::-webkit-scrollbar { display: none; }
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -44,7 +44,9 @@ const Stickynote = ({ id, bgcolor, content, sizeRatio, isOverlayed}:Res_Message 
     css({
       width:innerWidth,
       height: innerWidth,
-      overflowY:"scroll"
+      textWrap:"wrap",
+      overflowWrap:"anywhere",
+      overflowY: "scroll"
     })
   ]
 
