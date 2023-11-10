@@ -3,17 +3,18 @@ import './Article.css';
 import { Link } from "react-router-dom";
 import myInfoState from "../../recoil/myInfo";
 import { useRecoilValue } from "recoil";
+import users_api from "../../api/users/index";
 function MainArticle() {
   const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
   const [articles, setArticles] = useState([]); 
   const [currentPage, setCurrentPage] = useState(1); 
   const articlesPerPage = 12; 
-  const myInfo = useRecoilValue(myInfoState)
+  // const myInfo = useRecoilValue(myInfoState)
 
-  localStorage.setItem('userId', myInfo);
-  const userId = localStorage.getItem('userId');
+  // localStorage.setItem('userId', myInfo.userId);
+  // const userId = localStorage.getItem('userId');
 
-
+  const [userId, setUserId] = useState();
   function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -21,24 +22,27 @@ function MainArticle() {
     const day = ("0" + date.getDate()).slice(-2);
     return `${year}.${month}.${day}`;
   }
-
+  
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    fetch(`${back_base_URL}/api/v1/articles/my`, {
-      method: 'GET',
-      headers: {
-        "Authorization": `Bearer ${accessToken}`
-      }
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setArticles(data.data);
-
-    })
-    .catch((error) => {
-      console.error("요청 실패: " + error);
-    });
-  }, []); 
+    (async() => {
+      const accessToken = localStorage.getItem('accessToken');
+      const user = await users_api.getUserByToken(accessToken);
+      setUserId(user.userId)
+      fetch(`${back_base_URL}/api/v1/articles/my`, {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${accessToken}`
+        }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        setArticles(data.data);
+      })
+      .catch((error) => {
+        console.error("요청 실패: " + error);
+      });
+    })();
+  }, []);
 
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
