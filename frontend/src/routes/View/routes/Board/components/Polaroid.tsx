@@ -7,7 +7,7 @@ import { Res_Message } from "../../../../../api/messages/types";
 import {useState, useEffect} from "react"
 
 const min_ratio = 10 / 16
-const max_ratio = 16 / 10
+const max_ratio = 4 / 3
 
 const Polaroid = ({ id, sourceFileUrl, thumbnailFileUrl, content, sizeRatio, isOverlayed, type}:Res_Message &{sizeRatio:number, isOverlayed?:boolean}) => {
   const mobileSize = useRecoilValue(mobileSizeState)

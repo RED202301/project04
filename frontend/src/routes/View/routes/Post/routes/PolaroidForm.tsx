@@ -10,7 +10,7 @@ import secretMessages_api from "../../../../../api/secretMessages";
 
 
 const min_ratio = 10 / 16
-const max_ratio = 16 / 10
+const max_ratio = 4 / 3
 
   //base64 > 파일 변환
 const dataURLtoFile = (dataurl: string, fileName: string): File => {
