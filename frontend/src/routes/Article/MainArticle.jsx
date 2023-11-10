@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import './Article.css';
 import { Link } from "react-router-dom";
-
+import myInfoState from "../../recoil/myInfo";
+import { useRecoilValue } from "recoil";
 function MainArticle() {
   const back_base_URL = import.meta.env.VITE_BACK_SERVER_URL;
-
   const [articles, setArticles] = useState([]); 
   const [currentPage, setCurrentPage] = useState(1); 
   const articlesPerPage = 12; 
+  const myInfo = useRecoilValue(myInfoState)
+
+  localStorage.setItem('userId', myInfo);
+  const userId = localStorage.getItem('userId');
+
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -28,6 +33,7 @@ function MainArticle() {
     .then((response) => response.json())
     .then((data) => {
       setArticles(data.data);
+
     })
     .catch((error) => {
       console.error("요청 실패: " + error);
@@ -91,9 +97,17 @@ function MainArticle() {
             </tbody>
           </table>
         </div>
+        <div style={{marginTop:'-5.5%'}}>
+        <div style={{display:'flex', justifyContent:'flex-start'}}>
+          <div className="col">
+            <a className="font" href={`/view/${userId}`}><button className="postit">메인으로</button></a>
+          </div>
+          </div>
         <div style={{display:'flex', justifyContent:'flex-end'}}>
+
           <div className="col">
             <a className="font" href={"/article/Create"}><button className="chalk">글쓰기 </button></a>
+          </div>
           </div>
         </div>
         <div style={{display:'flex', justifyContent:'center', marginTop:'-20%'}}>
