@@ -7,6 +7,7 @@ import mobileSizeState from "../../../../../recoil/mobileSizeState";
 import {AiFillEdit} from "react-icons/ai"
 import messagesState from "../../../../../recoil/messagesState";
 import secretMessages_api from "../../../../../api/secretMessages";
+import heic2any from "heic2any";
 
 
 const min_ratio = 10 / 16
@@ -80,7 +81,27 @@ const PolaroidForm = () => {
             setThumnail({ src: thumnail, width, height })
           }
         }
-      } else {
+      } else if (file.name.split('.').includes('heic')) {
+        heic2any({ blob: file, toType: "image/jpeg" }).then((resultBlob) => {
+          const file = new File([resultBlob as Blob], "thumbnail.jpeg")
+          const img = new Image();
+          img.src = URL.createObjectURL(file);
+          img.onload = () => {
+            const ratio = img.height / img.width;
+            if (ratio < max_ratio) {
+              const width = innerWidth
+              const height = width * ratio;
+              setThumnail({ src: file, width, height })
+            }
+            else if (max_ratio <= ratio) {
+              const height = innerWidth * max_ratio
+              const width = height / ratio;
+              setThumnail({ src: file, width, height })
+            }
+          }
+        })
+      } 
+      else {
         const img = new Image();
         img.src = URL.createObjectURL(file);
         img.onload = () => {
