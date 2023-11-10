@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "axios": "^1.6.0",
+    "heic2any": "^0.0.4",
     "intro.js-react": "^1.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
