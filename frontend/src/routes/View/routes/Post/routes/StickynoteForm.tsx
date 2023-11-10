@@ -16,6 +16,7 @@ const SticknoteForm = () => {
   const mobileSize = useRecoilValue(mobileSizeState);
   const [messages, setMessages] = useRecoilState(messagesState);
   const [isSecret, setIsSecret] = useState(false)
+  const [isSending, setIsSending] = useState(false)
 
   const bgcolors = [tw`bg-yellow-200`, tw`bg-red-200`, tw`bg-blue-200`, tw`bg-green-200`]
   const selected_bgcolors = [tw`bg-yellow-300`, tw`bg-red-300`, tw`bg-blue-300`, tw`bg-green-300`]
@@ -24,6 +25,9 @@ const SticknoteForm = () => {
     setContent(e.target.value)
   }
   const handleSubmit = async () => {
+    if (isSending) return
+    setIsSending(true)
+
     const message = {
       receiverId: userId!,
       type:1,

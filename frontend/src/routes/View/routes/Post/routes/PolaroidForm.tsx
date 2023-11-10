@@ -10,7 +10,7 @@ import secretMessages_api from "../../../../../api/secretMessages";
 
 
 const min_ratio = 10 / 16
-const max_ratio = 4 / 3
+const max_ratio = 16 / 10
 
   //base64 > 파일 변환
 const dataURLtoFile = (dataurl: string, fileName: string): File => {
@@ -40,13 +40,13 @@ const PolaroidForm = () => {
   const mobileSize = useRecoilValue(mobileSizeState);
   const [messages, setMessages] = useRecoilState(messagesState)
   const [isSecret, setIsSecret] = useState(false)
-  
+  const [isSending, setIsSending] = useState(false)
 
   const buttonInnerRadius = mobileSize.width * .08;
   const buttonPadding = buttonInnerRadius / 8
   const buttonRadius = buttonInnerRadius + buttonPadding * 2;
 
-  const width = mobileSize.width * .8
+  const width = mobileSize.width * .7
   const innerWidth = width * 9 / 10
   const padding = width / 20
   const fontSize = innerWidth / 10;
@@ -107,7 +107,9 @@ const PolaroidForm = () => {
       alert("미디어 파일을 업로드 해주세요.")
       return
     }
-    
+    if (isSending) return;
+    setIsSending(true);
+
     const message = {
       receiverId: userId!,
       type: mediaType,
@@ -185,9 +187,9 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
-      fontSize: `${fontSize}px`,
+      fontSize: `${fontSize*2/3}px`,
       width: `${width}px`,
-      height: `${buttonRadius * 1.5}px`
+      height: `${buttonRadius}px`
     })
   ]
 
@@ -197,7 +199,7 @@ const PolaroidForm = () => {
     tw`bg-[rgba(1, 1, 1, .5)] rounded-full`,
     tw`text-white`,
     css({
-      fontSize: `${fontSize}px`,
+      fontSize: `${fontSize*2/3}px`,
       width: `${width}px`
     })
   ]

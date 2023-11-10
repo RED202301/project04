@@ -7,7 +7,7 @@ import { Res_Message } from "../../../../../api/messages/types";
 import {useState, useEffect} from "react"
 
 const min_ratio = 10 / 16
-const max_ratio = 4 / 3
+const max_ratio = 16 / 10
 
 const Polaroid = ({ id, sourceFileUrl, thumbnailFileUrl, content, sizeRatio, isOverlayed, type}:Res_Message &{sizeRatio:number, isOverlayed?:boolean}) => {
   const mobileSize = useRecoilValue(mobileSizeState)
@@ -18,7 +18,7 @@ const Polaroid = ({ id, sourceFileUrl, thumbnailFileUrl, content, sizeRatio, isO
   const [image, setImage] = useState<{ url: string, width: number, height: number }>();
 
 
-  const width = mobileSize.width * sizeRatio 
+  const width = mobileSize.width * sizeRatio
   const innerWidth = width * 9 / 10
   const padding = width / 20
   const fontSize = innerWidth / 10;
@@ -54,15 +54,17 @@ const Polaroid = ({ id, sourceFileUrl, thumbnailFileUrl, content, sizeRatio, isO
 
   const tw_p = [
     css`
-    white-space:pre-wrap;
+    white-space:pre;
     ::-webkit-scrollbar { display: none; }
     -ms-overflow-style: none;
     scrollbar-width: none;
     `,
     css({
-      width: `${innerWidth}px`,
-      height: `${innerWidth/4}px`,
-      overflowY:"scroll"
+      width:innerWidth,
+      height: innerWidth/4,
+      textWrap:"wrap",
+      overflowWrap:"anywhere",
+      overflowY: "scroll"
     })
   ]
   const navigate = useNavigate()

@@ -11,6 +11,13 @@ const ModalContainer = ({children, isOverlayed}:PropsWithChildren&{isOverlayed?:
   // ]
   const tw_fullsize = [
     tw`w-full h-screen`,
+    css`
+    white-space:pre-wrap;
+    ::-webkit-scrollbar { display: none; }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  `,
+css({ overflowY: 'scroll' })
     // css({
     //   height:`${mobileSize.height - mobileSize.width * .12}px`
     // })
