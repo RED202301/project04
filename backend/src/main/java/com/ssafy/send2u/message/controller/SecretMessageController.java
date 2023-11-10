@@ -32,19 +32,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class SecretMessageController {
     private final SecretMessageService secretMessageService;
 
-    @ApiOperation(value = "비밀메시지전체조회")
-    @GetMapping()
-    public ResponseEntity<ApiResponse> getAllSecretMessages() throws Exception {
-        List<SecretMessageDto> list = secretMessageService.getAllSecretMessages();
-
-        ApiResponse apiResponse = ApiResponse.builder()
-                .message("비밀메시지 리스트")
-                .status(OK.value())
-                .data(list)
-                .build();
-        return ResponseEntity.ok(apiResponse);
-    }
-
     @ApiOperation(value = "내비밀메시지조회")
     @GetMapping("/search")
     public ResponseEntity<ApiResponse> getUserReceivedMessages(
