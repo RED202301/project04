@@ -216,6 +216,7 @@ const PolaroidForm = () => {
 
   return (
     <Fragment>
+      <div></div>
       <label {...{ css: tw_filepicker }}>
         미디어 파일 업로드
         <input {...{
@@ -249,6 +250,7 @@ const PolaroidForm = () => {
         </div>
         <AiFillEdit {...{ css: [tw_button], onClick: handleSubmit }} />
       </section>
+      <div></div>
     </Fragment>
   );
 };
