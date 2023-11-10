@@ -28,18 +28,29 @@ public class SecretMessageService {
     private final AwsService awsService;
 
     @Transactional
-    public List<SecretMessageDto> getAllSecretMessages() {
-        List<SecretMessageDto> list = secretMessageRepository.findAll()
-                .stream()
-                .map(SecretMessageDto::new)
-                .collect(Collectors.toList());
-        return list;
+    public List<SecretMessageDto> getAllSecretMessages() throws Exception {
+        List<SecretMessage> list = secretMessageRepository.findAll();
+//        List<SecretMessageDto> list = secretMessageRepository.findAll()
+//                .stream()
+//                .map(SecretMessageDto::new)
+//                .collect(Collectors.toList());
+        for (SecretMessage message : list) {
+            if (message.getContent() == null) {
+                continue;
+            }
+            String encryptedContent = AESUtil.encrypt(message.getContent());
+            message.setContent(encryptedContent);
+            secretMessageRepository.save(message);
+        }
+
+        return null;
+
     }
 
     @Transactional
     public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 16, 16, 45);
+        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 9, 16, 45);
 
         String userId;
 
@@ -62,7 +73,21 @@ public class SecretMessageService {
             }).collect(Collectors.toList());
         } else {
             // 현재 시간이 목표 시간 이후이면 그대로 반환
-            return messages.stream().map(SecretMessageDto::new).collect(Collectors.toList());
+            return messages.stream().map(msg -> {
+                // 복호화
+                String decryptedContent = null;
+                if (msg.getContent() != null) {
+
+                    try {
+                        decryptedContent = AESUtil.decrypt(msg.getContent());
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException("메시지 내용 복호화에 실패했습니다.");
+                    }
+                }
+                SecretMessageDto dto = new SecretMessageDto(msg);
+                dto.setContent(decryptedContent);
+                return dto;
+            }).collect(Collectors.toList());
         }
     }
 
@@ -112,8 +137,15 @@ public class SecretMessageService {
             thumbnailFileUrl = awsService.fileUpload(thumbnailFile, "thumbnail");
         }
 
+        String encryptedContent;
+        try {
+            encryptedContent = AESUtil.encrypt(secretMessageDto.getContent());
+        } catch (Exception e) {
+            throw new IllegalArgumentException("메시지 내용 암호화에 실패했습니다.");
+        }
+
         SecretMessage secretMessage = new SecretMessage();
-        secretMessage.setContent(secretMessageDto.getContent());
+        secretMessage.setContent(encryptedContent);
         secretMessage.setTop(secretMessageDto.getTop());
         secretMessage.setLeft(secretMessageDto.getLeft());
         secretMessage.setRotate(secretMessageDto.getRotate());
