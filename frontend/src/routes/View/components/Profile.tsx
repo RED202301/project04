@@ -82,6 +82,9 @@ const Profile: React.FC = () => {
                       건의함
                     </Link>
                     </li>
+                    <li css={tw`p-[10px]`}>
+                    <Link to="/aiphoto" css={tw`text-black hover:text-black`}>실험실</Link>
+                    </li>
                     <hr css={tw`mt-0`}/>
                     <li css={tw``}>
                     <a href='https://www.instagram.com/send2u__' css={tw`flex justify-center m-0 p-0`}>
