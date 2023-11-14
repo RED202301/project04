@@ -61,7 +61,9 @@ const AIphoto = () => {
     const formData = new FormData()
     formData.append('img1', selectedFile1);
     formData.append('img2', selectedFile2)
-    axios.post('http://70.12.130.111:1557/upload', formData, {
+
+    // axios.post('http://70.12.130.111:1557/upload', formData, {
+    axios.post('https://send2u.site/upload', formData, {
       headers: {'Content-Type': 'multipart/form-data', charset: 'utf-8'},
   }).then(response => {
     setSimilarity(response.data.similarity * 100)
