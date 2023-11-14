@@ -13,6 +13,7 @@ import users_api from "./api/users";
 import { useSetRecoilState } from "recoil";
 import myInfoState from "./recoil/myInfo";
 import {useEffect} from "react"
+import AIphoto from "./routes/AIphoto/AIphoto";
 
 const App: React.FC = () => {
   const setMyInfo = useSetRecoilState(myInfoState);
@@ -44,6 +45,7 @@ const App: React.FC = () => {
               <Route path="/article/:id" element={<Article/>}/>
               <Route path="/article/Create" element={<CreateArticle/>}/>
               <Route path="/article/update/:id" element={<UpdateArticle/>}/>
+              <Route path="/aiphoto" element={<AIphoto/>}/>
               <Route path="/*" element={<NotFound/>}/>
               
             </Routes>
