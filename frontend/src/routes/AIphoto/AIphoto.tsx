@@ -124,7 +124,7 @@ const AIphoto = () => {
   const tw_after_container = [tw`flex justify-center border border-gray-500 rounded-md overflow-hidden w-[100%]`]
   const tw_after_text = [tw`flex justify-center text-xs font-bold`]
 
-  const tw_button = [tw`p-1 pr-2 pl-2 rounded-sm text-black border-black hover:text-black hover:border-black`]
+  const tw_button = [tw`p-1 pr-2 pl-2 rounded-sm text-black bg-white border-black hover:text-black hover:border-black`]
   
   return (
       <div css={tw_container}>
