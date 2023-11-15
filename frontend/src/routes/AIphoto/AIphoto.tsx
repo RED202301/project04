@@ -193,7 +193,7 @@ const AIphoto = () => {
             {/* 결과 창 */}
             <div css={tw`flex justify-center w-[100%] h-[20px]`}>
                 <div css={tw``}>
-                  {similarity&&(<div css={tw`flex justify-center`}>유사도:{similarity.toFixed(0)}%</div>)}
+                  {similarity !== null &&(<div css={tw`flex justify-center`}>유사도: {similarity.toFixed(0)}%</div>)}
                     <div css={tw`flex`}>
                       {[aiphoto, aiphoto2].map((aiphotoSrc, index) => (
                         aiphotoSrc && (
@@ -208,7 +208,7 @@ const AIphoto = () => {
                       ))}
                     </div>
                     <br/>
-                    {similarity&&(<div css={tw`flex justify-center`}>재미로만 봐주세요.</div>)}
+                    {similarity !== null &&(<div css={tw`flex justify-center`}>재미로만 봐주세요.</div>)}
                 </div>
             </div>
             {/* 결과 창 */}
