@@ -30,7 +30,7 @@ public class SecretMessageService {
     @Transactional
     public List<SecretMessageDto> getUserReceivedSecretMessages(String encryptedReceiverId) {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 16, 16, 45);
+        LocalDateTime targetDateTime = LocalDateTime.of(2023, 11, 17, 16, 45);
 
         String userId;
 
@@ -46,7 +46,7 @@ public class SecretMessageService {
         if (now.isBefore(targetDateTime)) {
             return messages.stream().map(msg -> {
                 SecretMessageDto dto = new SecretMessageDto(msg);
-                dto.setContent("11월 16일 16시 45분 공개");
+                dto.setContent("11월 17일 16시 45분 공개");
                 dto.setThumbnailFileUrl("https://send2u.s3.ap-northeast-2.amazonaws.com/thumbnail/dummyImage.png");
                 dto.setSourceFileUrl("https://send2u.s3.ap-northeast-2.amazonaws.com/thumbnail/dummyImage.png");
                 return dto;
