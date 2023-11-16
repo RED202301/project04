@@ -14,7 +14,7 @@ const secretMessages_api = {
       const response = await axios.get(url, { headers, params })
       return response.data.data as Res_SecretMessage[]
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       return []
     }
   },
@@ -27,7 +27,7 @@ const secretMessages_api = {
       const response = await axios.get(url, { headers })
       return response.data.data as Res_SecretMessage[]
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   },
 
@@ -40,7 +40,7 @@ const secretMessages_api = {
       const response = await axios.post(url, new_secretMessage, { headers })
       return response.data.data as Res_SecretMessage;
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   },
 
@@ -52,7 +52,7 @@ const secretMessages_api = {
       const response = await axios.delete(url, { headers })
       return response.data.data;
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 }

@@ -13,7 +13,7 @@ const users_api = {
       const response = await axios.get(url, { headers });
       return response.data.data as { userId: string, userName: string, userProfileImageUrl: string };
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   },
   getUsernameById: async function (id: string) {
@@ -24,7 +24,7 @@ const users_api = {
       const response = await axios.get(url, { headers });
       return response.data.data as { userId: string, userName: string, userProfileImageUrl: string };
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 }
