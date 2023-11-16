@@ -14,8 +14,8 @@ const Signout: React.FC = () => {
             }
         }
         )
-        .then((response) => {
-            console.log("응답 확인", response);
+        .then(() => {
+            // console.log("응답 확인", response);
             localStorage.removeItem("accessToken");
             alert('탈퇴 완료')
             location.reload();

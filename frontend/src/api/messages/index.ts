@@ -14,7 +14,7 @@ const messages_api = {
       const response = await axios.get(url, { headers, params })
       return response.data.data as Res_Message[]
     } catch (error) {
-      console.log(error)
+      // console.log(error)
       return []
     }
   },
@@ -27,7 +27,7 @@ const messages_api = {
       const response = await axios.get(url, { headers })
       return response.data.data as Res_Message[]
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   },
 
@@ -39,7 +39,7 @@ const messages_api = {
       const response = await axios.post(url, new_message, { headers })
       return response.data.data as Res_Message;
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   },
 
@@ -51,7 +51,7 @@ const messages_api = {
       const response = await axios.put(url, updated_position, { headers })
       return response.data.data;
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   },
 
@@ -63,7 +63,7 @@ const messages_api = {
       const response = await axios.delete(url, { headers })
       return response.data.data;
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 }
