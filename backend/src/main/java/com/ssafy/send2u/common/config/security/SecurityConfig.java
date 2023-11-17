@@ -1,6 +1,5 @@
 package com.ssafy.send2u.common.config.security;
 
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
 import com.ssafy.send2u.common.config.properties.AppProperties;
 import com.ssafy.send2u.common.config.properties.CorsProperties;
 import com.ssafy.send2u.common.oauth.entity.RoleType;
@@ -13,22 +12,31 @@ import com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedO
 import com.ssafy.send2u.common.oauth.service.CustomOAuth2UserService;
 import com.ssafy.send2u.common.oauth.service.CustomUserDetailsService;
 import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
@@ -40,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomUserDetailsService userDetailsService;
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
     /*
      * UserDetailsService 설정
@@ -68,9 +77,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
-                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
-                .anyRequest().authenticated()
+                /* 아래 주석된 부분은 인증관련 나중에 설정 잘 하기*/
+                .antMatchers(HttpMethod.GET, "/api/v1/users/{encryptedUserId}", "/api/v1/messages/search").permitAll()
+                .antMatchers("/api/v1/users/**", "/api/v1/messages/**", "/api/v1/secretMessages/**")
+                .hasAnyAuthority(RoleType.USER.getCode())
+//                .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
                 .authorizationEndpoint()
@@ -84,9 +95,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userService(oAuth2UserService)
                 .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
-                .failureHandler(oAuth2AuthenticationFailureHandler());
+                .failureHandler(oAuth2AuthenticationFailureHandler())
+                .and()
+                .logout()
+                .deleteCookies("JSESSIONID", "refresh_token")
+                .logoutUrl("/logout") // 로그아웃 U
+                .logoutSuccessHandler(new LogoutSuccessHandler() {
+
+                    @Override
+                    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                Authentication authentication) throws IOException, ServletException {
+                        String accessToken = extractAccessToken(request); // Access Token 추출하는 로직 필요
+                        redisTemplate.opsForValue().set(accessToken, "logout");
+                        redisTemplate.expire(accessToken, 30, TimeUnit.MINUTES);
+                        System.out.println("success");
+                    }
+                });
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    private String extractAccessToken(HttpServletRequest request) {
+        // Authorization 헤더에서 추출
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7); // "Bearer " 이후의 토큰 부분 반환
+        }
+
+        // 추출할 수 있는 위치에서 토큰을 찾지 못한 경우
+        throw new IllegalArgumentException("Access Token을 추출할 수 없습니다.");
     }
 
     /*
@@ -131,8 +168,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new OAuth2AuthenticationSuccessHandler(
                 tokenProvider,
                 appProperties,
-                userRefreshTokenRepository,
-                oAuth2AuthorizationRequestBasedOnCookieRepository()
+                oAuth2AuthorizationRequestBasedOnCookieRepository(),
+                redisTemplate,
+                authorizedClientService
         );
     }
 
