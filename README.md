@@ -110,7 +110,7 @@
 
 <a name="systemArchitecture"></a>
 
-<img src="./READMEimg/architecture.png">
+<img src="./READMEimg/architecture.PNG">
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 <br/>
