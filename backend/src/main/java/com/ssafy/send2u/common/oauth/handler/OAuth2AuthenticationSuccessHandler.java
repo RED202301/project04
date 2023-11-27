@@ -1,9 +1,10 @@
 package com.ssafy.send2u.common.oauth.handler;
 
-import com.ssafy.send2u.common.oauth.entity.ProviderType;
-import com.ssafy.send2u.user.entity.user.UserRefreshToken;
-import com.ssafy.send2u.user.repository.user.UserRefreshTokenRepository;
+import static com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
+
 import com.ssafy.send2u.common.config.properties.AppProperties;
+import com.ssafy.send2u.common.oauth.entity.ProviderType;
 import com.ssafy.send2u.common.oauth.entity.RoleType;
 import com.ssafy.send2u.common.oauth.info.OAuth2UserInfo;
 import com.ssafy.send2u.common.oauth.info.OAuth2UserInfoFactory;
@@ -11,27 +12,26 @@ import com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedO
 import com.ssafy.send2u.common.oauth.token.AuthToken;
 import com.ssafy.send2u.common.oauth.token.AuthTokenProvider;
 import com.ssafy.send2u.common.utils.CookieUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
-
-import static com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-import static com.ssafy.send2u.common.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REFRESH_TOKEN;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
@@ -39,12 +39,28 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    @Transactional
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(request, response, authentication);
+
+        // 카카오에서 발급한 accessToken 가져오기
+//        OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+//        OAuth2AuthorizedClient authorizedClient = authorizedClientService
+//                .loadAuthorizedClient(
+//                        oauthToken.getAuthorizedClientRegistrationId(),
+//                        oauthToken.getName()
+//                );
+//
+//        String accessToken = authorizedClient.getAccessToken().getTokenValue();
+//
+//        System.out.println("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
+//        System.out.println("카카오에서 발급한 accessToken: " + accessToken);
 
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
@@ -55,12 +71,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response,
+                                        Authentication authentication) {
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
-        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new IllegalArgumentException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+            throw new IllegalArgumentException(
+                    "Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
@@ -78,6 +97,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         AuthToken accessToken = tokenProvider.createAuthToken(
                 userInfo.getId(),
                 roleType.getCode(),
+                userInfo.getName(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
@@ -90,13 +110,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         );
 
         // DB 저장
-        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userInfo.getId());
-        if (userRefreshToken != null) {
-            userRefreshToken.setRefreshToken(refreshToken.getToken());
-        } else {
-            userRefreshToken = new UserRefreshToken(userInfo.getId(), refreshToken.getToken());
-            userRefreshTokenRepository.saveAndFlush(userRefreshToken);
-        }
+//        UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userInfo.getId());
+//        if (userRefreshToken != null) {
+//            userRefreshToken.setRefreshToken(refreshToken.getToken());
+//        } else {
+//            userRefreshToken = new UserRefreshToken(userInfo.getId(), refreshToken.getToken());
+//            userRefreshTokenRepository.saveAndFlush(userRefreshToken);
+//        }
+        // Redis에 저장
+        redisTemplate.opsForValue().set(userInfo.getId(), refreshToken.getToken());
 
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
@@ -134,7 +156,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .anyMatch(authorizedRedirectUri -> {
                     // Only validate host and port. Let the clients use different paths if they want to
                     URI authorizedURI = URI.create(authorizedRedirectUri);
-                    if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+                    if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
                             && authorizedURI.getPort() == clientRedirectUri.getPort()) {
                         return true;
                     }

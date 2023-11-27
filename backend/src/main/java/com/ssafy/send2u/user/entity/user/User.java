@@ -1,17 +1,27 @@
 package com.ssafy.send2u.user.entity.user;
 
+import com.ssafy.send2u.article.entity.Article;
 import com.ssafy.send2u.common.oauth.entity.ProviderType;
 import com.ssafy.send2u.common.oauth.entity.RoleType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.send2u.message.entity.Message;
+import com.ssafy.send2u.message.entity.SecretMessage;
+import java.time.LocalDateTime;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -19,13 +29,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "USER")
+@ToString
 public class User {
-    @JsonIgnore
+    //    @JsonIgnore
+//    @Id
+//    @Column(name = "USER_SEQ")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long userSeq;
+//
     @Id
-    @Column(name = "USER_SEQ")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userSeq;
-
     @Column(name = "USER_ID", length = 64, unique = true)
     @NotNull
     @Size(max = 64)
@@ -36,16 +48,15 @@ public class User {
     @Size(max = 100)
     private String username;
 
-
-    @Column(name = "EMAIL", length = 512, unique = false)
-    @NotNull
-    @Size(max = 512)
-    private String email;
-
-    @Column(name = "EMAIL_VERIFIED_YN", length = 1)
-    @NotNull
-    @Size(min = 1, max = 1)
-    private String emailVerifiedYn;
+//    @Column(name = "EMAIL", length = 512, unique = false)
+//    @NotNull
+//    @Size(max = 512)
+//    private String email;
+//
+//    @Column(name = "EMAIL_VERIFIED_YN", length = 1)
+//    @NotNull
+//    @Size(min = 1, max = 1)
+//    private String emailVerifiedYn;
 
     @Column(name = "PROFILE_IMAGE_URL", length = 512)
     @NotNull
@@ -70,11 +81,25 @@ public class User {
     @NotNull
     private LocalDateTime modifiedAt;
 
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<Message> sendMessage;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private List<Message> receiveMessage;
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<SecretMessage> sendSecretMessage;
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    private List<SecretMessage> receiveSecretMessage;
+
+    @OneToMany(mappedBy = "articleWriter", cascade = CascadeType.ALL)
+    private List<Article> articles;
+
     public User(
             @NotNull @Size(max = 64) String userId,
             @NotNull @Size(max = 100) String username,
-            @NotNull @Size(max = 512) String email,
-            @NotNull @Size(max = 1) String emailVerifiedYn,
             @NotNull @Size(max = 512) String profileImageUrl,
             @NotNull ProviderType providerType,
             @NotNull RoleType roleType,
@@ -83,8 +108,6 @@ public class User {
     ) {
         this.userId = userId;
         this.username = username;
-        this.email = email != null ? email : "NO_EMAIL";
-        this.emailVerifiedYn = emailVerifiedYn;
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";
         this.providerType = providerType;
         this.roleType = roleType;

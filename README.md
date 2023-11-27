@@ -1,76 +1,274 @@
-# 기획 플로우
+# 📧 SEND2U (수능 응원 메시지 작성 서비스)
 
- - 11월 1일 부터 서비스 시작 / 홍보 시작
+<br/>
 
-개인정보(번호, 카카오id 등 정보 공개) - 개인정보처리방침, 이용약관 넣기(참고. https://505bucket.s3.ap-northeast-2.amazonaws.com/static/personal.html)
+<div align=center>
+<br/>
+  <img src="./READMEimg/title.gif" width="80%">
+</div>
 
-미리 작성하기
+<div align="center">
+  <h1>SEND2U
+  <h3>수능생들을 위한 응원 메시지 작성 서비스
+</h3>
+</div>
 
-- 인풋 어떻게 뭘 받나(음성, 텍스트, 영상)
-    - 웹 | 앱 | 카카오 채널
-    - 뭘 : 음성, 텍스트, 영상
-- 어떻게 저장하나(S3)
-    - 어디에 : s3
+<!-- <div align="right"><a href="https://(UCC링크)">🎥 UCC 보러 가기</a></div> -->
+<br/>
 
-시간되면 전송
+## 📅 기간
 
-- 어떻게 전송( 수능 끝나는 시간 11월 16일 오후 4시 40분 기준)
-    - 카카오 채널로 링크로 보낸다.
+- **2023.10.09 ~ 2023.11.17(6주)**
 
-포스트 잇, 책상꾸미기, 사진앨범
+<a name="tableContents"></a>
 
-친구 목록 불러오기
+<br/>
 
-핸드폰 번호 트리꾸미기
+## 🔎 목차
 
-핸드폰 번호로 보내기
+1. <a href="#subject">🎯 기획 배경</a>
+1. <a href="#mainContents">⭐️ 주요 기능</a>
+1. <a href="#systemArchitecture">⚙️ 시스템 아키텍쳐</a>
+1. <a href="#skills">🛠️ 기술 스택</a>
+1. <a href="#erd">💾 ERD</a>
+1. <a href="#contents">🖥️ 화면 소개</a>
+1. <a href="#developers">👥 팀원 소개</a>
 
-인풋: 웹 
+<br/>
 
-개발요소: 롤링페이퍼 보여주는 사이트
+<!------- 주제 시작 -------->
 
-최대목표
+## 🎯 기획 배경
 
-- 실사용 유저를 많이 확보(호선프로님학생들, 인터넷 홍보, sns 타즈아)
-- 공통, 특화프로젝트 볼륨이 큰 프로젝트들을 했지만 실사용 유저들을 확보한 경험 없음 → 어떻게든 실사용 유저들을 많이 확보해 일어나는 일들을 경험하고 싶다.
+<a name="subject"></a>
 
+**SEND2U**
 
-# 23.10.16 팀미팅
-주제
+**수능 응원 메시지 서비스**
 
-1. 수능 - 컨셉에 맞는 디자인 선정
-- 앨범, 책상 꾸미기(포스트 잇), 사진 붙이기 등 범용성 높이는 의견 발의
+1. <b> 중요한 시험 </b>
 
-2. 수능 끝나는 시간에 맞춰서 저장된 텍스트, 영상 등 카카오톡이나 문자 형식으로 받아볼 수 잇으면 좋지않을까?
-(차별성)
-전화번호 등 개인정보를 어떻게 동의를 구할 수 있을까?
-수신인이 가입이 안되어있으면 핸드폰 번호 저장 이슈
+- 수능은 학생들에게 19년의 학창시절이 한 번의 시험으로 결정되는 아주 중요한 시험입니다. 그 중요성 때문에 학생들은 많은 부담감을 느낍니다.
+  <br/>
 
-부모님한테 써달라고 하는 방법은 별로다
+2. <b> 부담감의 해소 </b>
 
-컨트님 의견 : 문자발송은 X/ 가입할 때 개인정보 동의를 받는게 좋을 것 같다.(=> 우리의견 : 가입을 강제성을 줘야할 듯/ 최초 발신을 하려면 번호(정보)가 필요함)
-2-1. 부모님에게 지정된 날짜에 ???이 완성되었어요 하고 부모님이 학생에게 알려주는 방식을 제시
-2-2. 이 사이트를 모를 확률이 어렵다고 생각하기에 -> 다 가입되어있다고 가정하자
+- SEND2U는 그런 학생들의 부담감을 조금이라도 해소하고자 합니다. 서로의 응원의 메시지를 공유하고 퍼트리면서, 그 부담감을 함께 나누고 위로를 얻을 수 있는 공간을 제공합니다.
+  <br/>
 
-3. 가입안되어있을때 페이지는 어떻게 꾸밀것인가?(이름이 다를때 김동현 => 동동이 동현이 등 hash로 키를 만들던가 해서)
-컨트님 의견 : 전화번호로 구분하자/ 크게 걱정안해도 될꺼같다
+3. <b> 마음의 선물 </b>
 
-개인정보라는게 여러가지 정보 => 특정 개인을 식별할 수 있는가? 한가지는 개인정보로 안치기 때문에 김동현은 특정은 안되지만 SSAFY_부울경_2반_김동현은 특정할 수 있어서 개인정보
-판례에 따라 움직이기에 개인정보에 민감하지 않아도 될 것 같다.
+- SEND2U는 서로에게 응원의 메시지를 전달하는 서비스입니다. 부모님뿐만 아니라 친구, 선생님, 그리고 모든 사람들이 수능생에게 마음을 전달할 수 있는 플랫폼입니다.
+  <br/>
 
-4. 아이디어는 괜찮은가? 어디에 중점인가?(실사용) 남긴 데이터를 검토해야하는건 문제가 없는가?(필터를 써도 한계가 있는데 개발진이 검토해도 괜찮은가?) 
-경고문 제의(좋은 방법은 아님) 입력전에 필터링 하면 어떤가? 어쩔 수 없기 때문에 신경 X
-스토킹 사례(나중에 고려)
+4. <b>기다림의 선물</b>
 
-5. 가입했는지 안했는지 모르는데 1차적으로 핸드폰 번호로 보내는데 가입시 서비스 없으면 문자 or 카카오톡? 핸드폰번호 인증으로 가입을 하려고 하는데 전화번호 필수 카카오톡 공유하기 예약발송
-카카오를 빼고 우리가 폼을 만들지? vs 카카오로 편의성을 늘릴지(핸드론인증이 잇어서 모순임)
-스케줄러를 통해서 카카오톡으로 보낼때 수신자 식별이 힘들다
-종합의견 : 무조건적으로 카카오로 다해결하자 핸드폰로그인은 X(plan B 하지말고 무조건 카카오로 하자)
+- END2U는 수능이 끝난 후에 공개되는 비밀 응원 메시지 기능을 제공합니다. 수능을 치룬 학생들에게는 끝난 후에 받을 수 있는 응원의 메시지가 또 다른 선물이 될 것입니다.
+  <br/>
 
-마케팅(필요)
-- 소셜미디어로 마케팅
-- SSAFY DAY 일정
+**"SEND2U"** 는 이런 배경에서 시작된 서비스로, 모든 사람들이 수능생들에게 응원의 메시지를 전달할 수 있는 공간입니다. 부모님, 친구, 선생님 등 모든 사람들이 자신의 마음을 담은 응원의 메시지를 작성하고, 그 메시지를 수능생에게 전달할 수 있습니다. 이런 과정을 통해, 수능을 준비하는 학생들에게 많은 사람들의 응원과 사랑이 전달되며, 그들에게 큰 힘이 되어주기를 바라는 마음으로 기획하게 되었습니다.
+<br/>
 
+<!------- 주요 기능 시작 -------->
 
-일단 수능 몰빵하기로했습니다
-feature/board, refactor  작업중
+## ⭐️ 주요 기능
+
+<a name="mainContents"></a>
+
+### 텍스트, 사진, 영상 메시지 / 비밀 메시지 작성
+
+- 사용자는 텍스트, 사진, 영상을 통해 응원 메시지를 작성할 수 있습니다. 또한, 수능이 끝난 후에 공개될 비밀 메시지도 미리 작성해두실 수 있습니다.
+
+---
+
+### 드래그 드롭을 이용한 메시지 배치
+
+- 작성된 메시지는 드래그와 드롭을 이용해 원하는 위치에 배치할 수 있습니다. 이를 통해 사용자는 자신만의 메시지 레이아웃을 만들 수 있습니다.
+
+---
+
+### 메시지 / 비밀 메시지 모아보기
+
+- 작성된 메시지와 비밀 메시지는 모아서 볼 수 있습니다. 이를 통해 사용자는 다른 사람들이 보낸 메시지를 한눈에 확인하며, 다양한 응원의 메시지를 받아볼 수 있습니다.
+
+---
+
+### 링크 공유 기능
+
+- 작성된 메시지는 링크를 통해 공유할 수 있습니다. 이 링크를 통해 다른 사람들에게 응원의 메시지를 전달하거나, 자신이 받은 응원의 메시지를 공유할 수 있습니다.
+
+### 얼굴 유사도 측정 및 합성
+
+- 재미를 위한 기능으로 두 사람의 얼굴을 합성하고 유사도를 측정할 수 있습니다.
+
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
+<br/>
+
+<!------- 시스템 아키텍쳐 시작 -------->
+
+## ⚙️ 시스템 아키텍쳐
+
+<a name="systemArchitecture"></a>
+
+<img src="./READMEimg/architecture.PNG">
+
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
+<br/>
+
+<!------- 기술 스택 시작 -------->
+
+## 🛠️ 기술 스택
+
+<a name="skills"></a>
+
+<!-- ![(이름)](<https://img.shields.io/badge/(이름)-(색깔)?style=for-the-badge&logo=(이름)&logoColor=white>) -->
+
+### 프론트
+
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)![React-router](https://img.shields.io/badge/reactrouter-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white) ![Recoil](https://img.shields.io/badge/recoil-%23593d88.svg?style=for-the-badge&logo=recoil&logoColor=white)
+
+## ![Axios](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+
+### 백엔드
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) ![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) ![SpringBoot](https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+
+![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![amazonec2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white) ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) ![mysql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+
+---
+
+### 협업
+
+![GitLab](https://img.shields.io/badge/gitlab-FC6D26.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Mattermost](https://img.shields.io/badge/mattermost-0058CC.svg?style=for-the-badge&logo=mattermost&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=for-the-badge&logo=notion&logoColor=white)
+
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
+
+<br/>
+
+<!------- ERD 시작 -------->
+
+## 💾 ERD
+
+<a name="erd"></a>
+
+<img src="./READMEimg/ERD.png">
+
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
+
+<br/>
+
+<!------- 화면 소개 시작 -------->
+
+<a name="contents"></a>
+
+<br/>
+
+## 🖥️ 화면 소개
+
+### 1. 로그인 페이지
+
+<div align=center>
+<img src="./READMEimg/login.gif" width="50%">
+</div>
+
+- 카카오 로그인을 구현하여 간편하게 로그인이 가능합니다.
+
+### 2. 서비스 소개 기능
+
+<div align=center display=flex>
+<img src="./READMEimg/intro.gif" width="50%">
+</div>
+
+- 처음에 왼쪽 상단 물음표를 클릭하라는 메시지
+- 서비스의 대략적인 기능을 소개 해줍니다.
+
+### 3. 메시지 작성 기능
+
+<div align=center>
+<img src="./READMEimg/main1.gif" width="50%">
+</div>
+
+- 공유받은 링크를 통해서 친구페이지 입장합니다.
+- 일반 메시지를 작성할 수 있고 여러 색깔 선택가능합니다.
+- 편지를 간단히 이동할 수 있습니다.
+- 비밀편지 예약전송을 클릭하면 비밀메시지로 작성됩니다.
+
+### 4. 사진/영상 메시지 작성 기능
+
+<div align=center>
+<img src="./READMEimg/main2.gif" width="70%">
+</div>
+
+- 사진과 동영상 메시지도 작성가능합니다.
+
+### 5. 비밀 메시지 확인
+
+<div align=center>
+<img src="./READMEimg/main3.png" width="50%">
+</div>
+
+- 수능 날짜에 맞춰서 수능이 끝나고 나왔을 때 확인 할 수 있습니다.
+
+### 6. 건의함 기능
+
+<div align=center>
+<img src="./READMEimg/main4.gif" width="50%">
+</div>
+
+- 실제 유저와 소통하기 위한 기능입니다.
+- 유저들은 건의사항을 작성할 수 있습니다.
+
+### 7. 얼굴 바꾸기 기능
+
+<div align=center>
+<img src="./READMEimg/main5.gif" width="70%">
+</div>
+
+- 간단한 흥미를 위한 기능입니다.
+- 두 명의 얼굴을 합성해서 다운로드할 수 있습니다.
+
+## 🖥️ 기술
+
+### 1. SERVER
+
+- corntab을 활용해 3시간마다 db 백업, 3일 지난 백업 파일은 삭제
+- S3에 저장된 파일 send2u.site 에서 만 접근 가능하게 설정
+
+### 2. BACKEND
+
+- AES를 이용해 DB에 비밀 메시지 암호화 저장
+- Redis를 활용하여 refresh 토큰을 관리, 로그아웃 시 블랙리스트 구현
+
+### 3. FRONTEND
+
+- 커스텀 drag, double tap, long press event 구현
+- 데스크탑 및 모바일 환경에서 자유롭게 배치가능
+- 데스크탑, 안드로이드, ios 환경을 충족
+
+### 4. AI
+
+- RetinaFace와 ArcFace 모델을 사용하여 얼굴 유사도 측정
+- Dlib 라이브러리를 사용하여 얼굴 바꾸기
+
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
+<br/>
+
+<br/>
+<!------- 팀원 소개 시작 -------->
+
+## 👥 팀원 소개
+
+<a name="developers"></a>
+
+|   **Name**   |              김창혁              |              김동현              |              홍진환              |              홍정현              |              정재범              |              라동엽              |
+| :----------: | :------------------------------: | :------------------------------: | :------------------------------: | :------------------------------: | :------------------------------: | :------------------------------: |
+| **Profile**  | ![image](./READMEimg/김창혁.png) | ![image](./READMEimg/김동현.png) | ![image](./READMEimg/홍진환.png) | ![image](./READMEimg/홍정현.png) | ![image](./READMEimg/정재범.png) | ![image](./READMEimg/라동엽.png) |
+| **Position** |       Leader <br/> Server        |             Backend              |             Backend              |             Frontend             |             Frontend             |                AI                |
+
+<div align="right"><a href="#tableContents">목차로 이동</a></div>

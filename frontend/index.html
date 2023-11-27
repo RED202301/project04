@@ -16,27 +16,49 @@
       sizes="152x152"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="manifest.json" />
-    <title>zzzz</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        // Register a service worker hosted at the root of the
-        // site using the default scope.
-        navigator.serviceWorker
-          .register("/sw.js")
-          .then((registration) => {
-            // console.log("Service worker registration succeeded:", registration);
-          })
-          .catch((err) => {
-            // console.log("Service worker registration failed:", error);
-          });
-      } else {
-        // console.log("Service workers are not supported.");
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Send2U" />
+    <meta name="google-site-verification" content="bJ4TrWLLUEPwvYYSWwoSLTNa96wAm0CjAkZ4cZds5cg" />
+    <title>Send2U</title>
+    <style>
+      /* 여기에 원하는 디자인을 추가하세요. */
+      body {
+        user-select: none;
+        -webkit-touch-callout: none;
+        /* 페이지 당겼을때 새로고침 방지 */
+        overflow: hidden;
+        overscroll-behavior: none;
       }
-    </script>
-  </body>
+      .introjs-tooltip .introjs-tooltip-title {
+        color: black;
+       }
+  </style>
+</head>
+
+<body oncontextmenu='return false' ondragstart="return false" onselectstart="return false">
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      // Register a service worker hosted at the root of the
+      // site using the default scope.
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          // console.log("Service worker registration succeeded:", registration);
+        })
+        .catch((err) => {
+          // console.log("Service worker registration failed:", error);
+        });
+    } else {
+      // console.log("Service workers are not supported.");
+    }
+  </script>
+</body>
+
 </html>
